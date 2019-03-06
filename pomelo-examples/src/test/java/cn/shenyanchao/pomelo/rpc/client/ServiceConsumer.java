@@ -6,6 +6,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +20,7 @@ public class ServiceConsumer {
     private static final Logger LOG = LoggerFactory.getLogger(ServiceConsumer.class);
 
     @Test
+    @Ignore
     public  void rpcBenchmark() throws Exception {
 
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(

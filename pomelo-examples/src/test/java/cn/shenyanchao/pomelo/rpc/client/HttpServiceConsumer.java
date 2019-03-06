@@ -2,6 +2,7 @@ package cn.shenyanchao.pomelo.rpc.client;
 
 import java.util.concurrent.TimeUnit;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +25,7 @@ public class HttpServiceConsumer {
     private OkHttpClient client = new OkHttpClient.Builder().connectionPool(connectionPool).build();
 
     @Test
+    @Ignore
     public void mainHttpGetTest() throws Exception {
         LOG.debug("开始测试");
         int count = 10000;
@@ -43,6 +45,7 @@ public class HttpServiceConsumer {
     }
 
     @Test
+    @Ignore
     public void mainHttpPostTest() throws Exception {
         LOG.debug("开始测试");
         long begin = System.currentTimeMillis();

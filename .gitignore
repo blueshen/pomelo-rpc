@@ -12,3 +12,4 @@ target
 *.log*
 .DS_Store
 logs
+pom.xml.versionsBackup
