@@ -1,0 +1,3 @@
+http\://www.shenyanchao.cn/pomelorpc=cn.shenyanchao.pomelo.rpc.spring.config.tcp.PomeloNamespaceHandler
+http\://www.shenyanchao.cn/pomelohttp=cn.shenyanchao.pomelo.rpc.spring.config.http.PomeloHttpNamespaceHandler
+http\://www.shenyanchao.cn/pomelorpc/pomelorpc.xsd=

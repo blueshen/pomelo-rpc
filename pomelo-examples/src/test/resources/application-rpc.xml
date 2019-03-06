@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:pomelorpc="http://www.shenyanchao.cn/pomelorpc"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.shenyanchao.cn/pomelorpc
+        http://www.shenyanchao.cn/pomelorpc/pomelorpc.xsd">
+
+    <pomelorpc:application id="rpcRegistryApplication" address="127.0.0.1:2181" flag="1" timeout="500"/>
+    <pomelorpc:registry id="rpcRegistry" ip="localhost" port="10018" timeout="200" protocolType="1" serializerType="4"
+                        group="example" threadCount="200"/>
+
+    <pomelorpc:service id="IHelloService" interfaceName="cn.shenyanchao.pomelo.rpc.demo.service.IHelloService"
+                       ref="helloService" filterRef="myRpcFilter"/>
+
+    <bean id="helloService" class="cn.shenyanchao.pomelo.rpc.demo.service.impl.HelloService"/>
+    <bean id="myRpcFilter" class="cn.shenyanchao.pomelo.rpc.demo.filter.MyRpcFilter"/>
+
+
+</beans>
