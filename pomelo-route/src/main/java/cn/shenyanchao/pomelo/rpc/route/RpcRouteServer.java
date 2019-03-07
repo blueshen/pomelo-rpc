@@ -1,4 +1,4 @@
-package cn.shenyanchao.pomelo.rpc.core.route;
+package cn.shenyanchao.pomelo.rpc.route;
 
 import java.io.Serializable;
 import java.net.InetSocketAddress;
@@ -10,7 +10,7 @@ import java.net.InetSocketAddress;
  */
 public class RpcRouteServer implements Serializable {
 
-    private static final long serialVersionUID = -59907756387170272L;
+    private static final long serialVersionUID = -59907756987170272L;
 
     public InetSocketAddress server;
     public int weight;

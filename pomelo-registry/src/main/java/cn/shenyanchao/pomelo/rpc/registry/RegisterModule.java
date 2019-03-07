@@ -26,7 +26,7 @@ public class RegisterModule implements IRegisterModule {
     }
 
     public static RegisterModule getInstance() {
-        return RegisterModule.SingletonHolder.instance;
+        return SingletonHolder.instance;
     }
 
     @Override

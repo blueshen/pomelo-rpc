@@ -11,7 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.alibaba.fastjson.JSONObject;
 
-import cn.shenyanchao.pomelo.rpc.core.route.RpcRouteInfo;
+import cn.shenyanchao.pomelo.rpc.route.RpcRouteInfo;
 import cn.shenyanchao.pomelo.rpc.http.RpcHttpServerHandler;
 import cn.shenyanchao.pomelo.rpc.http.netty4.server.bean.ServerBean;
 import io.netty.buffer.ByteBuf;

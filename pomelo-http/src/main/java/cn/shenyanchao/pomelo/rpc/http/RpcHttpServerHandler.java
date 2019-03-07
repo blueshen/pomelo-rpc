@@ -2,8 +2,8 @@ package cn.shenyanchao.pomelo.rpc.http;
 
 import java.util.Map;
 
-import cn.shenyanchao.pomelo.rpc.core.route.RpcRouteInfo;
-import cn.shenyanchao.pomelo.rpc.core.route.factory.PomeloRpcRouteServiceFactory;
+import cn.shenyanchao.pomelo.rpc.route.PomeloRpcRouteService;
+import cn.shenyanchao.pomelo.rpc.route.RpcRouteInfo;
 import cn.shenyanchao.pomelo.rpc.core.server.filter.RpcInterceptor;
 
 /**
@@ -22,7 +22,7 @@ public class RpcHttpServerHandler extends AbstractRpcHttpServerHandler {
                            RpcInterceptor rpcFilter) {
         if (instance instanceof RpcHttpBean) {
             RpcHttpBean rpcHttpBean = (RpcHttpBean) instance;
-            PomeloRpcRouteServiceFactory.getRouteService().registerRoute(instanceName, rpcHttpBean.getObject(),
+            PomeloRpcRouteService.getInstance().registerRoute(instanceName, rpcHttpBean.getObject(),
                     rpcFilter, rpcHttpBean.getHttpType(), rpcHttpBean.getReturnType());
         }
     }
@@ -30,17 +30,17 @@ public class RpcHttpServerHandler extends AbstractRpcHttpServerHandler {
     @Override
     public RpcRouteInfo isRouteInfos(String route, String methodType,
                                      Map<String, Object> params) throws Exception {
-        return PomeloRpcRouteServiceFactory.getRouteService().isRouteInfos(route, methodType, params);
+        return PomeloRpcRouteService.getInstance().isRouteInfos(route, methodType, params);
     }
 
     @Override
     public Object methodInvoke(RpcRouteInfo routeInfo) throws Exception {
-        return PomeloRpcRouteServiceFactory.getRouteService().methodInvoke(routeInfo);
+        return PomeloRpcRouteService.getInstance().methodInvoke(routeInfo);
     }
 
     @Override
     public void clear() {
-        PomeloRpcRouteServiceFactory.getRouteService().clear();
+        PomeloRpcRouteService.getInstance().clear();
     }
 
     static class SingletonHolder {

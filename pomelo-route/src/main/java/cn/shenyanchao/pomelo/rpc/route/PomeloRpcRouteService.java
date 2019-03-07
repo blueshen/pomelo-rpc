@@ -1,4 +1,4 @@
-package cn.shenyanchao.pomelo.rpc.core.route;
+package cn.shenyanchao.pomelo.rpc.route;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -20,6 +20,10 @@ public class PomeloRpcRouteService implements IPomeloRpcRouteService {
     public static final int TYPE = 0;
 
     private static List<RpcRouteInfo> rpcRouteInfos = new ArrayList<RpcRouteInfo>();
+
+    public static PomeloRpcRouteService getInstance() {
+        return SingletonHolder.instance;
+    }
 
     @Override
     public RpcRouteInfo isRouteInfos(String route, String methodType, Map<String, Object> params) throws Exception {
@@ -89,8 +93,8 @@ public class PomeloRpcRouteService implements IPomeloRpcRouteService {
 
                 Object object = routeInfo.getObjCls().newInstance();
 
-                if (routeInfo.getRpcFilter() != null) {
-                    RpcInterceptor rpcFilter = routeInfo.getRpcFilter();
+                if (routeInfo.getRpcInterceptor() != null) {
+                    RpcInterceptor rpcFilter = routeInfo.getRpcInterceptor();
 
                     if (rpcFilter.before(method, object, objs)) {
                         result = getResult(method, object, objs);
@@ -111,7 +115,7 @@ public class PomeloRpcRouteService implements IPomeloRpcRouteService {
     }
 
     private Object getResult(Method method, Object object, Object... args) throws Exception {
-        return method.invoke(object, args);// 执行
+        return method.invoke(object, args);
     }
 
     @Override
@@ -129,7 +133,7 @@ public class PomeloRpcRouteService implements IPomeloRpcRouteService {
             rpcRouteInfo.setMethods(methods);
             rpcRouteInfo.setMethod(method.getName());
             rpcRouteInfo.setReturnType(returnType);
-            rpcRouteInfo.setRpcFilter(rpcFilter);
+            rpcRouteInfo.setRpcInterceptor(rpcFilter);
             String route = projectname + "/" + simplename + "/" + rpcRouteInfo.getMethod();
             rpcRouteInfo.setRoute(route);
 
@@ -143,4 +147,7 @@ public class PomeloRpcRouteService implements IPomeloRpcRouteService {
         rpcRouteInfos.clear();
     }
 
+    static class SingletonHolder {
+        static final PomeloRpcRouteService instance = new PomeloRpcRouteService();
+    }
 }

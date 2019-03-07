@@ -1,4 +1,4 @@
-package cn.shenyanchao.pomelo.rpc.core.route;
+package cn.shenyanchao.pomelo.rpc.route;
 
 import java.net.InetSocketAddress;
 import java.util.ArrayList;

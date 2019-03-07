@@ -1,4 +1,4 @@
-package cn.shenyanchao.pomelo.rpc.core.route;
+package cn.shenyanchao.pomelo.rpc.route;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
@@ -11,9 +11,6 @@ import cn.shenyanchao.pomelo.rpc.core.server.filter.RpcInterceptor;
  */
 public class RpcRouteInfo implements Serializable {
 
-    /**
-     *
-     */
     private static final long serialVersionUID = -8853603569468133779L;
 
     /**
@@ -56,7 +53,7 @@ public class RpcRouteInfo implements Serializable {
     /**
      * 过滤器
      */
-    private RpcInterceptor rpcFilter;
+    private RpcInterceptor rpcInterceptor;
 
     public RpcRouteInfo() {
         super();
@@ -160,18 +157,11 @@ public class RpcRouteInfo implements Serializable {
         this.returnType = returnType;
     }
 
-    /**
-     * @return the rpcFilter
-     */
-    public RpcInterceptor getRpcFilter() {
-        return rpcFilter;
+    public RpcInterceptor getRpcInterceptor() {
+        return rpcInterceptor;
     }
 
-    /**
-     * @param rpcFilter the rpcFilter to set
-     */
-    public void setRpcFilter(RpcInterceptor rpcFilter) {
-        this.rpcFilter = rpcFilter;
+    public void setRpcInterceptor(RpcInterceptor rpcInterceptor) {
+        this.rpcInterceptor = rpcInterceptor;
     }
-
 }

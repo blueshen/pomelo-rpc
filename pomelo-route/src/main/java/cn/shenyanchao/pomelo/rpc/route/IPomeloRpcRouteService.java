@@ -1,4 +1,4 @@
-package cn.shenyanchao.pomelo.rpc.core.route;
+package cn.shenyanchao.pomelo.rpc.route;
 
 import java.util.Map;
 
@@ -10,18 +10,15 @@ import cn.shenyanchao.pomelo.rpc.core.server.filter.RpcInterceptor;
 public interface IPomeloRpcRouteService {
 
     /**
-     * 判断请求地址是否包含在路由表内，有则返回对应的实体
-     * 如果有，设置参数;没有不设置，返回null
-     *
      * @param route
      * @param methodType
-     * @param parmas
+     * @param params
      *
      * @return
      *
      * @throws Exception
      */
-    RpcRouteInfo isRouteInfos(String route, String methodType, Map<String, Object> parmas) throws Exception;
+    RpcRouteInfo isRouteInfos(String route, String methodType, Map<String, Object> params) throws Exception;
 
     /**
      * 根据参数执行对应的方法
@@ -39,7 +36,7 @@ public interface IPomeloRpcRouteService {
      *
      * @param instance
      */
-    void registerRoute(String projectname, Object instance, RpcInterceptor rpcFilter, String httpType,
+    void registerRoute(String projectname, Object instance, RpcInterceptor rpcInterceptor, String httpType,
                        String returnType);
 
     void clear();

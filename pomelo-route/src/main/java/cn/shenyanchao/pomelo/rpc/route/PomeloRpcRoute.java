@@ -1,4 +1,4 @@
-package cn.shenyanchao.pomelo.rpc.core.route;
+package cn.shenyanchao.pomelo.rpc.route;
 
 import java.util.List;
 
@@ -8,13 +8,12 @@ import java.util.List;
 public class PomeloRpcRoute {
 
     public static RpcRouteServer getBestServer(List<RpcRouteServer> serverList) {
-        RpcRouteServer server = null;
+        RpcRouteServer server;
         RpcRouteServer best = null;
         int total = 0;
         for (int i = 0, len = serverList.size(); i < len; i++) {
-            //当前服务器对象
+
             server = serverList.get(i);
-            //当前服务器已宕机，排除
             if (server.down) {
                 continue;
             }
@@ -23,7 +22,7 @@ public class PomeloRpcRoute {
             if (server.effectiveWeight < server.weight) {
                 server.effectiveWeight++;
             }
-            if (best == null || server.currentWeight > best.currentWeight) {
+            if (null == best || server.currentWeight > best.currentWeight) {
                 best = server;
             }
 
