@@ -26,7 +26,7 @@ public class PomeloRpcProtocol {
         return DefaultRpcProtocol.getInstance().encode(message, byteBufferWrapper);
     }
 
-    public static Object decode(RpcByteBuffer wrapper, Message errorObject) throws Exception {
+    public static Message decode(RpcByteBuffer wrapper, Message errorObject) throws Exception {
         final int originPos = wrapper.readerIndex();
         if (wrapper.readableBytes() < 2) {
             wrapper.setReaderIndex(originPos);

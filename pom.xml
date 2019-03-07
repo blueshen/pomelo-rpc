@@ -11,6 +11,7 @@
     <artifactId>pomelo-rpc</artifactId>
     <version>0.1.0</version>
     <packaging>pom</packaging>
+    <description>Just another rpc framework</description>
 
     <modules>
         <module>pomelo-core</module>
@@ -31,9 +32,7 @@
         <curator.version>2.13.0</curator.version>
         <logback.version>1.1.7</logback.version>
         <fastjson.version>1.2.47</fastjson.version>
-        <github.global.server>github</github.global.server>
     </properties>
-
     <url>https://www.shenyanchao.cn/pomelo-rpc/</url>
     <issueManagement>
         <url>https://github.com/blueshen/pomelo-rpc/issues</url>
@@ -168,6 +167,7 @@
                 <version>0.12</version>
                 <configuration>
                     <message>Creating site for ${project.version}</message>
+                    <server>github</server>
                 </configuration>
                 <executions>
                     <execution>
@@ -190,7 +190,7 @@
                     </dependency>
                 </dependencies>
                 <configuration>
-                    <locales>zh_CN</locales>
+                    <locales>en_US</locales>
                     <reportPlugins>
                         <plugin>
                             <groupId>org.apache.maven.plugins</groupId>
