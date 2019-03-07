@@ -1,11 +1,12 @@
 package cn.shenyanchao.pomelo.rpc.spring.config.tcp;
 
-import cn.shenyanchao.pomelo.rpc.support.PomeloRpcReference;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.beans.factory.xml.BeanDefinitionParser;
 import org.springframework.beans.factory.xml.ParserContext;
 import org.w3c.dom.Element;
+
+import cn.shenyanchao.pomelo.rpc.support.PomeloRpcReference;
 
 /**
  * @author shenyanchao

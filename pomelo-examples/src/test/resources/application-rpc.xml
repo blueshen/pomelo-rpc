@@ -7,15 +7,15 @@
         http://www.shenyanchao.cn/pomelorpc
         http://www.shenyanchao.cn/pomelorpc/pomelorpc.xsd">
 
-    <pomelorpc:application id="rpcRegistryApplication" address="127.0.0.1:2181" flag="1" timeout="500"/>
+    <pomelorpc:application id="rpcRegistryApplication" address="127.0.0.1:2181" flag="1" timeout="2000"/>
     <pomelorpc:registry id="rpcRegistry" ip="localhost" port="10018" timeout="200" protocolType="1" serializerType="4"
-                        group="example" threadCount="200"/>
+                        group="example" threadCount="24"/>
 
     <pomelorpc:service id="IHelloService" interfaceName="cn.shenyanchao.pomelo.rpc.demo.service.IHelloService"
-                       ref="helloService" filterRef="myRpcFilter"/>
+                       ref="helloService" interceptorRef="myRpcInterceptor"/>
 
     <bean id="helloService" class="cn.shenyanchao.pomelo.rpc.demo.service.impl.HelloService"/>
-    <bean id="myRpcFilter" class="cn.shenyanchao.pomelo.rpc.demo.filter.MyRpcFilter"/>
+    <bean id="myRpcInterceptor" class="cn.shenyanchao.pomelo.rpc.demo.filter.MyRpcInterceptor"/>
 
 
 </beans>

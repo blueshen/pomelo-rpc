@@ -1,6 +1,6 @@
 package cn.shenyanchao.pomelo.rpc.core.server.handler;
 
-import cn.shenyanchao.pomelo.rpc.core.server.filter.RpcFilter;
+import cn.shenyanchao.pomelo.rpc.core.server.filter.RpcInterceptor;
 
 /**
  * @author shenyanchao
@@ -13,7 +13,7 @@ public interface RpcServerHandler {
      * @param instanceName
      * @param instance
      */
-    void addHandler(String instanceName, Object instance, RpcFilter rpcFilter);
+    void addHandler(String instanceName, Object instance, RpcInterceptor rpcFilter);
 
     /**
      * 清除

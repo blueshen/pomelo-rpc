@@ -9,9 +9,8 @@ import java.util.Map;
 
 import com.alibaba.fastjson.JSONObject;
 
+import cn.shenyanchao.pomelo.rpc.core.server.filter.RpcInterceptor;
 import cn.shenyanchao.pomelo.rpc.core.util.ClassPoolUtils;
-import cn.shenyanchao.pomelo.rpc.core.util.StringUtil;
-import cn.shenyanchao.pomelo.rpc.core.server.filter.RpcFilter;
 
 /**
  * @author shenyanchao
@@ -71,7 +70,7 @@ public class PomeloRpcRouteService implements IPomeloRpcRouteService {
                             || mdTypes[j].getName().startsWith("java.")) {// java 私有类型
                         Map<String, Object> params = routeInfo.getParams();
 
-                        if (!StringUtil.isBlank(paramNames) && paramNames[j] != null) {
+                        if (null != paramNames && null != paramNames[j]) {
                             if (params.containsKey(paramNames[j])) {
                                 objs[j] = params.get(paramNames[j]);
                             }
@@ -86,19 +85,19 @@ public class PomeloRpcRouteService implements IPomeloRpcRouteService {
 
                 method.setAccessible(true);
 
-                Object result = null;
+                Object result;
 
                 Object object = routeInfo.getObjCls().newInstance();
 
                 if (routeInfo.getRpcFilter() != null) {
-                    RpcFilter rpcFilter = routeInfo.getRpcFilter();
+                    RpcInterceptor rpcFilter = routeInfo.getRpcFilter();
 
-                    if (rpcFilter.doBeforeRequest(method, object, objs)) {
+                    if (rpcFilter.before(method, object, objs)) {
                         result = getResult(method, object, objs);
                     } else {
                         throw new Exception("无效的请求，服务端已经拒绝回应");
                     }
-                    rpcFilter.doAfterRequest(result);
+                    rpcFilter.after(result);
 
                 } else {
 
@@ -116,7 +115,7 @@ public class PomeloRpcRouteService implements IPomeloRpcRouteService {
     }
 
     @Override
-    public void registerRoute(String projectname, Object instance, RpcFilter rpcFilter, String httpType,
+    public void registerRoute(String projectname, Object instance, RpcInterceptor rpcFilter, String httpType,
                               String returnType) {
         Method[] methods = instance.getClass().getDeclaredMethods();
         for (Method method : methods) {

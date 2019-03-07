@@ -1,10 +1,10 @@
 package cn.shenyanchao.pomelo.rpc.support;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 
 import cn.shenyanchao.pomelo.rpc.core.util.NetUtils;
-import cn.shenyanchao.pomelo.rpc.core.util.StringUtil;
 import cn.shenyanchao.pomelo.rpc.registry.RegisterModule;
 import cn.shenyanchao.pomelo.rpc.tcp.netty4.server.PomeloTcpServer;
 
@@ -91,7 +91,7 @@ public class PomeloRpcRegistry implements InitializingBean, DisposableBean {
     }
 
     private String getLocalhost() {
-        String ip = StringUtil.isBlank(this.getIp()) ? NetUtils.getLocalHost() : this.getIp();
+        String ip = StringUtils.isBlank(this.getIp()) ? NetUtils.getLocalHost() : this.getIp();
         return ip;
     }
 

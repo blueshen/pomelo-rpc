@@ -37,7 +37,7 @@ public class HttpServiceConsumer {
         for (int i = 0; i < count; i++) {
             Response response = client.newCall(request).execute();
             String returnValue = response.body().string();
-//            LOG.debug(returnValue);
+            //            LOG.debug(returnValue);
         }
         long endtime = System.currentTimeMillis();
         LOG.info("get qps:{}", count / ((endtime - begin) / 1000.0));
@@ -62,7 +62,7 @@ public class HttpServiceConsumer {
         for (int i = 0; i < count; i++) {
             Response response = client.newCall(request).execute();
             String returnValue = response.body().string();
-//            LOG.debug(returnValue);
+            //            LOG.debug(returnValue);
 
         }
         long endtime = System.currentTimeMillis();

@@ -5,7 +5,7 @@ import java.lang.reflect.Method;
 /**
  * @author shenyanchao
  */
-public interface RpcFilter {
+public interface RpcInterceptor {
 
     /**
      * 拦截服务端开始前处理
@@ -14,17 +14,17 @@ public interface RpcFilter {
      * @param processor
      * @param requestObjects
      *
-     * @return
+     * @return true or false
      */
-    boolean doBeforeRequest(Method method, Object processor, Object[] requestObjects);
+    boolean before(Method method, Object processor, Object[] requestObjects);
 
     /**
      * 拦截器服务端后处理
      *
      * @param processor
      *
-     * @return
+     * @return true or false
      */
-    boolean doAfterRequest(Object processor);
+    boolean after(Object processor);
 
 }

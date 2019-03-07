@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import cn.shenyanchao.pomelo.rpc.core.thread.NamedThreadFactory;
+import cn.shenyanchao.pomelo.rpc.demo.entity.RpcUser;
 import cn.shenyanchao.pomelo.rpc.demo.service.IHelloService;
 
 public class ServiceConsumer {
@@ -21,7 +22,7 @@ public class ServiceConsumer {
 
     @Test
     @Ignore
-    public  void rpcBenchmark() throws Exception {
+    public void rpcBenchmark() throws Exception {
 
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
                 "application-client.xml");
@@ -29,17 +30,20 @@ public class ServiceConsumer {
                 .getBean("helloService");
         long start = System.currentTimeMillis();
         final int count = 10000;
-        final int threadcount = 10;
+        final int threadcount = 24;
 
         ExecutorService executorService = Executors.newFixedThreadPool(threadcount, new NamedThreadFactory("client"
                 + "-send"));
+        RpcUser rpcUser = new RpcUser();
+        rpcUser.setName("shenyanchao");
+        rpcUser.setAge("30");
         List<Future> futureList = new ArrayList<>();
         for (int j = 0; j < threadcount; j++) {
             Future future = executorService.submit(new Runnable() {
                 @Override
                 public void run() {
                     for (int i = 0; i < count; i++) {
-                        String greeting = helloService.sayHi("shenyanchao_" + i);
+                        String greeting = helloService.sayHiToUser(rpcUser);
                         //                        LOG.info(greeting);
                     }
                 }

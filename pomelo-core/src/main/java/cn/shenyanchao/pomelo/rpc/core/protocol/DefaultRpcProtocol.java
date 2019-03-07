@@ -8,9 +8,9 @@ import org.slf4j.LoggerFactory;
 
 import cn.shenyanchao.pomelo.rpc.core.bytebuffer.RpcByteBuffer;
 import cn.shenyanchao.pomelo.rpc.core.message.Message;
-import cn.shenyanchao.pomelo.rpc.core.serialize.PomeloRpcSerializers;
 import cn.shenyanchao.pomelo.rpc.core.message.PomeloRequestMessage;
 import cn.shenyanchao.pomelo.rpc.core.message.PomeloResponseMessage;
+import cn.shenyanchao.pomelo.rpc.core.serialize.PomeloRpcSerializers;
 
 /**
  * 协议实现,每个字节代表什么
@@ -31,7 +31,7 @@ public class DefaultRpcProtocol implements RpcProtocol {
 
     private static final byte RESPONSE = (byte) 1;
 
-    private DefaultRpcProtocol(){
+    private DefaultRpcProtocol() {
 
     }
 
@@ -182,7 +182,7 @@ public class DefaultRpcProtocol implements RpcProtocol {
 
     @Override
     public Message decode(RpcByteBuffer wrapper, Message errorObject,
-                         int... originPosArray) throws Exception {
+                          int... originPosArray) throws Exception {
         final int originPos;
         if (originPosArray != null && originPosArray.length == 1) {
             originPos = originPosArray[0];

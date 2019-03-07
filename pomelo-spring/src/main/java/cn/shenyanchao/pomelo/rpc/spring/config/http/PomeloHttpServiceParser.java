@@ -1,17 +1,17 @@
 package cn.shenyanchao.pomelo.rpc.spring.config.http;
 
-import cn.shenyanchao.pomelo.rpc.support.PomeloRpcHttpService;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.beans.factory.xml.BeanDefinitionParser;
 import org.springframework.beans.factory.xml.ParserContext;
 import org.w3c.dom.Element;
 
+import cn.shenyanchao.pomelo.rpc.support.PomeloRpcHttpService;
+
 /**
  * @author shenyanchao
  */
 public class PomeloHttpServiceParser implements BeanDefinitionParser {
-
 
     @Override
     public BeanDefinition parse(Element element, ParserContext parserContext) {

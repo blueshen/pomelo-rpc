@@ -1,4 +1,4 @@
-package cn.shenyanchao.pomelo.rpc.core.server.handler.tcp;
+package cn.shenyanchao.pomelo.rpc.tcp.netty4.server.handler;
 
 import cn.shenyanchao.pomelo.rpc.core.message.PomeloRequestMessage;
 import cn.shenyanchao.pomelo.rpc.core.message.PomeloResponseMessage;
@@ -18,6 +18,7 @@ public abstract class AbstractRpcTcpServerHandler implements RpcServerHandler {
      *
      * @return
      */
-    public abstract PomeloResponseMessage handleRequest(PomeloRequestMessage request, int serializerType, int protocolType);
+    public abstract PomeloResponseMessage handleRequest(PomeloRequestMessage request, int serializerType,
+                                                        int protocolType);
 
 }

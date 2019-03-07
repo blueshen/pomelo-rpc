@@ -7,7 +7,7 @@
     <parent>
         <groupId>cn.shenyanchao.pomelo</groupId>
         <artifactId>pomelo-rpc</artifactId>
-        <version>0.1.0</version>
+        <version>0.2.0-SNAPSHOT</version>
         <relativePath>../</relativePath>
     </parent>
     <artifactId>pomelo-tcp</artifactId>
@@ -23,6 +23,11 @@
         <dependency>
             <groupId>cn.shenyanchao.pomelo</groupId>
             <artifactId>pomelo-registry</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.shenyanchao.pomelo</groupId>
+            <artifactId>pomelo-route</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>

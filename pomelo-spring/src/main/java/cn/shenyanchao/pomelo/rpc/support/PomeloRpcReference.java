@@ -1,11 +1,11 @@
 package cn.shenyanchao.pomelo.rpc.support;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.FactoryBean;
 
-import cn.shenyanchao.pomelo.rpc.core.util.StringUtil;
 import cn.shenyanchao.pomelo.rpc.discovery.DiscoveryModule;
 import cn.shenyanchao.pomelo.rpc.tcp.netty4.client.factory.PomeloRpcTcpClientFactory;
 import cn.shenyanchao.pomelo.rpc.tcp.netty4.client.handler.PomeloRpcTcpClientProxy;
@@ -47,13 +47,14 @@ public class PomeloRpcReference implements FactoryBean, DisposableBean {
     @Override
     public Object getObject() throws Exception {
         return PomeloRpcTcpClientProxy.getInstance()
-                .getProxyService(getObjectType(), timeout, serializerType, protocolType, getObjectType().getName(), group);
+                .getProxyService(getObjectType(), timeout, serializerType, protocolType, getObjectType().getName(),
+                        group);
     }
 
     @Override
     public Class<?> getObjectType() {
         try {
-            if (StringUtil.isBlank(interfaceName)) {
+            if (StringUtils.isBlank(interfaceName)) {
                 LOG.warn("interfaceName is null");
                 return null;
             } else {

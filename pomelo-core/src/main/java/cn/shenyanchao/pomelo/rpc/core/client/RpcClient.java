@@ -7,7 +7,6 @@ import cn.shenyanchao.pomelo.rpc.core.client.factory.RpcClientFactory;
  */
 public interface RpcClient {
 
-
     /**
      * 动态调用
      *
@@ -18,13 +17,14 @@ public interface RpcClient {
      * @param timeout
      * @param codecType
      * @param protocolType
+     *
      * @return
+     *
      * @throws Exception
      */
     Object invokeImpl(String targetInstanceName, String methodName,
                       String[] argTypes, Object[] args, int timeout, int codecType, int protocolType)
             throws Exception;
-
 
     /**
      * server address
@@ -41,7 +41,6 @@ public interface RpcClient {
     int getServerPort();
 
     /**
-     *
      * @return
      */
     RpcClientFactory getRpcClientFactory();

@@ -18,13 +18,13 @@ public class PomeloRpcTcpClientProxy implements ClientProxy {
     }
 
     @Override
-    public <T> T getProxyService(Class<T> clazz, int timeout, int codecType,
+    public <T> T getProxyService(Class<T> clazz, int timeout, int serializerType,
                                  int protocolType, String targetInstanceName, String group) {
         return (T) Proxy.newProxyInstance(
                 Thread.currentThread().getContextClassLoader(),
                 new Class[] {clazz},
                 new PomeloRpcTcpClientInvocationHandler(group, timeout,
-                        targetInstanceName, codecType, protocolType));
+                        targetInstanceName, serializerType, protocolType));
     }
 
     private static class SingletonHolder {

@@ -7,9 +7,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cn.shenyanchao.pomelo.rpc.core.server.RpcServer;
-import cn.shenyanchao.pomelo.rpc.core.server.filter.RpcFilter;
-import cn.shenyanchao.pomelo.rpc.core.server.handler.factory.PomeloRpcServerHandlerFactory;
+import cn.shenyanchao.pomelo.rpc.core.server.filter.RpcInterceptor;
 import cn.shenyanchao.pomelo.rpc.core.thread.NamedThreadFactory;
+import cn.shenyanchao.pomelo.rpc.http.RpcHttpServerHandler;
 import cn.shenyanchao.pomelo.rpc.http.netty4.server.handler.PomeloHttpServerHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
@@ -47,14 +47,14 @@ public class PomeloHttpServer implements RpcServer {
 
     @Override
     public void registerService(String serviceName, Object serviceInstance,
-                                RpcFilter rpcFilter) {
+                                RpcInterceptor rpcFilter) {
 
-        PomeloRpcServerHandlerFactory.getHttpServerHandler().addHandler(serviceName, serviceInstance, rpcFilter);
+        RpcHttpServerHandler.getInstance().addHandler(serviceName, serviceInstance, rpcFilter);
     }
 
     @Override
     public void stop() {
-        PomeloRpcServerHandlerFactory.getHttpServerHandler().clear();
+        RpcHttpServerHandler.getInstance().clear();
         bossGroup.shutdownGracefully();
         workerGroup.shutdownGracefully();
     }

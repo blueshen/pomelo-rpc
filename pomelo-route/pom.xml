@@ -10,28 +10,18 @@
         <version>0.2.0-SNAPSHOT</version>
         <relativePath>../</relativePath>
     </parent>
-    <groupId>cn.shenyanchao.pomelo</groupId>
-    <artifactId>pomelo-examples</artifactId>
-    <description>pomelo使用样例</description>
+    <artifactId>pomelo-route</artifactId>
+    <name>pomelo-route</name>
+    <description>pomelo路由</description>
 
     <dependencies>
-
         <dependency>
             <groupId>cn.shenyanchao.pomelo</groupId>
-            <artifactId>pomelo-spring</artifactId>
+            <artifactId>pomelo-core</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.squareup.okhttp3</groupId>
-            <artifactId>okhttp</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-        </dependency>
+
+
     </dependencies>
+
 </project>

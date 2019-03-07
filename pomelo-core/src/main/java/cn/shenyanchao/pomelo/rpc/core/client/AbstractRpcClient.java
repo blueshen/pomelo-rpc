@@ -6,10 +6,9 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cn.shenyanchao.pomelo.rpc.core.serialize.PomeloRpcSerializers;
 import cn.shenyanchao.pomelo.rpc.core.message.PomeloRequestMessage;
 import cn.shenyanchao.pomelo.rpc.core.message.PomeloResponseMessage;
-import cn.shenyanchao.pomelo.rpc.core.util.StringUtil;
+import cn.shenyanchao.pomelo.rpc.core.serialize.PomeloRpcSerializers;
 
 /**
  * @author shenyanchao
@@ -91,8 +90,9 @@ public abstract class AbstractRpcClient implements RpcClient {
                 if (((byte[]) rpcResponse.getResponse()).length == 0) {
                     rpcResponse.setResponse(null);
                 } else {
-                    Object responseObject = PomeloRpcSerializers.getSerialization(rpcResponse.getSerializerType()).deserialize(
-                            responseClassName, (byte[]) rpcResponse.getResponse());
+                    Object responseObject =
+                            PomeloRpcSerializers.getSerialization(rpcResponse.getSerializerType()).deserialize(
+                                    responseClassName, (byte[]) rpcResponse.getResponse());
                     if (responseObject instanceof Throwable) {
                         rpcResponse.setException((Throwable) responseObject);
                     } else {
@@ -105,7 +105,7 @@ public abstract class AbstractRpcClient implements RpcClient {
             throw new Exception("Deserialize response object error", e);
         }
 
-        if (!StringUtil.isBlank(rpcResponse.getException())) {
+        if (null != rpcResponse.getException()) {
             Throwable t = rpcResponse.getException();
             LOG.error("server error,server is:{}:{}, request id is:{}", getServerIP(), getServerPort(),
                     requestMessage.getId(), t);

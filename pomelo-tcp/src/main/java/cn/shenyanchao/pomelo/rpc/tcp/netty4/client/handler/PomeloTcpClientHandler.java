@@ -1,7 +1,6 @@
 package cn.shenyanchao.pomelo.rpc.tcp.netty4.client.handler;
 
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
 
 import org.slf4j.Logger;

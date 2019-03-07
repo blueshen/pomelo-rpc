@@ -3,7 +3,6 @@ package cn.shenyanchao.pomelo.rpc.core.serialize;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import cn.shenyanchao.pomelo.rpc.core.serialize.Serialization;
 import cn.shenyanchao.pomelo.rpc.core.serialize.hessian.HessianSerialization;
 import cn.shenyanchao.pomelo.rpc.core.serialize.jdk.JdkSerialization;
 import cn.shenyanchao.pomelo.rpc.core.serialize.kryo.KryoSerialization;

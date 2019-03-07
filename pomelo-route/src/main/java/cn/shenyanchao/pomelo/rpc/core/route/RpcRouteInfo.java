@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.Map;
 
-import cn.shenyanchao.pomelo.rpc.core.server.filter.RpcFilter;
+import cn.shenyanchao.pomelo.rpc.core.server.filter.RpcInterceptor;
 
 /**
  * @author shenyanchao
@@ -56,7 +56,7 @@ public class RpcRouteInfo implements Serializable {
     /**
      * 过滤器
      */
-    private RpcFilter rpcFilter;
+    private RpcInterceptor rpcFilter;
 
     public RpcRouteInfo() {
         super();
@@ -163,14 +163,14 @@ public class RpcRouteInfo implements Serializable {
     /**
      * @return the rpcFilter
      */
-    public RpcFilter getRpcFilter() {
+    public RpcInterceptor getRpcFilter() {
         return rpcFilter;
     }
 
     /**
      * @param rpcFilter the rpcFilter to set
      */
-    public void setRpcFilter(RpcFilter rpcFilter) {
+    public void setRpcFilter(RpcInterceptor rpcFilter) {
         this.rpcFilter = rpcFilter;
     }
 

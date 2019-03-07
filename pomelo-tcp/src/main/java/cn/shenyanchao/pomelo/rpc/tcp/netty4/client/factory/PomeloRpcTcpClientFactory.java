@@ -32,13 +32,12 @@ public class PomeloRpcTcpClientFactory extends AbstractRpcClientFactory {
     private static final Logger LOG = LoggerFactory.getLogger(PomeloRpcTcpClientFactory.class);
     private static final int PROCESSORS = Runtime.getRuntime().availableProcessors();
     private static final ThreadFactory workerThreadFactory = new NamedThreadFactory("pomelo-worker-");
-    private static AbstractRpcClientFactory self = new PomeloRpcTcpClientFactory();
     private static EventLoopGroup workerGroup = new NioEventLoopGroup(6 * PROCESSORS, workerThreadFactory);
 
     private final Bootstrap bootstrap = new Bootstrap();
 
-    public static AbstractRpcClientFactory getInstance() {
-        return self;
+    public static PomeloRpcTcpClientFactory getInstance() {
+        return SingletonHolder.instance;
     }
 
     @Override
@@ -91,6 +90,10 @@ public class PomeloRpcTcpClientFactory extends AbstractRpcClientFactory {
     public void stopClient() throws Exception {
         getInstance().clearClients();
         workerGroup.shutdownGracefully();
+    }
+
+    static class SingletonHolder {
+        public static PomeloRpcTcpClientFactory instance = new PomeloRpcTcpClientFactory();
     }
 
 }

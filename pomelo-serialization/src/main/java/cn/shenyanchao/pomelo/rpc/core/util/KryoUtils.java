@@ -22,7 +22,7 @@ public class KryoUtils {
             for (int i = 0; i < size; i++) {
                 kryo.register(classList.get(i), serializerList.get(i), idList.get(i));
             }
-            kryo.setRegistrationRequired(true);
+            kryo.setRegistrationRequired(false);
             kryo.setReferences(false);
             return kryo;
         }

@@ -1,11 +1,9 @@
-package cn.shenyanchao.pomelo.rpc.core.util;
+package cn.shenyanchao.pomelo.rpc.core.route;
 
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
-import cn.shenyanchao.pomelo.rpc.core.route.RpcRouteServer;
 
 public class SocketAddressUtil {
 

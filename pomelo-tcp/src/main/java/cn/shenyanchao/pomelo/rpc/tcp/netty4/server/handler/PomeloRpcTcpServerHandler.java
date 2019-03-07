@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 
 import cn.shenyanchao.pomelo.rpc.core.message.PomeloRequestMessage;
 import cn.shenyanchao.pomelo.rpc.core.message.PomeloResponseMessage;
-import cn.shenyanchao.pomelo.rpc.core.server.handler.factory.PomeloRpcServerHandlerFactory;
 import cn.shenyanchao.pomelo.rpc.core.thread.NamedThreadFactory;
 import cn.shenyanchao.pomelo.rpc.core.util.NetUtils;
 import io.netty.channel.ChannelFuture;
@@ -45,7 +44,7 @@ public class PomeloRpcTcpServerHandler extends ChannelInboundHandlerAdapter {
         this.serializerType = serializerType;
         threadPoolExecutor = new ThreadPoolExecutor(threadCount, threadCount,
                 60L, TimeUnit.SECONDS,
-                new LinkedBlockingQueue<>(), new NamedThreadFactory("rpc-handler-"));
+                new LinkedBlockingQueue<>(), new NamedThreadFactory("rpc-handler"));
     }
 
     @Override
@@ -91,8 +90,8 @@ public class PomeloRpcTcpServerHandler extends ChannelInboundHandlerAdapter {
         PomeloResponseMessage pomeloResponseMessage;
         try {
             PomeloRequestMessage request = (PomeloRequestMessage) message;
-            pomeloResponseMessage = PomeloRpcServerHandlerFactory
-                    .getServerHandler().handleRequest(request, serializerType, protocolType);
+            pomeloResponseMessage =
+                    RpcTcpServerHandler.getInstance().handleRequest(request, serializerType, protocolType);
             if (ctx.channel().isOpen()) {
                 ChannelFuture wf = ctx.channel().writeAndFlush(pomeloResponseMessage);
                 wf.addListener(new ChannelFutureListener() {

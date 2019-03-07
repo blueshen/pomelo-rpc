@@ -1,8 +1,8 @@
 package cn.shenyanchao.pomelo.rpc.support;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 
-import cn.shenyanchao.pomelo.rpc.core.util.StringUtil;
 import cn.shenyanchao.pomelo.rpc.discovery.DiscoveryModule;
 import cn.shenyanchao.pomelo.rpc.registry.RegisterModule;
 import cn.shenyanchao.pomelo.rpc.tcp.netty4.client.factory.PomeloRpcTcpClientFactory;
@@ -26,10 +26,10 @@ public class PomeloRpcApplication implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        if (StringUtil.isBlank(address)) {
+        if (StringUtils.isBlank(address)) {
             throw new RuntimeException("address can not be null or empty");
         }
-        if (StringUtil.isBlank(flag)) {
+        if (null == flag) {
             throw new RuntimeException("flag can not be null or empty");
         }
         if (flag != 1 && flag != 2) {

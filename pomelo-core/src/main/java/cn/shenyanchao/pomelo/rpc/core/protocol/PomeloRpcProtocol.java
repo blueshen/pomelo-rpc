@@ -1,9 +1,9 @@
 package cn.shenyanchao.pomelo.rpc.core.protocol;
 
+import cn.shenyanchao.pomelo.rpc.core.bytebuffer.RpcByteBuffer;
 import cn.shenyanchao.pomelo.rpc.core.message.Message;
 import cn.shenyanchao.pomelo.rpc.core.message.PomeloRequestMessage;
 import cn.shenyanchao.pomelo.rpc.core.message.PomeloResponseMessage;
-import cn.shenyanchao.pomelo.rpc.core.bytebuffer.RpcByteBuffer;
 
 /**
  * RPC协议, 编码/解码

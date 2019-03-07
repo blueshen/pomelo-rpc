@@ -1,6 +1,5 @@
 package cn.shenyanchao.pomelo.rpc.spring.config.tcp;
 
-import cn.shenyanchao.pomelo.rpc.support.PomeloRpcApplication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -8,6 +7,8 @@ import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.beans.factory.xml.BeanDefinitionParser;
 import org.springframework.beans.factory.xml.ParserContext;
 import org.w3c.dom.Element;
+
+import cn.shenyanchao.pomelo.rpc.support.PomeloRpcApplication;
 
 /**
  * @author shenyanchao
@@ -33,7 +34,6 @@ public class PomeloApplicationParser implements BeanDefinitionParser {
         beanDefinition.getPropertyValues().addPropertyValue("clientId", clientId);
         beanDefinition.getPropertyValues().addPropertyValue("flag", Integer.parseInt(flag));
         beanDefinition.getPropertyValues().addPropertyValue("timeout", Integer.parseInt(timeout));
-
 
         parserContext.getRegistry().registerBeanDefinition(id, beanDefinition);
         return beanDefinition;

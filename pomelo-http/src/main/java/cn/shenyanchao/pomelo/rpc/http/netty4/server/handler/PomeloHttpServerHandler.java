@@ -7,11 +7,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.alibaba.fastjson.JSONObject;
 
 import cn.shenyanchao.pomelo.rpc.core.route.RpcRouteInfo;
-import cn.shenyanchao.pomelo.rpc.core.server.handler.factory.PomeloRpcServerHandlerFactory;
-import cn.shenyanchao.pomelo.rpc.core.util.StringUtil;
+import cn.shenyanchao.pomelo.rpc.http.RpcHttpServerHandler;
 import cn.shenyanchao.pomelo.rpc.http.netty4.server.bean.ServerBean;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -85,7 +86,7 @@ public class PomeloHttpServerHandler extends ChannelInboundHandlerAdapter {
                 ByteBuf content = httpContent.content();
                 if (content.isReadable()) {
                     String contentMsg = content.toString(CharsetUtil.UTF_8);
-                    if (!StringUtil.isBlank(contentMsg)) {
+                    if (StringUtils.isNotBlank(contentMsg)) {
                         Map<String, Object> params = JSONObject.parseObject(contentMsg, Map.class);
                         map.putAll(params);
                     }
@@ -93,7 +94,7 @@ public class PomeloHttpServerHandler extends ChannelInboundHandlerAdapter {
                 }
                 if (message instanceof LastHttpContent) {
                     RpcRouteInfo rpcRouteInfo =
-                            PomeloRpcServerHandlerFactory.getHttpServerHandler().isRouteInfos(url, httpType, map);
+                            RpcHttpServerHandler.getInstance().isRouteInfos(url, httpType, map);
                     if (rpcRouteInfo == null || rpcRouteInfo.getRoute() == null) {
                         DefaultHttpResponse response = getDefaultHttpResponse(HttpResponseStatus.NOT_FOUND, null);
                         serverBean = new ServerBean(response, null, keepAlive);
@@ -101,7 +102,7 @@ public class PomeloHttpServerHandler extends ChannelInboundHandlerAdapter {
                     } else {
                         DefaultHttpResponse response = getDefaultHttpResponse(HttpResponseStatus.OK,
                                 rpcRouteInfo.getReturnType());
-                        Object result = PomeloRpcServerHandlerFactory.getHttpServerHandler().methodInvoke(rpcRouteInfo);
+                        Object result = RpcHttpServerHandler.getInstance().methodInvoke(rpcRouteInfo);
                         if (result == null) {
                             serverBean = new ServerBean(response, null, keepAlive);
                             writeResponse(ctx, serverBean);

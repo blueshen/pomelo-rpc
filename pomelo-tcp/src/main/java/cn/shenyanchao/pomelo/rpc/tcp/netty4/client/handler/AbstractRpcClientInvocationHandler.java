@@ -10,7 +10,7 @@ import java.util.Set;
 import cn.shenyanchao.pomelo.rpc.core.client.RpcClient;
 import cn.shenyanchao.pomelo.rpc.core.client.factory.RpcClientFactory;
 import cn.shenyanchao.pomelo.rpc.core.route.RpcRouteServer;
-import cn.shenyanchao.pomelo.rpc.core.util.SocketAddressUtil;
+import cn.shenyanchao.pomelo.rpc.core.route.SocketAddressUtil;
 import cn.shenyanchao.pomelo.rpc.discovery.DiscoveryModule;
 
 /**
@@ -24,7 +24,7 @@ public abstract class AbstractRpcClientInvocationHandler implements InvocationHa
 
     private String targetInstanceName;
 
-    private int codecType;
+    private int serialzierType;
 
     private int protocolType;
 
@@ -35,7 +35,7 @@ public abstract class AbstractRpcClientInvocationHandler implements InvocationHa
         this.group = group;
         this.timeout = timeout;
         this.targetInstanceName = targetInstanceName;
-        this.codecType = codecType;
+        this.serialzierType = codecType;
         this.protocolType = protocolType;
 
     }
@@ -60,7 +60,7 @@ public abstract class AbstractRpcClientInvocationHandler implements InvocationHa
         String methodName = method.getName();
         String[] argTypes = createParamSignature(method.getParameterTypes());
         Object result =
-                client.invokeImpl(targetInstanceName, methodName, argTypes, args, timeout, codecType, protocolType);
+                client.invokeImpl(targetInstanceName, methodName, argTypes, args, timeout, serialzierType, protocolType);
         return result;
     }
 

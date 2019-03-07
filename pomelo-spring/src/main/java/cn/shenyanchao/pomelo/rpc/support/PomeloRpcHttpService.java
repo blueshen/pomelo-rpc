@@ -6,8 +6,8 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
 
-import cn.shenyanchao.pomelo.rpc.core.server.filter.RpcFilter;
-import cn.shenyanchao.pomelo.rpc.core.server.handler.http.RpcHttpBean;
+import cn.shenyanchao.pomelo.rpc.core.server.filter.RpcInterceptor;
+import cn.shenyanchao.pomelo.rpc.http.RpcHttpBean;
 import cn.shenyanchao.pomelo.rpc.http.netty4.server.PomeloHttpServer;
 
 /**
@@ -39,7 +39,7 @@ public class PomeloRpcHttpService implements ApplicationContextAware, Applicatio
 
         Object object = applicationContext.getBean(ref);
         if (filterRef != null && !"".equals(filterRef)) {
-            RpcFilter rpcFilter = (RpcFilter) applicationContext.getBean(filterRef);
+            RpcInterceptor rpcFilter = (RpcInterceptor) applicationContext.getBean(filterRef);
             RpcHttpBean rpcHttpBean = new RpcHttpBean(object, httpType, returnType);
             PomeloHttpServer.getInstance().registerService(projectName, rpcHttpBean, rpcFilter);
         } else {

@@ -1,4 +1,4 @@
-package cn.shenyanchao.pomelo.rpc.core.server.handler.http;
+package cn.shenyanchao.pomelo.rpc.http;
 
 import java.io.Serializable;
 
@@ -14,7 +14,6 @@ public class RpcHttpBean implements Serializable {
     private String httpType;
 
     private String returnType;
-
 
     public RpcHttpBean(Object object, String httpType, String returnType) {
         super();
@@ -64,6 +63,5 @@ public class RpcHttpBean implements Serializable {
     public void setReturnType(String returnType) {
         this.returnType = returnType;
     }
-
 
 }

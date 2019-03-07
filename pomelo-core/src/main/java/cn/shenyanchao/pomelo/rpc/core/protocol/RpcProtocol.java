@@ -18,7 +18,9 @@ public interface RpcProtocol {
      *
      * @param message
      * @param byteBufferWrapper
+     *
      * @return
+     *
      * @throws Exception
      */
     RpcByteBuffer encode(Message message, RpcByteBuffer byteBufferWrapper) throws Exception;
@@ -29,7 +31,9 @@ public interface RpcProtocol {
      * @param wrapper
      * @param errorObject
      * @param originPos
+     *
      * @return
+     *
      * @throws Exception
      */
     Message decode(RpcByteBuffer wrapper, Message errorObject, int... originPos) throws Exception;

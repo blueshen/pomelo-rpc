@@ -10,8 +10,8 @@ public class PomeloRpcTcpClientInvocationHandler extends AbstractRpcClientInvoca
 
     public PomeloRpcTcpClientInvocationHandler(String group,
                                                int timeout, String targetInstanceName,
-                                               int codecType, int protocolType) {
-        super(group, timeout, targetInstanceName, codecType, protocolType);
+                                               int serializerType, int protocolType) {
+        super(group, timeout, targetInstanceName, serializerType, protocolType);
     }
 
     @Override

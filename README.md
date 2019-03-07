@@ -3,7 +3,7 @@
 
 ---
 
-## Pomelo-Rpc
+## Pomelo-rpc
 
 Just another Rpc Framework
 

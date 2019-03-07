@@ -1,8 +1,8 @@
 package cn.shenyanchao.pomelo.rpc.core.route;
 
-import cn.shenyanchao.pomelo.rpc.core.server.filter.RpcFilter;
-
 import java.util.Map;
+
+import cn.shenyanchao.pomelo.rpc.core.server.filter.RpcInterceptor;
 
 /**
  * @author shenyanchao
@@ -16,7 +16,9 @@ public interface IPomeloRpcRouteService {
      * @param route
      * @param methodType
      * @param parmas
+     *
      * @return
+     *
      * @throws Exception
      */
     RpcRouteInfo isRouteInfos(String route, String methodType, Map<String, Object> parmas) throws Exception;
@@ -25,7 +27,9 @@ public interface IPomeloRpcRouteService {
      * 根据参数执行对应的方法
      *
      * @param routeInfo
+     *
      * @return
+     *
      * @throws Exception
      */
     Object methodInvoke(RpcRouteInfo routeInfo) throws Exception;
@@ -35,8 +39,8 @@ public interface IPomeloRpcRouteService {
      *
      * @param instance
      */
-    void registerRoute(String projectname, Object instance, RpcFilter rpcFilter, String httpType, String returnType);
-
+    void registerRoute(String projectname, Object instance, RpcInterceptor rpcFilter, String httpType,
+                       String returnType);
 
     void clear();
 }

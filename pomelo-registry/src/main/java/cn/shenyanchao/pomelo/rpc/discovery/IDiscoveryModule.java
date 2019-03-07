@@ -8,11 +8,11 @@ import java.util.Set;
  */
 public interface IDiscoveryModule {
 
-
     /**
      * 获取服务端 group 对应的server地址
      *
      * @param group
+     *
      * @return
      */
     Set<InetSocketAddress> getActiveServersByGroup(String group) throws Exception;
@@ -27,9 +27,9 @@ public interface IDiscoveryModule {
      *
      * @param server
      * @param timeout
+     *
      * @throws Exception
      */
     void initZooKeeper(String server, int timeout) throws Exception;
-
 
 }

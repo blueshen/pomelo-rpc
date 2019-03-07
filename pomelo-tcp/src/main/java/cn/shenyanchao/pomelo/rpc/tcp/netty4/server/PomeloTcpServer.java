@@ -7,8 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cn.shenyanchao.pomelo.rpc.core.server.RpcServer;
-import cn.shenyanchao.pomelo.rpc.core.server.filter.RpcFilter;
-import cn.shenyanchao.pomelo.rpc.core.server.handler.factory.PomeloRpcServerHandlerFactory;
+import cn.shenyanchao.pomelo.rpc.core.server.filter.RpcInterceptor;
+import cn.shenyanchao.pomelo.rpc.tcp.netty4.server.handler.RpcTcpServerHandler;
 import cn.shenyanchao.pomelo.rpc.core.thread.NamedThreadFactory;
 import cn.shenyanchao.pomelo.rpc.tcp.netty4.codec.PomeloRpcDecoderHandler;
 import cn.shenyanchao.pomelo.rpc.tcp.netty4.codec.PomeloRpcEncoderHandler;
@@ -18,6 +18,11 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.EventLoopGroup;
+import io.netty.channel.epoll.Epoll;
+import io.netty.channel.epoll.EpollChannelOption;
+import io.netty.channel.epoll.EpollEventLoopGroup;
+import io.netty.channel.epoll.EpollMode;
+import io.netty.channel.epoll.EpollServerSocketChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
@@ -36,7 +41,7 @@ public class PomeloTcpServer implements RpcServer {
 
     private EventLoopGroup bossGroup;
 
-    private NioEventLoopGroup workerGroup;
+    private EventLoopGroup workerGroup;
 
     /**
      * 协议名称
@@ -62,13 +67,13 @@ public class PomeloTcpServer implements RpcServer {
     }
 
     @Override
-    public void registerService(String serviceName, Object serviceInstance, RpcFilter rpcFilter) {
-        PomeloRpcServerHandlerFactory.getServerHandler().addHandler(serviceName, serviceInstance, rpcFilter);
+    public void registerService(String serviceName, Object serviceInstance, RpcInterceptor rpcFilter) {
+        RpcTcpServerHandler.getInstance().addHandler(serviceName, serviceInstance, rpcFilter);
     }
 
     @Override
     public void stop() {
-        PomeloRpcServerHandlerFactory.getServerHandler().clear();
+        RpcTcpServerHandler.getInstance().clear();
         bossGroup.shutdownGracefully();
         workerGroup.shutdownGracefully();
     }
@@ -77,11 +82,25 @@ public class PomeloTcpServer implements RpcServer {
     public void run(final int port, final int timeout) throws Exception {
         ThreadFactory serverBossTF = new NamedThreadFactory("pomelo-io-");
         ThreadFactory serverWorkerTF = new NamedThreadFactory("pomelo-worker-");
-        bossGroup = new NioEventLoopGroup(PROCESSORS, serverBossTF);
-        workerGroup = new NioEventLoopGroup(PROCESSORS * 2, serverWorkerTF);
+
         ServerBootstrap bootstrap = new ServerBootstrap();
+        if (Epoll.isAvailable()) {
+            bossGroup = new EpollEventLoopGroup(PROCESSORS, serverBossTF);
+            workerGroup = new EpollEventLoopGroup(PROCESSORS * 2, serverWorkerTF);
+            ((EpollEventLoopGroup) bossGroup).setIoRatio(100);
+            ((EpollEventLoopGroup) workerGroup).setIoRatio(100);
+            bootstrap.channel(EpollServerSocketChannel.class);
+            bootstrap.option(EpollChannelOption.EPOLL_MODE, EpollMode.EDGE_TRIGGERED);
+            bootstrap.childOption(EpollChannelOption.EPOLL_MODE, EpollMode.EDGE_TRIGGERED);
+            LOG.info("----- USE EPoll-------");
+        } else {
+            bossGroup = new NioEventLoopGroup(PROCESSORS, serverBossTF);
+            workerGroup = new NioEventLoopGroup(PROCESSORS * 2, serverWorkerTF);
+            ((NioEventLoopGroup) bossGroup).setIoRatio(100);
+            ((NioEventLoopGroup) workerGroup).setIoRatio(100);
+            bootstrap.channel(NioServerSocketChannel.class);
+        }
         bootstrap.group(bossGroup, workerGroup)
-                .channel(NioServerSocketChannel.class)
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, timeout)
                 .option(ChannelOption.SO_BACKLOG, 1024)
                 .option(ChannelOption.SO_REUSEADDR, true)

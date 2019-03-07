@@ -1,4 +1,4 @@
-package cn.shenyanchao.pomelo.rpc.core.server.handler.tcp;
+package cn.shenyanchao.pomelo.rpc.tcp.netty4.server.handler;
 
 import java.lang.reflect.Method;
 import java.util.Map;
@@ -7,10 +7,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cn.shenyanchao.pomelo.rpc.core.serialize.PomeloRpcSerializers;
 import cn.shenyanchao.pomelo.rpc.core.message.PomeloRequestMessage;
 import cn.shenyanchao.pomelo.rpc.core.message.PomeloResponseMessage;
-import cn.shenyanchao.pomelo.rpc.core.server.filter.RpcFilter;
+import cn.shenyanchao.pomelo.rpc.core.serialize.PomeloRpcSerializers;
+import cn.shenyanchao.pomelo.rpc.core.server.filter.RpcInterceptor;
 
 /**
  * 服务端处理请求类
@@ -30,8 +30,12 @@ public class RpcTcpServerHandler extends AbstractRpcTcpServerHandler {
 
     private static Map<String, Method> cacheMethods = new ConcurrentHashMap<>(256);
 
+    public static RpcTcpServerHandler getInstance() {
+        return SingletonHolder.rpcTcpServerHandler;
+    }
+
     @Override
-    public void addHandler(String instanceName, Object instance, RpcFilter rpcFilter) {
+    public void addHandler(String instanceName, Object instance, RpcInterceptor rpcFilter) {
         RpcFilterServerBean filterServerBean = new RpcFilterServerBean(instance, rpcFilter);
 
         rpcBeanHandlers.put(instanceName, filterServerBean);
@@ -59,7 +63,7 @@ public class RpcTcpServerHandler extends AbstractRpcTcpServerHandler {
             argTypes[i] = new String(argTypeBytes[i]);
         }
         Object[] requestObjects;
-        Method method ;
+        Method method;
         try {
             RpcFilterServerBean rpcFilterServerBean = rpcBeanHandlers.get(targetInstanceName);
             if (rpcFilterServerBean == null) {
@@ -94,13 +98,13 @@ public class RpcTcpServerHandler extends AbstractRpcTcpServerHandler {
             method.setAccessible(true);
             if (rpcFilterServerBean.getRpcFilter() != null) {
                 // filter 过滤
-                RpcFilter rpcFilter = rpcFilterServerBean.getRpcFilter();
-                if (rpcFilter.doBeforeRequest(method, rpcFilterServerBean.getObject(), requestObjects)) {
+                RpcInterceptor rpcFilter = rpcFilterServerBean.getRpcFilter();
+                if (rpcFilter.before(method, rpcFilterServerBean.getObject(), requestObjects)) {
                     responseWrapper.setResponse(method.invoke(rpcFilterServerBean.getObject(), requestObjects));
                 } else {
                     responseWrapper.setException(new Exception("invalid request，server confused to response"));
                 }
-                rpcFilter.doAfterRequest(responseWrapper.getResponse());
+                rpcFilter.after(responseWrapper.getResponse());
             } else {
                 responseWrapper.setResponse(method.invoke(rpcFilterServerBean.getObject(), requestObjects));
             }
@@ -136,13 +140,17 @@ public class RpcTcpServerHandler extends AbstractRpcTcpServerHandler {
         return methodKeyBuilder.toString();
     }
 
+    static class SingletonHolder {
+        public static RpcTcpServerHandler rpcTcpServerHandler = new RpcTcpServerHandler();
+    }
+
     class RpcFilterServerBean {
 
         private Object object;
 
-        private RpcFilter rpcFilter;
+        private RpcInterceptor rpcFilter;
 
-        public RpcFilterServerBean(Object object, RpcFilter rpcFilter) {
+        public RpcFilterServerBean(Object object, RpcInterceptor rpcFilter) {
             super();
             this.object = object;
             this.rpcFilter = rpcFilter;
@@ -165,14 +173,14 @@ public class RpcTcpServerHandler extends AbstractRpcTcpServerHandler {
         /**
          * @return the rpcFilter
          */
-        public RpcFilter getRpcFilter() {
+        public RpcInterceptor getRpcFilter() {
             return rpcFilter;
         }
 
         /**
          * @param rpcFilter the rpcFilter to set
          */
-        public void setRpcFilter(RpcFilter rpcFilter) {
+        public void setRpcFilter(RpcInterceptor rpcFilter) {
             this.rpcFilter = rpcFilter;
         }
 

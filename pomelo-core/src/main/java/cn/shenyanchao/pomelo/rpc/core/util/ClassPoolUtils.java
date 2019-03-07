@@ -1,15 +1,16 @@
 package cn.shenyanchao.pomelo.rpc.core.util;
 
+import java.lang.reflect.Modifier;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtMethod;
 import javassist.bytecode.CodeAttribute;
 import javassist.bytecode.LocalVariableAttribute;
 import javassist.bytecode.MethodInfo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.lang.reflect.Modifier;
 
 /**
  * @author shenyanchao
@@ -23,6 +24,7 @@ public class ClassPoolUtils {
      *
      * @param classname
      * @param methodname
+     *
      * @return
      */
     public static String[] getMethodVariableName(String classname, String methodname) {
@@ -33,7 +35,8 @@ public class ClassPoolUtils {
             MethodInfo methodInfo = cm.getMethodInfo();
             CodeAttribute codeAttribute = methodInfo.getCodeAttribute();
             String[] paramNames = new String[cm.getParameterTypes().length];
-            LocalVariableAttribute attr = (LocalVariableAttribute) codeAttribute.getAttribute(LocalVariableAttribute.tag);
+            LocalVariableAttribute attr =
+                    (LocalVariableAttribute) codeAttribute.getAttribute(LocalVariableAttribute.tag);
             if (attr != null) {
                 int pos = Modifier.isStatic(cm.getModifiers()) ? 0 : 1;
                 for (int i = 0; i < paramNames.length; i++) {
