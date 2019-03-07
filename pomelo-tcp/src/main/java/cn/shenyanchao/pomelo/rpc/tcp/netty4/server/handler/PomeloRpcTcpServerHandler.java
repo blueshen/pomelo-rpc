@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import cn.shenyanchao.pomelo.rpc.core.message.PomeloRequestMessage;
 import cn.shenyanchao.pomelo.rpc.core.message.PomeloResponseMessage;
 import cn.shenyanchao.pomelo.rpc.core.thread.NamedThreadFactory;
-import cn.shenyanchao.pomelo.rpc.core.util.NetUtils;
+import cn.shenyanchao.pomelo.rpc.util.NetUtils;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;

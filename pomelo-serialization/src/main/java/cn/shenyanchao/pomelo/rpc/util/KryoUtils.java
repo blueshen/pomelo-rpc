@@ -1,4 +1,4 @@
-package cn.shenyanchao.pomelo.rpc.core.util;
+package cn.shenyanchao.pomelo.rpc.util;
 
 import java.util.ArrayList;
 import java.util.List;

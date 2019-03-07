@@ -1,12 +1,12 @@
-package cn.shenyanchao.pomelo.rpc.core.serialize;
+package cn.shenyanchao.pomelo.rpc.serialize;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import cn.shenyanchao.pomelo.rpc.core.serialize.hessian.HessianSerialization;
-import cn.shenyanchao.pomelo.rpc.core.serialize.jdk.JdkSerialization;
-import cn.shenyanchao.pomelo.rpc.core.serialize.kryo.KryoSerialization;
-import cn.shenyanchao.pomelo.rpc.core.serialize.proto.ProtoBufSerialization;
+import cn.shenyanchao.pomelo.rpc.serialize.hessian.HessianSerialization;
+import cn.shenyanchao.pomelo.rpc.serialize.jdk.JdkSerialization;
+import cn.shenyanchao.pomelo.rpc.serialize.kryo.KryoSerialization;
+import cn.shenyanchao.pomelo.rpc.serialize.proto.ProtoBufSerialization;
 
 /**
  * 编解码

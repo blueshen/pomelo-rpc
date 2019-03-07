@@ -10,7 +10,7 @@ import cn.shenyanchao.pomelo.rpc.core.bytebuffer.RpcByteBuffer;
 import cn.shenyanchao.pomelo.rpc.core.message.Message;
 import cn.shenyanchao.pomelo.rpc.core.message.PomeloRequestMessage;
 import cn.shenyanchao.pomelo.rpc.core.message.PomeloResponseMessage;
-import cn.shenyanchao.pomelo.rpc.core.serialize.PomeloRpcSerializers;
+import cn.shenyanchao.pomelo.rpc.serialize.PomeloRpcSerializers;
 
 /**
  * 协议实现,每个字节代表什么

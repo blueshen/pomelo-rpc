@@ -1,10 +1,10 @@
-package cn.shenyanchao.pomelo.rpc.core.serialize.proto;
+package cn.shenyanchao.pomelo.rpc.serialize.proto;
 
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.google.protobuf.Message;
 
-import cn.shenyanchao.pomelo.rpc.core.serialize.Serialization;
+import cn.shenyanchao.pomelo.rpc.serialize.Serialization;
 
 /**
  * @author shenyanchao

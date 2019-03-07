@@ -1,4 +1,4 @@
-package cn.shenyanchao.pomelo.rpc.core.serialize.hessian;
+package cn.shenyanchao.pomelo.rpc.serialize.hessian;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -6,7 +6,7 @@ import java.io.ByteArrayOutputStream;
 import com.caucho.hessian.io.Hessian2Input;
 import com.caucho.hessian.io.Hessian2Output;
 
-import cn.shenyanchao.pomelo.rpc.core.serialize.Serialization;
+import cn.shenyanchao.pomelo.rpc.serialize.Serialization;
 
 /**
  * @author shenyanchao

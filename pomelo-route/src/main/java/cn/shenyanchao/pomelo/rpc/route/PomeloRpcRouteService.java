@@ -10,7 +10,7 @@ import java.util.Map;
 import com.alibaba.fastjson.JSONObject;
 
 import cn.shenyanchao.pomelo.rpc.core.server.filter.RpcInterceptor;
-import cn.shenyanchao.pomelo.rpc.core.util.ClassPoolUtils;
+import cn.shenyanchao.pomelo.rpc.util.ClassPoolUtils;
 
 /**
  * @author shenyanchao
@@ -148,6 +148,6 @@ public class PomeloRpcRouteService implements IPomeloRpcRouteService {
     }
 
     static class SingletonHolder {
-        static final PomeloRpcRouteService instance = new PomeloRpcRouteService();
+        static PomeloRpcRouteService instance = new PomeloRpcRouteService();
     }
 }

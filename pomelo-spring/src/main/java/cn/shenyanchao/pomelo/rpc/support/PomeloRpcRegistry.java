@@ -4,7 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 
-import cn.shenyanchao.pomelo.rpc.core.util.NetUtils;
+import cn.shenyanchao.pomelo.rpc.util.NetUtils;
 import cn.shenyanchao.pomelo.rpc.registry.RegisterModule;
 import cn.shenyanchao.pomelo.rpc.tcp.netty4.server.PomeloTcpServer;
 

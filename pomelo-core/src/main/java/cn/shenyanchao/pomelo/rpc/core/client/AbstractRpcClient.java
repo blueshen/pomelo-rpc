@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import cn.shenyanchao.pomelo.rpc.core.message.PomeloRequestMessage;
 import cn.shenyanchao.pomelo.rpc.core.message.PomeloResponseMessage;
-import cn.shenyanchao.pomelo.rpc.core.serialize.PomeloRpcSerializers;
+import cn.shenyanchao.pomelo.rpc.serialize.PomeloRpcSerializers;
 
 /**
  * @author shenyanchao

@@ -1,10 +1,10 @@
-package cn.shenyanchao.pomelo.rpc.core.serialize.kryo;
+package cn.shenyanchao.pomelo.rpc.serialize.kryo;
 
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 
-import cn.shenyanchao.pomelo.rpc.core.serialize.Serialization;
-import cn.shenyanchao.pomelo.rpc.core.util.KryoUtils;
+import cn.shenyanchao.pomelo.rpc.serialize.Serialization;
+import cn.shenyanchao.pomelo.rpc.util.KryoUtils;
 
 /**
  * @author shenyanchao

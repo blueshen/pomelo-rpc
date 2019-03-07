@@ -1,4 +1,4 @@
-package cn.shenyanchao.pomelo.rpc.core.serialize;
+package cn.shenyanchao.pomelo.rpc.serialize;
 
 /**
  * @author shenyanchao
