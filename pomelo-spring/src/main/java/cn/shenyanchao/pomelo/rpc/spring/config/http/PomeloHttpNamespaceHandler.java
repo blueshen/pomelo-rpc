@@ -11,7 +11,7 @@ public class PomeloHttpNamespaceHandler extends NamespaceHandlerSupport {
     public void init() {
 
         registerBeanDefinitionParser("service", new PomeloHttpServiceParser());
-        registerBeanDefinitionParser("registry", new PomeloHttpRegisteryParser());
+        registerBeanDefinitionParser("registry", new PomeloHttpRegistryParser());
     }
 
 }

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:pomelohttp="http://www.shenyanchao.cn/pomelohttp"
+       xmlns:pomelohttp="https://www.shenyanchao.cn/pomelohttp"
        xmlns="http://www.springframework.org/schema/beans"
        xsi:schemaLocation="
     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-    http://www.shenyanchao.cn/pomelohttp http://www.shenyanchao.cn/pomelorpc/pomelohttp.xsd">
+    https://www.shenyanchao.cn/pomelohttp https://www.shenyanchao.cn/pomelorpc/pomelohttp.xsd">
 
     <pomelohttp:registry id="rpcRegistry" port="10009" timeout="500"/>
     <pomelohttp:service id="IHelloService" projectName="hello" ref="helloService" httpType="POST" returnType="html"/>

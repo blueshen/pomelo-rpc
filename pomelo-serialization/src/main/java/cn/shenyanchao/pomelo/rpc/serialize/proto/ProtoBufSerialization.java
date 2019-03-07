@@ -1,5 +1,6 @@
 package cn.shenyanchao.pomelo.rpc.serialize.proto;
 
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.google.protobuf.Message;
@@ -12,7 +13,7 @@ import cn.shenyanchao.pomelo.rpc.serialize.Serialization;
  */
 public class ProtoBufSerialization implements Serialization {
 
-    private static ConcurrentHashMap<String, Message> messages = new ConcurrentHashMap<>();
+    private static Map<String, Message> messages = new ConcurrentHashMap<>();
 
     public static void addMessage(String className, Message message) {
         messages.putIfAbsent(className, message);

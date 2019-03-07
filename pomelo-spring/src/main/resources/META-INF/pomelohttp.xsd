@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
             xmlns:beans="http://www.springframework.org/schema/beans"
-            targetNamespace="http://www.shenyanchao.cn/pomelohttp"
+            targetNamespace="https://www.shenyanchao.cn/pomelohttp"
             elementFormDefault="qualified">
     <xsd:import namespace="http://www.springframework.org/schema/beans"/>
 
@@ -11,7 +11,7 @@
                 <xsd:extension base="beans:identifiedType">
                     <xsd:attribute name="projectName" type="xsd:string" use="required"/>
                     <xsd:attribute name="ref" type="xsd:string" use="required"/>
-                    <xsd:attribute name="filterRef" type="xsd:string"/>
+                    <xsd:attribute name="interceptorRef" type="xsd:string"/>
                     <xsd:attribute name="httpType" type="xsd:string" use="required"/>
                     <xsd:attribute name="returnType" type="xsd:string" use="required"/>
                 </xsd:extension>

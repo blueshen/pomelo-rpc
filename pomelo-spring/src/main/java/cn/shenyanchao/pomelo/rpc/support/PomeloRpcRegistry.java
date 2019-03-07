@@ -21,9 +21,9 @@ public class PomeloRpcRegistry implements InitializingBean, DisposableBean {
 
     private int timeout;
 
-    private int protocolType;
+    private byte protocolType;
 
-    private int serializerType;
+    private byte serializerType;
 
     private String group;
 
@@ -74,19 +74,19 @@ public class PomeloRpcRegistry implements InitializingBean, DisposableBean {
         this.timeout = timeout;
     }
 
-    public int getProtocolType() {
+    public byte getProtocolType() {
         return protocolType;
     }
 
-    public void setProtocolType(int protocolType) {
+    public void setProtocolType(byte protocolType) {
         this.protocolType = protocolType;
     }
 
-    public int getSerializerType() {
+    public byte getSerializerType() {
         return serializerType;
     }
 
-    public void setSerializerType(int serializerType) {
+    public void setSerializerType(byte serializerType) {
         this.serializerType = serializerType;
     }
 

@@ -6,12 +6,12 @@ import org.springframework.beans.factory.xml.BeanDefinitionParser;
 import org.springframework.beans.factory.xml.ParserContext;
 import org.w3c.dom.Element;
 
-import cn.shenyanchao.pomelo.rpc.support.PomeloRpcHttpRegistery;
+import cn.shenyanchao.pomelo.rpc.support.PomeloRpcHttpRegistry;
 
 /**
  * @author shenyanchao
  */
-public class PomeloHttpRegisteryParser implements BeanDefinitionParser {
+public class PomeloHttpRegistryParser implements BeanDefinitionParser {
 
     @Override
     public BeanDefinition parse(Element element, ParserContext parserContext) {
@@ -21,7 +21,7 @@ public class PomeloHttpRegisteryParser implements BeanDefinitionParser {
         int timeout = Integer.parseInt(element.getAttribute("timeout"));
 
         RootBeanDefinition beanDefinition = new RootBeanDefinition();
-        beanDefinition.setBeanClass(PomeloRpcHttpRegistery.class);
+        beanDefinition.setBeanClass(PomeloRpcHttpRegistry.class);
         beanDefinition.getPropertyValues().addPropertyValue("port", port);
         beanDefinition.getPropertyValues().addPropertyValue("timeout", timeout);
         parserContext.getRegistry().registerBeanDefinition(id, beanDefinition);

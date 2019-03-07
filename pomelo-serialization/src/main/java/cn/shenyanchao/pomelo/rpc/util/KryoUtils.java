@@ -11,9 +11,10 @@ import com.esotericsoftware.kryo.Serializer;
  */
 public class KryoUtils {
 
-    private static final List<Class> classList = new ArrayList<Class>();
-    private static final List<Serializer> serializerList = new ArrayList<Serializer>();
-    private static final List<Integer> idList = new ArrayList<Integer>();
+    private static final List<Class> classList = new ArrayList<>();
+    private static final List<Serializer> serializerList = new ArrayList<>();
+    private static final List<Integer> idList = new ArrayList<>();
+
     private static final ThreadLocal<Kryo> kryos = new ThreadLocal<Kryo>() {
         @Override
         protected Kryo initialValue() {

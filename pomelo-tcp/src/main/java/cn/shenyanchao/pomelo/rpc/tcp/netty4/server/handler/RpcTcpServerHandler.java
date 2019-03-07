@@ -9,8 +9,8 @@ import org.slf4j.LoggerFactory;
 
 import cn.shenyanchao.pomelo.rpc.core.message.PomeloRequestMessage;
 import cn.shenyanchao.pomelo.rpc.core.message.PomeloResponseMessage;
-import cn.shenyanchao.pomelo.rpc.serialize.PomeloRpcSerializers;
 import cn.shenyanchao.pomelo.rpc.core.server.filter.RpcInterceptor;
+import cn.shenyanchao.pomelo.rpc.serialize.SerializerType;
 
 /**
  * 服务端处理请求类
@@ -18,8 +18,6 @@ import cn.shenyanchao.pomelo.rpc.core.server.filter.RpcInterceptor;
  * @author shenyanchao
  */
 public class RpcTcpServerHandler extends AbstractRpcTcpServerHandler {
-
-    public static final int TYPE = 0;
 
     private static final Logger LOG = LoggerFactory.getLogger(RpcTcpServerHandler.class);
 
@@ -80,7 +78,7 @@ public class RpcTcpServerHandler extends AbstractRpcTcpServerHandler {
                 Object[] tmprequestObjects = request.getRequestObjects();
                 for (int i = 0; i < tmprequestObjects.length; i++) {
                     try {
-                        requestObjects[i] = PomeloRpcSerializers.getSerialization(request.getSerializerType())
+                        requestObjects[i] = SerializerType.parse(request.getSerializerType()).getSerialization()
                                 .deserialize(argTypes[i], (byte[]) tmprequestObjects[i]);
                     } catch (Exception e) {
                         throw new Exception("decode request object args error", e);

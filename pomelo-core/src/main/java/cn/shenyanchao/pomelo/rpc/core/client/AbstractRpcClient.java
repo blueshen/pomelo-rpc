@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import cn.shenyanchao.pomelo.rpc.core.message.PomeloRequestMessage;
 import cn.shenyanchao.pomelo.rpc.core.message.PomeloResponseMessage;
-import cn.shenyanchao.pomelo.rpc.serialize.PomeloRpcSerializers;
+import cn.shenyanchao.pomelo.rpc.serialize.SerializerType;
 
 /**
  * @author shenyanchao
@@ -91,7 +91,7 @@ public abstract class AbstractRpcClient implements RpcClient {
                     rpcResponse.setResponse(null);
                 } else {
                     Object responseObject =
-                            PomeloRpcSerializers.getSerialization(rpcResponse.getSerializerType()).deserialize(
+                            SerializerType.parse(rpcResponse.getSerializerType()).getSerialization().deserialize(
                                     responseClassName, (byte[]) rpcResponse.getResponse());
                     if (responseObject instanceof Throwable) {
                         rpcResponse.setException((Throwable) responseObject);

@@ -18,7 +18,7 @@ public class PomeloHttpServiceParser implements BeanDefinitionParser {
 
         String projectName = element.getAttribute("projectName");
         String ref = element.getAttribute("ref");
-        String filterRef = element.getAttribute("filterRef");
+        String interceptorRef = element.getAttribute("interceptorRef");
         String httpType = element.getAttribute("httpType");
         String returnType = element.getAttribute("returnType");
 
@@ -27,7 +27,7 @@ public class PomeloHttpServiceParser implements BeanDefinitionParser {
         beanDefinition.setLazyInit(false);
         beanDefinition.getPropertyValues().addPropertyValue("projectName", projectName);
         beanDefinition.getPropertyValues().addPropertyValue("ref", ref);
-        beanDefinition.getPropertyValues().addPropertyValue("filterRef", filterRef);
+        beanDefinition.getPropertyValues().addPropertyValue("interceptorRef", interceptorRef);
         beanDefinition.getPropertyValues().addPropertyValue("httpType", httpType);
         beanDefinition.getPropertyValues().addPropertyValue("returnType", returnType);
 

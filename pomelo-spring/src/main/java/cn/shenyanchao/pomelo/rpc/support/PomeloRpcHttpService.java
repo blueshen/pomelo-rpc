@@ -1,5 +1,6 @@
 package cn.shenyanchao.pomelo.rpc.support;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -19,7 +20,7 @@ public class PomeloRpcHttpService implements ApplicationContextAware, Applicatio
 
     private String ref;
 
-    private String filterRef;
+    private String interceptorRef;
 
     /**
      * POST,GET,HEAD,PUT,DELETE
@@ -38,8 +39,8 @@ public class PomeloRpcHttpService implements ApplicationContextAware, Applicatio
     public void onApplicationEvent(ApplicationEvent event) {
 
         Object object = applicationContext.getBean(ref);
-        if (filterRef != null && !"".equals(filterRef)) {
-            RpcInterceptor rpcFilter = (RpcInterceptor) applicationContext.getBean(filterRef);
+        if (StringUtils.isNotBlank(interceptorRef)) {
+            RpcInterceptor rpcFilter = (RpcInterceptor) applicationContext.getBean(interceptorRef);
             RpcHttpBean rpcHttpBean = new RpcHttpBean(object, httpType, returnType);
             PomeloHttpServer.getInstance().registerService(projectName, rpcHttpBean, rpcFilter);
         } else {
@@ -71,18 +72,12 @@ public class PomeloRpcHttpService implements ApplicationContextAware, Applicatio
         this.ref = ref;
     }
 
-    /**
-     * @return the filterRef
-     */
-    public String getFilterRef() {
-        return filterRef;
+    public String getInterceptorRef() {
+        return interceptorRef;
     }
 
-    /**
-     * @param filterRef the filterRef to set
-     */
-    public void setFilterRef(String filterRef) {
-        this.filterRef = filterRef;
+    public void setInterceptorRef(String interceptorRef) {
+        this.interceptorRef = interceptorRef;
     }
 
     /**

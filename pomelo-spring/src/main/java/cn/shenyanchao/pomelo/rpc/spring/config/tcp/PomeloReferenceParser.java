@@ -19,8 +19,8 @@ public class PomeloReferenceParser implements BeanDefinitionParser {
         String interfaceName = element.getAttribute("interfaceName");
         String id = element.getAttribute("id");
         String group = element.getAttribute("group");
-        int protocolType = Integer.parseInt(element.getAttribute("protocolType"));
-        int serializerType = Integer.parseInt(element.getAttribute("serializerType"));
+        byte protocolType = Byte.parseByte(element.getAttribute("protocolType"));
+        byte serializerType = Byte.parseByte(element.getAttribute("serializerType"));
         int timeout = Integer.parseInt(element.getAttribute("timeout"));
 
         RootBeanDefinition beanDefinition = new RootBeanDefinition();

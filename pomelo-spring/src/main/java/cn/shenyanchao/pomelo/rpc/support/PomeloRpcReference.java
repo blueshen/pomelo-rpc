@@ -28,11 +28,11 @@ public class PomeloRpcReference implements FactoryBean, DisposableBean {
     /**
      * 序列化类型
      */
-    private int serializerType;
+    private byte serializerType;
     /**
      * 协议类型
      */
-    private int protocolType;
+    private byte protocolType;
     /**
      * 组名
      */
@@ -94,25 +94,19 @@ public class PomeloRpcReference implements FactoryBean, DisposableBean {
         this.timeout = timeout;
     }
 
-    public int getSerializerType() {
+    public byte getSerializerType() {
         return serializerType;
     }
 
-    public void setSerializerType(int serializerType) {
+    public void setSerializerType(byte serializerType) {
         this.serializerType = serializerType;
     }
 
-    /**
-     * @return the protocolType
-     */
-    public int getProtocolType() {
+    public byte getProtocolType() {
         return protocolType;
     }
 
-    /**
-     * @param protocolType the protocolType to set
-     */
-    public void setProtocolType(int protocolType) {
+    public void setProtocolType(byte protocolType) {
         this.protocolType = protocolType;
     }
 

@@ -46,12 +46,12 @@ public class PomeloTcpServer implements RpcServer {
     /**
      * 协议名称
      */
-    private int protocolType;
+    private byte protocolType;
 
     /**
      * 序列化类型
      */
-    private int serializerType;
+    private byte serializerType;
 
     /**
      * 线程数
@@ -127,15 +127,19 @@ public class PomeloTcpServer implements RpcServer {
         LOG.info("--------- start success! ------------");
     }
 
-    public void setProtocolType(int protocolType) {
+    public byte getProtocolType() {
+        return protocolType;
+    }
+
+    public void setProtocolType(byte protocolType) {
         this.protocolType = protocolType;
     }
 
-    public int getSerializerType() {
+    public byte getSerializerType() {
         return serializerType;
     }
 
-    public void setSerializerType(int serializerType) {
+    public void setSerializerType(byte serializerType) {
         this.serializerType = serializerType;
     }
 

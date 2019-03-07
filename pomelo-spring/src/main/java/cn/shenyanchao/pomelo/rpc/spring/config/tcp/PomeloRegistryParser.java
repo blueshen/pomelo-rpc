@@ -20,8 +20,8 @@ public class PomeloRegistryParser implements BeanDefinitionParser {
         String ip = element.getAttribute("ip");
         int port = Integer.parseInt(element.getAttribute("port"));
         int timeout = Integer.parseInt(element.getAttribute("timeout"));
-        int protocolType = Integer.parseInt(element.getAttribute("protocolType"));
-        int serializerType = Integer.parseInt(element.getAttribute("serializerType"));
+        byte protocolType = Byte.parseByte(element.getAttribute("protocolType"));
+        byte serializerType = Byte.parseByte(element.getAttribute("serializerType"));
         int threadCount = Integer.parseInt(element.getAttribute("threadCount"));
         String group = element.getAttribute("group");
 

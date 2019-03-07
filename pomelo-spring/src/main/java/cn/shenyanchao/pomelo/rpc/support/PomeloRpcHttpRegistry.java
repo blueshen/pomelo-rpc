@@ -8,7 +8,7 @@ import cn.shenyanchao.pomelo.rpc.http.netty4.server.PomeloHttpServer;
 /**
  * @author shenyanchao
  */
-public class PomeloRpcHttpRegistery implements InitializingBean, DisposableBean {
+public class PomeloRpcHttpRegistry implements InitializingBean, DisposableBean {
 
     private int port;
 

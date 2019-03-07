@@ -27,13 +27,13 @@ public class PomeloRpcApplication implements InitializingBean {
     @Override
     public void afterPropertiesSet() throws Exception {
         if (StringUtils.isBlank(address)) {
-            throw new RuntimeException("address can not be null or empty");
+            throw new RuntimeException("address is null");
         }
         if (null == flag) {
-            throw new RuntimeException("flag can not be null or empty");
+            throw new RuntimeException("flag is null");
         }
-        if (flag != 1 && flag != 2) {
-            throw new RuntimeException("flag only be 1 or 2");
+        if (1 != flag && 2 != flag) {
+            throw new RuntimeException("flag in [1,2]");
         }
 
         if (1 == flag) {
@@ -42,7 +42,7 @@ public class PomeloRpcApplication implements InitializingBean {
         } else if (2 == flag) {
             //客户端
             DiscoveryModule.getInstance().initZooKeeper(address, timeout);
-            PomeloRpcTcpClientFactory.getInstance().connect(timeout);//客户端启动
+            PomeloRpcTcpClientFactory.getInstance().connect(timeout);
         }
 
     }
