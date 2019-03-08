@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 
+import cn.shenyanchao.pomelo.rpc.serialize.PomeloSerializer;
 import cn.shenyanchao.pomelo.rpc.util.NetUtils;
 import cn.shenyanchao.pomelo.rpc.registry.RegisterModule;
 import cn.shenyanchao.pomelo.rpc.tcp.netty4.server.PomeloTcpServer;
@@ -23,7 +24,7 @@ public class PomeloRpcRegistry implements InitializingBean, DisposableBean {
 
     private byte protocolType;
 
-    private byte serializerType;
+    private PomeloSerializer serializer;
 
     private String group;
 
@@ -43,7 +44,7 @@ public class PomeloRpcRegistry implements InitializingBean, DisposableBean {
             throw new Exception("parameter port can not be null");
         }
 
-        PomeloTcpServer.getInstance().setSerializerType(serializerType);
+        PomeloTcpServer.getInstance().setSerializer(serializer);
         PomeloTcpServer.getInstance().setProtocolType(protocolType);
         PomeloTcpServer.getInstance().setThreadCount(threadCount);
         PomeloTcpServer.getInstance().run(port, timeout);
@@ -82,12 +83,12 @@ public class PomeloRpcRegistry implements InitializingBean, DisposableBean {
         this.protocolType = protocolType;
     }
 
-    public byte getSerializerType() {
-        return serializerType;
+    public PomeloSerializer getSerializer() {
+        return serializer;
     }
 
-    public void setSerializerType(byte serializerType) {
-        this.serializerType = serializerType;
+    public void setSerializer(PomeloSerializer serializer) {
+        this.serializer = serializer;
     }
 
     private String getLocalhost() {

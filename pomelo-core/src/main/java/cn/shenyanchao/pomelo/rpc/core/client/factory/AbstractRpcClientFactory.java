@@ -18,7 +18,7 @@ public abstract class AbstractRpcClientFactory implements RpcClientFactory {
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractRpcClientFactory.class);
 
-    protected static ConcurrentHashMap<Integer, LinkedBlockingQueue<Object>> responses = new ConcurrentHashMap<>();
+    protected static Map<Integer, LinkedBlockingQueue<Object>> responses = new ConcurrentHashMap<>();
     protected static Map<String, AbstractRpcClient> rpcClients = new ConcurrentHashMap<>();
 
     @Override

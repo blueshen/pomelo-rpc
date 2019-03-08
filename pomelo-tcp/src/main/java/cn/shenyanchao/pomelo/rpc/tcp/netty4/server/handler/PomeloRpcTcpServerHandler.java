@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import cn.shenyanchao.pomelo.rpc.core.message.PomeloRequestMessage;
 import cn.shenyanchao.pomelo.rpc.core.message.PomeloResponseMessage;
 import cn.shenyanchao.pomelo.rpc.core.thread.NamedThreadFactory;
+import cn.shenyanchao.pomelo.rpc.serialize.PomeloSerializer;
 import cn.shenyanchao.pomelo.rpc.util.NetUtils;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
@@ -31,17 +32,17 @@ public class PomeloRpcTcpServerHandler extends ChannelInboundHandlerAdapter {
     /**
      * 协议名称
      */
-    private int protocolType;
+    private byte protocolType;
 
     /**
      * 编码类型
      */
-    private int serializerType;
+    private PomeloSerializer serializer;
 
-    public PomeloRpcTcpServerHandler(int threadCount, int protocolType, int serializerType) {
+    public PomeloRpcTcpServerHandler(int threadCount, byte protocolType, PomeloSerializer serializer) {
         super();
         this.protocolType = protocolType;
-        this.serializerType = serializerType;
+        this.serializer = serializer;
         threadPoolExecutor = new ThreadPoolExecutor(threadCount, threadCount,
                 60L, TimeUnit.SECONDS,
                 new LinkedBlockingQueue<>(), new NamedThreadFactory("rpc-handler"));
@@ -91,7 +92,7 @@ public class PomeloRpcTcpServerHandler extends ChannelInboundHandlerAdapter {
         try {
             PomeloRequestMessage request = (PomeloRequestMessage) message;
             pomeloResponseMessage =
-                    RpcTcpServerHandler.getInstance().handleRequest(request, serializerType, protocolType);
+                    RpcTcpServerHandler.getInstance().handleRequest(request, serializer, protocolType);
             if (ctx.channel().isOpen()) {
                 ChannelFuture wf = ctx.channel().writeAndFlush(pomeloResponseMessage);
                 wf.addListener(new ChannelFutureListener() {
@@ -119,7 +120,7 @@ public class PomeloRpcTcpServerHandler extends ChannelInboundHandlerAdapter {
     private void sendErrorResponse(final ChannelHandlerContext ctx, final PomeloRequestMessage request,
                                    String errorMessage) {
         PomeloResponseMessage commonRpcResponse =
-                new PomeloResponseMessage(request.getId(), request.getSerializerType(), request.getProtocolType());
+                new PomeloResponseMessage(request.getId(), request.getSerializer(), request.getProtocolType());
         commonRpcResponse.setException(new Exception(errorMessage));
         ChannelFuture wf = ctx.channel().writeAndFlush(commonRpcResponse);
 

@@ -17,12 +17,6 @@ public class PomeloRpcProtocol {
     public static final byte CURRENT_VERSION = (byte) 1;
 
     public static RpcByteBuffer encode(Message message, RpcByteBuffer byteBufferWrapper) throws Exception {
-        Integer type = 0;
-        if (message instanceof PomeloRequestMessage) {
-            type = ((PomeloRequestMessage) message).getProtocolType();
-        } else if (message instanceof PomeloResponseMessage) {
-            type = ((PomeloResponseMessage) message).getProtocolType();
-        }
         return DefaultRpcProtocol.getInstance().encode(message, byteBufferWrapper);
     }
 

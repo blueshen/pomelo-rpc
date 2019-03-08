@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cn.shenyanchao.pomelo.rpc.core.message.PomeloResponseMessage;
-import cn.shenyanchao.pomelo.rpc.tcp.netty4.client.factory.PomeloRpcTcpClientFactory;
+import cn.shenyanchao.pomelo.rpc.tcp.netty4.client.factory.PomeloRpcClientFactory;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.util.ReferenceCountUtil;
@@ -33,7 +33,7 @@ public class PomeloTcpClientHandler extends ChannelInboundHandlerAdapter {
                     LOG.debug("receive response list from server: {} ,requestId is: {}", ctx.channel().remoteAddress(),
                             response.getRequestId());
                 }
-                PomeloRpcTcpClientFactory.getInstance().receiveResponse(response);
+                PomeloRpcClientFactory.getInstance().receiveResponse(response);
             } else {
                 LOG.error("receive message error,only support List || ResponseWrapper");
                 throw new Exception(
@@ -51,7 +51,7 @@ public class PomeloTcpClientHandler extends ChannelInboundHandlerAdapter {
             LOG.error("catch some exception not IOException", e);
         }
         InetSocketAddress remoteAddress = (InetSocketAddress) ctx.channel().remoteAddress();
-        PomeloRpcTcpClientFactory.getInstance().removeRpcClient(remoteAddress.getHostName(), remoteAddress.getPort());
+        PomeloRpcClientFactory.getInstance().removeRpcClient(remoteAddress.getHostName(), remoteAddress.getPort());
         if (ctx.channel().isOpen()) {
             ctx.channel().close();
         }
@@ -62,7 +62,7 @@ public class PomeloTcpClientHandler extends ChannelInboundHandlerAdapter {
     public void channelUnregistered(ChannelHandlerContext ctx) throws Exception {
         LOG.error("connection closed: {} ", ctx.channel().remoteAddress());
         InetSocketAddress remoteAddress = (InetSocketAddress) ctx.channel().remoteAddress();
-        PomeloRpcTcpClientFactory.getInstance().removeRpcClient(remoteAddress.getHostName(), remoteAddress.getPort());
+        PomeloRpcClientFactory.getInstance().removeRpcClient(remoteAddress.getHostName(), remoteAddress.getPort());
         if (ctx.channel().isOpen()) {
             ctx.channel().close();
         }

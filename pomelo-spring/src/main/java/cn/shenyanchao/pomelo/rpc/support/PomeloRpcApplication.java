@@ -5,7 +5,7 @@ import org.springframework.beans.factory.InitializingBean;
 
 import cn.shenyanchao.pomelo.rpc.discovery.DiscoveryModule;
 import cn.shenyanchao.pomelo.rpc.registry.RegisterModule;
-import cn.shenyanchao.pomelo.rpc.tcp.netty4.client.factory.PomeloRpcTcpClientFactory;
+import cn.shenyanchao.pomelo.rpc.tcp.netty4.client.factory.PomeloRpcClientFactory;
 
 /**
  * @author shenyanchao
@@ -42,7 +42,7 @@ public class PomeloRpcApplication implements InitializingBean {
         } else if (2 == flag) {
             //客户端
             DiscoveryModule.getInstance().initZooKeeper(address, timeout);
-            PomeloRpcTcpClientFactory.getInstance().connect(timeout);
+            PomeloRpcClientFactory.getInstance().connect(timeout);
         }
 
     }

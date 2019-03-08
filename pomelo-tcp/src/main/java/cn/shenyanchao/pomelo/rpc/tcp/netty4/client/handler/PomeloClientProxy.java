@@ -3,31 +3,32 @@ package cn.shenyanchao.pomelo.rpc.tcp.netty4.client.handler;
 import java.lang.reflect.Proxy;
 
 import cn.shenyanchao.pomelo.rpc.core.client.proxy.ClientProxy;
+import cn.shenyanchao.pomelo.rpc.serialize.PomeloSerializer;
 
 /**
  * @author shenyanchao
  */
-public class PomeloRpcTcpClientProxy implements ClientProxy {
+public class PomeloClientProxy implements ClientProxy {
 
-    public PomeloRpcTcpClientProxy() {
+    private PomeloClientProxy() {
 
     }
 
-    public static PomeloRpcTcpClientProxy getInstance() {
+    public static PomeloClientProxy getInstance() {
         return SingletonHolder.instance;
     }
 
     @Override
-    public <T> T getProxyService(Class<T> clazz, int timeout, int serializerType,
-                                 int protocolType, String targetInstanceName, String group) {
+    public <T> T getProxyService(Class<T> clazz, int timeout, PomeloSerializer serializer,
+                                 byte protocolType, String targetInstanceName, String group) {
         return (T) Proxy.newProxyInstance(
                 Thread.currentThread().getContextClassLoader(),
                 new Class[] {clazz},
                 new PomeloRpcTcpClientInvocationHandler(group, timeout,
-                        targetInstanceName, serializerType, protocolType));
+                        targetInstanceName, serializer, protocolType));
     }
 
     private static class SingletonHolder {
-        static final PomeloRpcTcpClientProxy instance = new PomeloRpcTcpClientProxy();
+        static final PomeloClientProxy instance = new PomeloClientProxy();
     }
 }

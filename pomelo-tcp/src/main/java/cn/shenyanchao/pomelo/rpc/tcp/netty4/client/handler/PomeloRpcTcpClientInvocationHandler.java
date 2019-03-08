@@ -1,7 +1,8 @@
 package cn.shenyanchao.pomelo.rpc.tcp.netty4.client.handler;
 
 import cn.shenyanchao.pomelo.rpc.core.client.factory.RpcClientFactory;
-import cn.shenyanchao.pomelo.rpc.tcp.netty4.client.factory.PomeloRpcTcpClientFactory;
+import cn.shenyanchao.pomelo.rpc.serialize.PomeloSerializer;
+import cn.shenyanchao.pomelo.rpc.tcp.netty4.client.factory.PomeloRpcClientFactory;
 
 /**
  * @author shenyanchao
@@ -10,13 +11,13 @@ public class PomeloRpcTcpClientInvocationHandler extends AbstractRpcClientInvoca
 
     public PomeloRpcTcpClientInvocationHandler(String group,
                                                int timeout, String targetInstanceName,
-                                               int serializerType, int protocolType) {
-        super(group, timeout, targetInstanceName, serializerType, protocolType);
+                                               PomeloSerializer serializer, byte protocolType) {
+        super(group, timeout, targetInstanceName,  serializer, protocolType);
     }
 
     @Override
     public RpcClientFactory getClientFactory() {
-        return PomeloRpcTcpClientFactory.getInstance();
+        return PomeloRpcClientFactory.getInstance();
     }
 
 }

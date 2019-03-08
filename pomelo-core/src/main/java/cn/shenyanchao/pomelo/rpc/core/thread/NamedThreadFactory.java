@@ -4,21 +4,22 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * 线程池工厂类, 设置name
+ * 带名字的线程池工厂类,便于排查问题
  *
  * @author shenyanchao
  */
 public class NamedThreadFactory implements ThreadFactory {
 
-    static final AtomicInteger poolNumber = new AtomicInteger(1);
+    static final AtomicInteger poolNumber = new AtomicInteger(0);
 
-    final AtomicInteger threadNumber = new AtomicInteger(1);
+    final AtomicInteger threadNumber = new AtomicInteger(0);
+
     final ThreadGroup group;
     final String namePrefix;
     final boolean isDaemon;
 
     public NamedThreadFactory() {
-        this("rpc");
+        this("pomelo");
     }
 
     public NamedThreadFactory(String name) {

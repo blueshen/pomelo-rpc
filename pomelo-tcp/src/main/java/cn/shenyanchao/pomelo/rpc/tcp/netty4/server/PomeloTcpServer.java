@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import cn.shenyanchao.pomelo.rpc.core.server.RpcServer;
 import cn.shenyanchao.pomelo.rpc.core.server.filter.RpcInterceptor;
+import cn.shenyanchao.pomelo.rpc.serialize.PomeloSerializer;
 import cn.shenyanchao.pomelo.rpc.tcp.netty4.server.handler.RpcTcpServerHandler;
 import cn.shenyanchao.pomelo.rpc.core.thread.NamedThreadFactory;
 import cn.shenyanchao.pomelo.rpc.tcp.netty4.codec.PomeloRpcDecoderHandler;
@@ -51,7 +52,7 @@ public class PomeloTcpServer implements RpcServer {
     /**
      * 序列化类型
      */
-    private byte serializerType;
+    private PomeloSerializer serializer;
 
     /**
      * 线程数
@@ -116,7 +117,7 @@ public class PomeloTcpServer implements RpcServer {
                 pipeline.addLast("decoder", new PomeloRpcDecoderHandler());
                 pipeline.addLast("encoder", new PomeloRpcEncoderHandler());
                 pipeline.addLast("timeout", new IdleStateHandler(0, 0, 120));
-                pipeline.addLast("handler", new PomeloRpcTcpServerHandler(threadCount, protocolType, serializerType));
+                pipeline.addLast("handler", new PomeloRpcTcpServerHandler(threadCount, protocolType, serializer));
 
             }
 
@@ -135,12 +136,12 @@ public class PomeloTcpServer implements RpcServer {
         this.protocolType = protocolType;
     }
 
-    public byte getSerializerType() {
-        return serializerType;
+    public PomeloSerializer getSerializer() {
+        return serializer;
     }
 
-    public void setSerializerType(byte serializerType) {
-        this.serializerType = serializerType;
+    public void setSerializer(PomeloSerializer serializer) {
+        this.serializer = serializer;
     }
 
     /**

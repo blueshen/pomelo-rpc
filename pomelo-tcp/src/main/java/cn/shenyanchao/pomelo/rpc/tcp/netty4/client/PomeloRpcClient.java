@@ -9,7 +9,7 @@ import cn.shenyanchao.pomelo.rpc.core.client.AbstractRpcClient;
 import cn.shenyanchao.pomelo.rpc.core.client.factory.RpcClientFactory;
 import cn.shenyanchao.pomelo.rpc.core.message.PomeloRequestMessage;
 import cn.shenyanchao.pomelo.rpc.core.message.PomeloResponseMessage;
-import cn.shenyanchao.pomelo.rpc.tcp.netty4.client.factory.PomeloRpcTcpClientFactory;
+import cn.shenyanchao.pomelo.rpc.tcp.netty4.client.factory.PomeloRpcClientFactory;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 
@@ -38,7 +38,7 @@ public class PomeloRpcClient extends AbstractRpcClient {
 
     @Override
     public RpcClientFactory getRpcClientFactory() {
-        return PomeloRpcTcpClientFactory.getInstance();
+        return PomeloRpcClientFactory.getInstance();
     }
 
     @Override
@@ -70,7 +70,7 @@ public class PomeloRpcClient extends AbstractRpcClient {
                     }
                     LOG.error(errorMsg.toString());
                     PomeloResponseMessage response =
-                            new PomeloResponseMessage(requestMessage.getId(), requestMessage.getSerializerType(),
+                            new PomeloResponseMessage(requestMessage.getId(), requestMessage.getSerializer(),
                                     requestMessage.getProtocolType());
                     response.setException(new Exception(errorMsg.toString()));
                     getRpcClientFactory().receiveResponse(response);

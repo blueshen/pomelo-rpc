@@ -1,6 +1,7 @@
 package cn.shenyanchao.pomelo.rpc.core.client;
 
 import cn.shenyanchao.pomelo.rpc.core.client.factory.RpcClientFactory;
+import cn.shenyanchao.pomelo.rpc.serialize.PomeloSerializer;
 
 /**
  * @author shenyanchao
@@ -15,7 +16,7 @@ public interface RpcClient {
      * @param argTypes
      * @param args
      * @param timeout
-     * @param codecType
+     * @param serializer
      * @param protocolType
      *
      * @return
@@ -23,7 +24,7 @@ public interface RpcClient {
      * @throws Exception
      */
     Object invokeImpl(String targetInstanceName, String methodName,
-                      String[] argTypes, Object[] args, int timeout, int codecType, int protocolType)
+                      String[] argTypes, Object[] args, int timeout, PomeloSerializer serializer, byte protocolType)
             throws Exception;
 
     /**

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.xml.BeanDefinitionParser;
 import org.springframework.beans.factory.xml.ParserContext;
 import org.w3c.dom.Element;
 
+import cn.shenyanchao.pomelo.rpc.serialize.PomeloSerializer;
 import cn.shenyanchao.pomelo.rpc.support.PomeloRpcRegistry;
 
 /**
@@ -21,7 +22,7 @@ public class PomeloRegistryParser implements BeanDefinitionParser {
         int port = Integer.parseInt(element.getAttribute("port"));
         int timeout = Integer.parseInt(element.getAttribute("timeout"));
         byte protocolType = Byte.parseByte(element.getAttribute("protocolType"));
-        byte serializerType = Byte.parseByte(element.getAttribute("serializerType"));
+        String serializer = element.getAttribute("serializer");
         int threadCount = Integer.parseInt(element.getAttribute("threadCount"));
         String group = element.getAttribute("group");
 
@@ -32,7 +33,7 @@ public class PomeloRegistryParser implements BeanDefinitionParser {
         beanDefinition.getPropertyValues().addPropertyValue("timeout", timeout);
         beanDefinition.getPropertyValues().addPropertyValue("group", group);
         beanDefinition.getPropertyValues().addPropertyValue("protocolType", protocolType);
-        beanDefinition.getPropertyValues().addPropertyValue("serializerType", serializerType);
+        beanDefinition.getPropertyValues().addPropertyValue("serializer", PomeloSerializer.valueOf(serializer));
         beanDefinition.getPropertyValues().addPropertyValue("threadCount", threadCount);
 
         parserContext.getRegistry().registerBeanDefinition(id, beanDefinition);

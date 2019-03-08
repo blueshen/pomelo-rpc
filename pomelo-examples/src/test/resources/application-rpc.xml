@@ -8,8 +8,8 @@
         https://www.shenyanchao.cn/pomelorpc/pomelorpc.xsd">
 
     <pomelorpc:application id="rpcRegistryApplication" address="127.0.0.1:2181" flag="1" timeout="2000"/>
-    <pomelorpc:registry id="rpcRegistry" ip="localhost" port="10018" timeout="200" protocolType="1" serializerType="4"
-                        group="example" threadCount="24"/>
+    <pomelorpc:registry id="rpcRegistry" ip="localhost" port="10018" timeout="200" protocolType="1"
+                        group="example" threadCount="24" serializer="KRYO"/>
 
     <pomelorpc:service id="IHelloService" interfaceName="cn.shenyanchao.pomelo.rpc.demo.service.IHelloService"
                        ref="helloService" interceptorRef="myRpcInterceptor"/>

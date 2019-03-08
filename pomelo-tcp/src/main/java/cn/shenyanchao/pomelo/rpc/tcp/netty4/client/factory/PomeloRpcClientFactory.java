@@ -27,16 +27,16 @@ import io.netty.handler.timeout.IdleStateHandler;
 /**
  * @author shenyanchao
  */
-public class PomeloRpcTcpClientFactory extends AbstractRpcClientFactory {
+public class PomeloRpcClientFactory extends AbstractRpcClientFactory {
 
-    private static final Logger LOG = LoggerFactory.getLogger(PomeloRpcTcpClientFactory.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PomeloRpcClientFactory.class);
     private static final int PROCESSORS = Runtime.getRuntime().availableProcessors();
     private static final ThreadFactory workerThreadFactory = new NamedThreadFactory("pomelo-worker-");
     private static EventLoopGroup workerGroup = new NioEventLoopGroup(6 * PROCESSORS, workerThreadFactory);
 
     private final Bootstrap bootstrap = new Bootstrap();
 
-    public static PomeloRpcTcpClientFactory getInstance() {
+    public static PomeloRpcClientFactory getInstance() {
         return SingletonHolder.instance;
     }
 
@@ -93,7 +93,7 @@ public class PomeloRpcTcpClientFactory extends AbstractRpcClientFactory {
     }
 
     static class SingletonHolder {
-        public static PomeloRpcTcpClientFactory instance = new PomeloRpcTcpClientFactory();
+        public static PomeloRpcClientFactory instance = new PomeloRpcClientFactory();
     }
 
 }

@@ -2,12 +2,14 @@ package cn.shenyanchao.pomelo.rpc.core.message;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import cn.shenyanchao.pomelo.rpc.serialize.PomeloSerializer;
+
 /**
  * RPC请求实体类
  *
  * @author shenyanchao
  */
-public class PomeloRequestMessage implements Message {
+public class PomeloRequestMessage extends Message {
 
     private static final long serialVersionUID = -3554311529871950375L;
 
@@ -19,24 +21,21 @@ public class PomeloRequestMessage implements Message {
     private Object message = null;
     private int timeout;
     private int id;
-    private int protocolType;
-    private int serializerType;
-    private int messageLen;
 
     public PomeloRequestMessage(byte[] targetInstanceName, byte[] methodName, byte[][] argTypes,
-                                Object[] requestObjects, int timeout, int codecType, int protocolType) {
-        this(targetInstanceName, methodName, argTypes, requestObjects, timeout, get(), codecType, protocolType);
+                                Object[] requestObjects, int timeout, PomeloSerializer serializer, byte protocolType) {
+        this(targetInstanceName, methodName, argTypes, requestObjects, timeout, get(), serializer, protocolType);
     }
 
     public PomeloRequestMessage(byte[] targetInstanceName, byte[] methodName, byte[][] argTypes,
-                                Object[] requestObjects, int timeout, int id, int codecType, int protocolType) {
+                                Object[] requestObjects, int timeout, int id, PomeloSerializer serializer, byte protocolType) {
         this.requestObjects = requestObjects;
         this.id = id;
         this.timeout = timeout;
         this.targetInstanceName = targetInstanceName;
         this.methodName = methodName;
         this.argTypes = argTypes;
-        this.serializerType = codecType;
+        this.serializer = serializer;
         this.protocolType = protocolType;
 
     }
@@ -45,21 +44,6 @@ public class PomeloRequestMessage implements Message {
         return requestIdSeq.incrementAndGet();
     }
 
-    public int getMessageLen() {
-        return messageLen;
-    }
-
-    public void setMessageLen(int messageLen) {
-        this.messageLen = messageLen;
-    }
-
-    public int getProtocolType() {
-        return protocolType;
-    }
-
-    public int getSerializerType() {
-        return serializerType;
-    }
 
     public Object getMessage() {
         return message;

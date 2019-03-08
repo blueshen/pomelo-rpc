@@ -7,8 +7,9 @@ import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.FactoryBean;
 
 import cn.shenyanchao.pomelo.rpc.discovery.DiscoveryModule;
-import cn.shenyanchao.pomelo.rpc.tcp.netty4.client.factory.PomeloRpcTcpClientFactory;
-import cn.shenyanchao.pomelo.rpc.tcp.netty4.client.handler.PomeloRpcTcpClientProxy;
+import cn.shenyanchao.pomelo.rpc.serialize.PomeloSerializer;
+import cn.shenyanchao.pomelo.rpc.tcp.netty4.client.factory.PomeloRpcClientFactory;
+import cn.shenyanchao.pomelo.rpc.tcp.netty4.client.handler.PomeloClientProxy;
 
 /**
  * @author shenyanchao
@@ -28,7 +29,7 @@ public class PomeloRpcReference implements FactoryBean, DisposableBean {
     /**
      * 序列化类型
      */
-    private byte serializerType;
+    private PomeloSerializer serializer;
     /**
      * 协议类型
      */
@@ -41,13 +42,13 @@ public class PomeloRpcReference implements FactoryBean, DisposableBean {
     @Override
     public void destroy() throws Exception {
         DiscoveryModule.getInstance().close();
-        PomeloRpcTcpClientFactory.getInstance().stopClient();
+        PomeloRpcClientFactory.getInstance().stopClient();
     }
 
     @Override
     public Object getObject() throws Exception {
-        return PomeloRpcTcpClientProxy.getInstance()
-                .getProxyService(getObjectType(), timeout, serializerType, protocolType, getObjectType().getName(),
+        return PomeloClientProxy.getInstance()
+                .getProxyService(getObjectType(), timeout, serializer, protocolType, getObjectType().getName(),
                         group);
     }
 
@@ -94,12 +95,12 @@ public class PomeloRpcReference implements FactoryBean, DisposableBean {
         this.timeout = timeout;
     }
 
-    public byte getSerializerType() {
-        return serializerType;
+    public PomeloSerializer getSerializer() {
+        return serializer;
     }
 
-    public void setSerializerType(byte serializerType) {
-        this.serializerType = serializerType;
+    public void setSerializer(PomeloSerializer serializer) {
+        this.serializer = serializer;
     }
 
     public byte getProtocolType() {

@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import cn.shenyanchao.pomelo.rpc.core.message.PomeloRequestMessage;
 import cn.shenyanchao.pomelo.rpc.core.message.PomeloResponseMessage;
 import cn.shenyanchao.pomelo.rpc.core.server.filter.RpcInterceptor;
-import cn.shenyanchao.pomelo.rpc.serialize.SerializerType;
+import cn.shenyanchao.pomelo.rpc.serialize.PomeloSerializer;
 
 /**
  * 服务端处理请求类
@@ -51,8 +51,8 @@ public class RpcTcpServerHandler extends AbstractRpcTcpServerHandler {
     }
 
     @Override
-    public PomeloResponseMessage handleRequest(PomeloRequestMessage request, int codecType, int protocolType) {
-        PomeloResponseMessage responseWrapper = new PomeloResponseMessage(request.getId(), codecType, protocolType);
+    public PomeloResponseMessage handleRequest(PomeloRequestMessage request, PomeloSerializer serializer, byte protocolType) {
+        PomeloResponseMessage responseWrapper = new PomeloResponseMessage(request.getId(), serializer, protocolType);
         String targetInstanceName = new String(request.getTargetInstanceName());
         String methodName = new String(request.getMethodName());
         byte[][] argTypeBytes = request.getArgTypes();
@@ -78,7 +78,7 @@ public class RpcTcpServerHandler extends AbstractRpcTcpServerHandler {
                 Object[] tmprequestObjects = request.getRequestObjects();
                 for (int i = 0; i < tmprequestObjects.length; i++) {
                     try {
-                        requestObjects[i] = SerializerType.parse(request.getSerializerType()).getSerialization()
+                        requestObjects[i] = request.getSerializer().getSerialization()
                                 .deserialize(argTypes[i], (byte[]) tmprequestObjects[i]);
                     } catch (Exception e) {
                         throw new Exception("decode request object args error", e);

@@ -12,6 +12,6 @@
 
     <!--group 可以同时支持多组，以符合,隔开  -->
     <pomelorpc:reference id="helloService" interfaceName="cn.shenyanchao.pomelo.rpc.demo.service.IHelloService"
-                         protocolType="1" serializerType="4" timeout="2000" group="example"/>
+                         protocolType="1" serializer="KRYO" timeout="2000" group="example"/>
 
 </beans>

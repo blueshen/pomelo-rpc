@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import cn.shenyanchao.pomelo.rpc.core.message.PomeloRequestMessage;
 import cn.shenyanchao.pomelo.rpc.core.message.PomeloResponseMessage;
-import cn.shenyanchao.pomelo.rpc.serialize.SerializerType;
+import cn.shenyanchao.pomelo.rpc.serialize.PomeloSerializer;
 
 /**
  * @author shenyanchao
@@ -19,15 +19,15 @@ public abstract class AbstractRpcClient implements RpcClient {
 
     @Override
     public Object invokeImpl(String targetInstanceName, String methodName,
-                             String[] argTypes, Object[] args, int timeout, int codecType,
-                             int protocolType) throws Exception {
+                             String[] argTypes, Object[] args, int timeout, PomeloSerializer serializer,
+                             byte protocolType) throws Exception {
         byte[][] argTypeBytes = new byte[argTypes.length][];
         for (int i = 0; i < argTypes.length; i++) {
             argTypeBytes[i] = argTypes[i].getBytes();
         }
 
         PomeloRequestMessage wrapper = new PomeloRequestMessage(targetInstanceName.getBytes(),
-                methodName.getBytes(), argTypeBytes, args, timeout, codecType, protocolType);
+                methodName.getBytes(), argTypeBytes, args, timeout, serializer, protocolType);
 
         return invokeImplIntern(wrapper);
     }
@@ -64,7 +64,7 @@ public abstract class AbstractRpcClient implements RpcClient {
         }
         if (null == result && (System.currentTimeMillis() - beginTime) <= requestMessage.getTimeout()) {
             //返回结果集为null
-            rpcResponse = new PomeloResponseMessage(requestMessage.getId(), requestMessage.getSerializerType(),
+            rpcResponse = new PomeloResponseMessage(requestMessage.getId(), requestMessage.getSerializer(),
                     requestMessage.getProtocolType());
         } else if (null == result && (System.currentTimeMillis() - beginTime) > requestMessage.getTimeout()) {
             //结果集超时
@@ -74,7 +74,7 @@ public abstract class AbstractRpcClient implements RpcClient {
                     .append(requestMessage.getId());
 
             LOG.error(errorMsg.toString());
-            rpcResponse = new PomeloResponseMessage(requestMessage.getId(), requestMessage.getSerializerType(),
+            rpcResponse = new PomeloResponseMessage(requestMessage.getId(), requestMessage.getSerializer(),
                     requestMessage.getProtocolType());
             rpcResponse.setException(new Throwable(errorMsg.toString()));
         } else if (result != null) {
@@ -90,8 +90,7 @@ public abstract class AbstractRpcClient implements RpcClient {
                 if (((byte[]) rpcResponse.getResponse()).length == 0) {
                     rpcResponse.setResponse(null);
                 } else {
-                    Object responseObject =
-                            SerializerType.parse(rpcResponse.getSerializerType()).getSerialization().deserialize(
+                    Object responseObject = rpcResponse.getSerializer().getSerialization().deserialize(
                                     responseClassName, (byte[]) rpcResponse.getResponse());
                     if (responseObject instanceof Throwable) {
                         rpcResponse.setException((Throwable) responseObject);

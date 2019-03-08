@@ -11,7 +11,7 @@ import cn.shenyanchao.pomelo.rpc.core.message.Message;
 import cn.shenyanchao.pomelo.rpc.core.message.PomeloRequestMessage;
 import cn.shenyanchao.pomelo.rpc.core.message.PomeloResponseMessage;
 import cn.shenyanchao.pomelo.rpc.serialize.Serialization;
-import cn.shenyanchao.pomelo.rpc.serialize.SerializerType;
+import cn.shenyanchao.pomelo.rpc.serialize.PomeloSerializer;
 
 /**
  * 协议实现,每个字节代表什么
@@ -20,7 +20,7 @@ import cn.shenyanchao.pomelo.rpc.serialize.SerializerType;
  */
 public class DefaultRpcProtocol implements RpcProtocol {
 
-    public static final int TYPE = 1;
+    public static final byte TYPE = 1;
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultRpcProtocol.class);
 
@@ -67,8 +67,7 @@ public class DefaultRpcProtocol implements RpcProtocol {
                 Object[] requestObjects = wrapper.getRequestObjects();
                 if (requestObjects != null) {
                     for (Object requestArg : requestObjects) {
-                        byte[] requestArgByte =
-                                SerializerType.parse(wrapper.getSerializerType()).getSerialization()
+                        byte[] requestArgByte =wrapper.getSerializer().getSerialization()
                                         .serialize(requestArg);
                         requestArgs.add(requestArgByte);
                         requestArgsLen += requestArgByte.length;
@@ -90,7 +89,7 @@ public class DefaultRpcProtocol implements RpcProtocol {
                 //--------------HEADER_LEN----------------
                 byteBuffer.writeByte(VERSION);//1B
                 byteBuffer.writeByte(type);//1B
-                byteBuffer.writeByte((byte) wrapper.getSerializerType());//1B
+                byteBuffer.writeByte((byte) wrapper.getSerializer().getType());//1B
                 byteBuffer.writeByte((byte) 0);//1B
                 byteBuffer.writeByte((byte) 0);//1B
                 byteBuffer.writeByte((byte) 0);//1B
@@ -126,9 +125,8 @@ public class DefaultRpcProtocol implements RpcProtocol {
             }
         } else {
             PomeloResponseMessage wrapper = (PomeloResponseMessage) message;
-            int serializerTypeCode = wrapper.getSerializerType();
-            SerializerType serializerType = SerializerType.parse(serializerTypeCode);
-            Serialization serialization = serializerType.getSerialization();
+            PomeloSerializer serializer = wrapper.getSerializer();
+            Serialization serialization = serializer.getSerialization();
             byte[] body = new byte[0];
             byte[] className = new byte[0];
             try {
@@ -155,7 +153,7 @@ public class DefaultRpcProtocol implements RpcProtocol {
             type = RESPONSE;
             int capacity = PomeloRpcProtocol.HEADER_LEN + RESPONSE_HEADER_LEN
                     + body.length;
-            if (serializerType == SerializerType.PB_CODEC) {
+            if (serializer == PomeloSerializer.PROTOBUF) {
                 capacity += className.length;
             }
             RpcByteBuffer byteBuffer = byteBufferWrapper.get(capacity);
@@ -164,19 +162,19 @@ public class DefaultRpcProtocol implements RpcProtocol {
             //--------------HEADER_LEN----------------
             byteBuffer.writeByte(VERSION);//1B
             byteBuffer.writeByte(type);  //1B
-            byteBuffer.writeByte((byte) wrapper.getSerializerType());//1B
+            byteBuffer.writeByte((byte) serializer.getType());//1B
             byteBuffer.writeByte((byte) 0);//1B
             byteBuffer.writeByte((byte) 0);//1B
             byteBuffer.writeByte((byte) 0);//1B
             //---------------REQUEST_HEADER_LEN----------
             byteBuffer.writeInt(id);//4B
-            if (serializerType == SerializerType.PB_CODEC) {
+            if (serializer == PomeloSerializer.PROTOBUF) {
                 byteBuffer.writeInt(className.length);
             } else {
                 byteBuffer.writeInt(0);//4B
             }
             byteBuffer.writeInt(body.length);//4B
-            if (serializerType == SerializerType.PB_CODEC) {
+            if (serializer == PomeloSerializer.PROTOBUF) {
                 byteBuffer.writeBytes(className);
             }
             byteBuffer.writeBytes(body);
@@ -198,14 +196,14 @@ public class DefaultRpcProtocol implements RpcProtocol {
             return errorObject;
         }
         byte version = wrapper.readByte();
-        if (version == (byte) TYPE) {
+        if (version == TYPE) {
             byte type = wrapper.readByte();
             if (type == REQUEST) {
                 if (wrapper.readableBytes() < REQUEST_HEADER_LEN - 2) {
                     wrapper.setReaderIndex(originPos);
                     return errorObject;
                 }
-                int codecType = wrapper.readByte();
+                byte serializerType = wrapper.readByte();
                 wrapper.readByte();
                 wrapper.readByte();
                 wrapper.readByte();
@@ -260,7 +258,7 @@ public class DefaultRpcProtocol implements RpcProtocol {
 
                 PomeloRequestMessage pomeloRequestMessage = new PomeloRequestMessage(
                         targetInstanceByte, methodNameByte, argTypes, args,
-                        timeout, requestId, codecType, TYPE);
+                        timeout, requestId, PomeloSerializer.parse(serializerType), TYPE);
 
                 int messageLen = PomeloRpcProtocol.HEADER_LEN + REQUEST_HEADER_LEN
                         + expectedLenInfoLen + expectedLen;
@@ -272,7 +270,7 @@ public class DefaultRpcProtocol implements RpcProtocol {
                     wrapper.setReaderIndex(originPos);
                     return errorObject;
                 }
-                int serializerTypeCode = wrapper.readByte();
+                byte serializerType = wrapper.readByte();
                 wrapper.readByte();
                 wrapper.readByte();
                 wrapper.readByte();
@@ -285,9 +283,9 @@ public class DefaultRpcProtocol implements RpcProtocol {
                     wrapper.setReaderIndex(originPos);
                     return errorObject;
                 }
-                SerializerType serializerType = SerializerType.parse(serializerTypeCode);
+                PomeloSerializer serializer = PomeloSerializer.parse(serializerType);
                 byte[] classNameBytes = null;
-                if (serializerType == SerializerType.PB_CODEC) {
+                if (serializer == PomeloSerializer.PROTOBUF) {
                     classNameBytes = new byte[classNameLen];
                     wrapper.readBytes(classNameBytes);
                 }
@@ -295,7 +293,7 @@ public class DefaultRpcProtocol implements RpcProtocol {
                 wrapper.readBytes(bodyBytes);
 
                 PomeloResponseMessage responseWrapper = new PomeloResponseMessage(
-                        requestId, serializerTypeCode, TYPE);
+                        requestId, serializer, TYPE);
                 responseWrapper.setResponse(bodyBytes);
                 responseWrapper.setResponseClassName(classNameBytes);
                 int messageLen = PomeloRpcProtocol.HEADER_LEN + RESPONSE_HEADER_LEN

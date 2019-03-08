@@ -44,7 +44,7 @@ public class ServiceConsumer {
                 public void run() {
                     for (int i = 0; i < count; i++) {
                         String greeting = helloService.sayHiToUser(rpcUser);
-                        //                        LOG.info(greeting);
+//                                                LOG.info(greeting);
                     }
                 }
             });

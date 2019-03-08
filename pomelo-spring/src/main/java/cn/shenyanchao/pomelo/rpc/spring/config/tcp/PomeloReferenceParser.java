@@ -6,6 +6,7 @@ import org.springframework.beans.factory.xml.BeanDefinitionParser;
 import org.springframework.beans.factory.xml.ParserContext;
 import org.w3c.dom.Element;
 
+import cn.shenyanchao.pomelo.rpc.serialize.PomeloSerializer;
 import cn.shenyanchao.pomelo.rpc.support.PomeloRpcReference;
 
 /**
@@ -20,7 +21,7 @@ public class PomeloReferenceParser implements BeanDefinitionParser {
         String id = element.getAttribute("id");
         String group = element.getAttribute("group");
         byte protocolType = Byte.parseByte(element.getAttribute("protocolType"));
-        byte serializerType = Byte.parseByte(element.getAttribute("serializerType"));
+        String serializer = element.getAttribute("serializer");
         int timeout = Integer.parseInt(element.getAttribute("timeout"));
 
         RootBeanDefinition beanDefinition = new RootBeanDefinition();
@@ -30,7 +31,7 @@ public class PomeloReferenceParser implements BeanDefinitionParser {
         beanDefinition.getPropertyValues().addPropertyValue("interfaceName", interfaceName);
         beanDefinition.getPropertyValues().addPropertyValue("group", group);
         beanDefinition.getPropertyValues().addPropertyValue("protocolType", protocolType);
-        beanDefinition.getPropertyValues().addPropertyValue("serializerType", serializerType);
+        beanDefinition.getPropertyValues().addPropertyValue("serializer", PomeloSerializer.valueOf(serializer));
         beanDefinition.getPropertyValues().addPropertyValue("timeout", timeout);
 
         parserContext.getRegistry().registerBeanDefinition(id, beanDefinition);

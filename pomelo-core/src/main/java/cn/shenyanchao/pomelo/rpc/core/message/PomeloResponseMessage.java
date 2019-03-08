@@ -1,15 +1,15 @@
 package cn.shenyanchao.pomelo.rpc.core.message;
 
+import cn.shenyanchao.pomelo.rpc.serialize.PomeloSerializer;
+
 /**
  * RPC返回实体
  *
  * @author shenyanchao
  */
-public class PomeloResponseMessage implements Message {
+public class PomeloResponseMessage extends Message {
 
     private static final long serialVersionUID = 4523576666635080090L;
-
-    private int requestId;
 
     private Object response = null;
 
@@ -17,39 +17,14 @@ public class PomeloResponseMessage implements Message {
 
     private Throwable exception = null;
 
-    private int serializerType;
-
-    private int protocolType;
-
-    private int messageLen;
-
     private byte[] responseClassName;
 
-    public PomeloResponseMessage(int requestId, int codecType, int protocolType) {
+    public PomeloResponseMessage(int requestId, PomeloSerializer serializer, byte protocolType) {
         this.requestId = requestId;
-        this.serializerType = codecType;
+        this.serializer = serializer;
         this.protocolType = protocolType;
     }
 
-    public int getMessageLen() {
-        return messageLen;
-    }
-
-    public void setMessageLen(int messageLen) {
-        this.messageLen = messageLen;
-    }
-
-    public int getProtocolType() {
-        return protocolType;
-    }
-
-    public int getSerializerType() {
-        return serializerType;
-    }
-
-    public int getRequestId() {
-        return requestId;
-    }
 
     public Object getResponse() {
         return response;
