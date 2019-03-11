@@ -104,12 +104,4 @@ public class PomeloRpcClientFactory implements RpcClientFactory {
         PomeloRpcClient client = new PomeloRpcClient(future, responseModule, clientHolder);
         return client;
     }
-
-    public ResponseModule getResponseModule() {
-        return responseModule;
-    }
-
-    public ClientHolder getClientHolder() {
-        return clientHolder;
-    }
 }

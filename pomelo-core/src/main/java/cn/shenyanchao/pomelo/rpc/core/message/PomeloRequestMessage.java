@@ -28,7 +28,8 @@ public class PomeloRequestMessage extends Message {
     }
 
     public PomeloRequestMessage(byte[] targetInstanceName, byte[] methodName, byte[][] argTypes,
-                                Object[] requestObjects, int timeout, int id, PomeloSerializer serializer, byte protocolType) {
+                                Object[] requestObjects, int timeout, int id, PomeloSerializer serializer,
+                                byte protocolType) {
         this.requestObjects = requestObjects;
         this.id = id;
         this.timeout = timeout;
@@ -43,7 +44,6 @@ public class PomeloRequestMessage extends Message {
     public static Integer get() {
         return requestIdSeq.incrementAndGet();
     }
-
 
     public Object getMessage() {
         return message;

@@ -26,6 +26,7 @@ public class PomeloTcpClientHandler extends ChannelInboundHandlerAdapter {
     private ResponseModule responseModule;
 
     public PomeloTcpClientHandler(ClientHolder clientHolder, ResponseModule responseModule) {
+        super();
         this.clientHolder = clientHolder;
         this.responseModule = responseModule;
     }

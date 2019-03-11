@@ -8,10 +8,10 @@
         https://www.shenyanchao.cn/pomelorpc/pomelorpc.xsd">
 
     <!--zk 注册中心地址  -->
-    <pomelorpc:application id="rpcRegistryApplicationClient" address="127.0.0.1:2181" flag="2" timeout="2000"/>
+    <pomelorpc:application id="rpcRegistryApplicationClient" address="127.0.0.1:2181" flag="2" timeout="60000"/>
 
     <!--group 可以同时支持多组，以符合,隔开  -->
     <pomelorpc:reference id="helloService" interfaceName="cn.shenyanchao.pomelo.rpc.demo.service.IHelloService"
-                         protocolType="1" serializer="KRYO" timeout="5000" group="hello"/>
+                         protocolType="1" serializer="KRYO" timeout="60000" group="hello"/>
 
 </beans>

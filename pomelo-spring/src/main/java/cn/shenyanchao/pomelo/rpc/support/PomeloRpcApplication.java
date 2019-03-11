@@ -3,14 +3,6 @@ package cn.shenyanchao.pomelo.rpc.support;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-
-import cn.shenyanchao.pomelo.rpc.discovery.DiscoveryModule;
-import cn.shenyanchao.pomelo.rpc.registry.RegisterModule;
-import cn.shenyanchao.pomelo.rpc.tcp.netty4.client.factory.PomeloRpcClientFactory;
-import cn.shenyanchao.pomelo.rpc.tcp.netty4.server.PomeloTcpServer;
-
 /**
  * @author shenyanchao
  */
@@ -39,14 +31,14 @@ public class PomeloRpcApplication implements InitializingBean {
             throw new RuntimeException("flag in [1,2]");
         }
 
-//        if (1 == flag) {
-//            //服务端
-//            registerModule.initZooKeeper(address, timeout);
-//        } else if (2 == flag) {
-//            //客户端
-//            discoveryModule.initZooKeeper(address, timeout);
-//            pomeloRpcClientFactory.connect(timeout);
-//        }
+        //        if (1 == flag) {
+        //            //服务端
+        //            registerModule.initZooKeeper(address, timeout);
+        //        } else if (2 == flag) {
+        //            //客户端
+        //            discoveryModule.initZooKeeper(address, timeout);
+        //            pomeloRpcClientFactory.connect(timeout);
+        //        }
 
     }
 

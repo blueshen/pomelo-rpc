@@ -12,8 +12,8 @@ import cn.shenyanchao.pomelo.rpc.core.bytebuffer.RpcByteBuffer;
 import cn.shenyanchao.pomelo.rpc.core.message.Message;
 import cn.shenyanchao.pomelo.rpc.core.message.PomeloRequestMessage;
 import cn.shenyanchao.pomelo.rpc.core.message.PomeloResponseMessage;
-import cn.shenyanchao.pomelo.rpc.serialize.Serialization;
 import cn.shenyanchao.pomelo.rpc.serialize.PomeloSerializer;
+import cn.shenyanchao.pomelo.rpc.serialize.Serialization;
 
 /**
  * 协议实现,每个字节代表什么
@@ -37,7 +37,6 @@ public class DefaultRpcProtocol implements RpcProtocol {
     private static final byte REQUEST = (byte) 0;
 
     private static final byte RESPONSE = (byte) 1;
-
 
     @Override
     public RpcByteBuffer encode(Message message,
@@ -64,8 +63,8 @@ public class DefaultRpcProtocol implements RpcProtocol {
                 Object[] requestObjects = wrapper.getRequestObjects();
                 if (requestObjects != null) {
                     for (Object requestArg : requestObjects) {
-                        byte[] requestArgByte =wrapper.getSerializer().getSerialization()
-                                        .serialize(requestArg);
+                        byte[] requestArgByte = wrapper.getSerializer().getSerialization()
+                                .serialize(requestArg);
                         requestArgs.add(requestArgByte);
                         requestArgsLen += requestArgByte.length;
                     }
@@ -159,7 +158,7 @@ public class DefaultRpcProtocol implements RpcProtocol {
             //--------------HEADER_LEN----------------
             byteBuffer.writeByte(VERSION);//1B
             byteBuffer.writeByte(type);  //1B
-            byteBuffer.writeByte((byte) serializer.getType());//1B
+            byteBuffer.writeByte(serializer.getType());//1B
             byteBuffer.writeByte((byte) 0);//1B
             byteBuffer.writeByte((byte) 0);//1B
             byteBuffer.writeByte((byte) 0);//1B
@@ -276,7 +275,8 @@ public class DefaultRpcProtocol implements RpcProtocol {
 
                 int classNameLen = wrapper.readInt();
                 int bodyLen = wrapper.readInt();
-                if (wrapper.readableBytes() < classNameLen + bodyLen) {
+                int readableBytes = wrapper.readableBytes();
+                if (readableBytes < classNameLen + bodyLen) {
                     wrapper.setReaderIndex(originPos);
                     return errorObject;
                 }

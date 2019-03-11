@@ -25,7 +25,6 @@ public class PomeloResponseMessage extends Message {
         this.protocolType = protocolType;
     }
 
-
     public Object getResponse() {
         return response;
     }

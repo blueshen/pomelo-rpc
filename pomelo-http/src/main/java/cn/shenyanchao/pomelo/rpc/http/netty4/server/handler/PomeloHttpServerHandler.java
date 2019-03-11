@@ -12,9 +12,9 @@ import org.apache.commons.lang3.StringUtils;
 import com.alibaba.fastjson.JSONObject;
 import com.google.inject.Inject;
 
-import cn.shenyanchao.pomelo.rpc.route.RpcRouteInfo;
 import cn.shenyanchao.pomelo.rpc.http.RpcHttpServerHandler;
 import cn.shenyanchao.pomelo.rpc.http.netty4.server.bean.ServerBean;
+import cn.shenyanchao.pomelo.rpc.route.RpcRouteInfo;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
@@ -40,7 +40,6 @@ import io.netty.util.ReferenceCountUtil;
  * @author shenyanchao
  */
 public class PomeloHttpServerHandler extends ChannelInboundHandlerAdapter {
-
 
     @Inject
     private RpcHttpServerHandler rpcHttpServerHandler;

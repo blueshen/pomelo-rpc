@@ -34,7 +34,6 @@ public class DiscoveryModule implements IDiscoveryModule {
     private ServiceDiscovery serviceDiscovery;
     private ServiceCache serviceCache;
 
-
     /**
      * 方法置为同步，解决serviceCache多次start问题
      *
@@ -67,7 +66,9 @@ public class DiscoveryModule implements IDiscoveryModule {
             addressList.add(socketAddress);
         }
         servers.put(group, addressList);
-        LOG.debug("ACTIVE ADDRESS:{}", addressList);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("[{group}] active server ip:{}", group, addressList);
+        }
         return servers.get(group);
 
     }

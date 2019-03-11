@@ -77,7 +77,9 @@ public class PomeloRpcTcpServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg)
             throws Exception {
-        LOG.info("----------channel read:{}--------", msg.toString());
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("----------channel read:{}--------", msg.toString());
+        }
         if (!(msg instanceof PomeloRequestMessage)) {
             LOG.error("receive message error,only support RequestWrapper");
             throw new Exception(

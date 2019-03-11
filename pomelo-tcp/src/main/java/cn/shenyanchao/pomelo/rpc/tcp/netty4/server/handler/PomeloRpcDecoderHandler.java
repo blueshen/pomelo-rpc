@@ -3,7 +3,6 @@ package cn.shenyanchao.pomelo.rpc.tcp.netty4.server.handler;
 import java.util.List;
 
 import cn.shenyanchao.pomelo.rpc.core.protocol.PomeloRpcProtocol;
-import cn.shenyanchao.pomelo.rpc.tcp.netty4.server.handler.PomeloRpcByteBuffer;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
@@ -17,6 +16,7 @@ public class PomeloRpcDecoderHandler extends ByteToMessageDecoder {
     private PomeloRpcProtocol pomeloRpcProtocol;
 
     public PomeloRpcDecoderHandler(PomeloRpcProtocol pomeloRpcProtocol) {
+        super();
         this.pomeloRpcProtocol = pomeloRpcProtocol;
     }
 

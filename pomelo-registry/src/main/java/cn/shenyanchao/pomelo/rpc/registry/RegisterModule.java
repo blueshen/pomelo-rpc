@@ -68,5 +68,4 @@ public class RegisterModule implements IRegisterModule {
         serviceDiscovery.start();
     }
 
-
 }

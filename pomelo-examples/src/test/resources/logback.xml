@@ -26,14 +26,14 @@
     </appender>
 
 
-    <logger name="io.netty" level="DEBUG"/>
-    <logger name="org.springframework" level="WARN" />
+    <logger name="io.netty" level="WARN"/>
+    <logger name="org.springframework" level="WARN"/>
 
-    <logger name="org.apache" level="WARN" />
+    <logger name="org.apache" level="WARN"/>
 
-    <logger name="cn.shenyanchao.pomelo" level="DEBUG"/>
+    <logger name="cn.shenyanchao.pomelo" level="INFO"/>
     <!-- 日志输出级别 -->
-    <root level="DEBUG">
+    <root level="INFO">
         <appender-ref ref="FILE"/>
         <appender-ref ref="STDOUT"/>
     </root>

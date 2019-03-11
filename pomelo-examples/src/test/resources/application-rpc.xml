@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns:pomelorpc="https://www.shenyanchao.cn/pomelorpc"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context"
+       xmlns="http://www.springframework.org/schema/beans"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
         https://www.shenyanchao.cn/pomelorpc
-        https://www.shenyanchao.cn/pomelorpc/pomelorpc.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+        https://www.shenyanchao.cn/pomelorpc/pomelorpc.xsd">
 
 
-    <pomelorpc:application id="rpcRegistryApplication" address="127.0.0.1:2181" flag="1" timeout="2000"/>
+    <pomelorpc:application id="rpcRegistryApplication" address="127.0.0.1:2181" flag="1" timeout="60000"/>
     <pomelorpc:registry id="rpcRegistry" ip="localhost" port="20018" timeout="2000" protocolType="1"
                         group="hello" threadCount="24" serializer="KRYO"/>
 
     <pomelorpc:service id="IHelloService" interfaceName="cn.shenyanchao.pomelo.rpc.demo.service.IHelloService"
-                       ref="helloService" interceptorRef="myRpcInterceptor" />
+                       ref="helloService" interceptorRef="myRpcInterceptor"/>
 
     <bean id="helloService" class="cn.shenyanchao.pomelo.rpc.demo.service.impl.HelloService"/>
     <bean id="myRpcInterceptor" class="cn.shenyanchao.pomelo.rpc.demo.filter.MyRpcInterceptor"/>

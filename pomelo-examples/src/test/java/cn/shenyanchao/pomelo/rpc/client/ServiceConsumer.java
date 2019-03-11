@@ -50,8 +50,8 @@ public class ServiceConsumer {
         // -----------
 
         long start = System.currentTimeMillis();
-        final int count = 1;
-        final int threadCount = 1;
+        final int count = 10000;
+        final int threadCount = 24;
 
         ExecutorService executorService = Executors.newFixedThreadPool(threadCount, new NamedThreadFactory("client"
                 + "-send"));
@@ -65,7 +65,9 @@ public class ServiceConsumer {
                 public void run() {
                     for (int i = 0; i < count; i++) {
                         String greeting = helloService.sayHiToUser(rpcUser);
-                        LOG.info(greeting);
+                        if (LOG.isDebugEnabled()) {
+                            LOG.debug(greeting);
+                        }
                     }
                 }
             });
