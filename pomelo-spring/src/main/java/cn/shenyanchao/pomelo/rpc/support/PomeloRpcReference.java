@@ -44,7 +44,7 @@ public class PomeloRpcReference {
             }
 
         } catch (ClassNotFoundException e) {
-            LOG.error("spring 解析失败", e);
+            LOG.error("spring parser error!", e);
         }
         return null;
     }
@@ -101,4 +101,15 @@ public class PomeloRpcReference {
         this.group = group;
     }
 
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("PomeloRpcReference{");
+        sb.append("interfaceName='").append(interfaceName).append('\'');
+        sb.append(", timeout=").append(timeout);
+        sb.append(", serializer=").append(serializer);
+        sb.append(", protocolType=").append(protocolType);
+        sb.append(", group='").append(group).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
 }

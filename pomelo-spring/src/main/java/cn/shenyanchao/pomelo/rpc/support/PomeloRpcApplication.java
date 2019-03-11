@@ -20,7 +20,7 @@ public class PomeloRpcApplication implements InitializingBean {
     private int timeout;
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         if (StringUtils.isBlank(address)) {
             throw new RuntimeException("address is null");
         }
@@ -30,15 +30,6 @@ public class PomeloRpcApplication implements InitializingBean {
         if (1 != flag && 2 != flag) {
             throw new RuntimeException("flag in [1,2]");
         }
-
-        //        if (1 == flag) {
-        //            //服务端
-        //            registerModule.initZooKeeper(address, timeout);
-        //        } else if (2 == flag) {
-        //            //客户端
-        //            discoveryModule.initZooKeeper(address, timeout);
-        //            pomeloRpcClientFactory.connect(timeout);
-        //        }
 
     }
 

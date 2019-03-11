@@ -1,7 +1,6 @@
 package cn.shenyanchao.pomelo.rpc.support;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 
 import cn.shenyanchao.pomelo.rpc.serialize.PomeloSerializer;
@@ -12,7 +11,7 @@ import cn.shenyanchao.pomelo.rpc.util.NetUtils;
  *
  * @author shenyanchao
  */
-public class PomeloRpcRegistry implements InitializingBean, DisposableBean {
+public class PomeloRpcRegistry implements InitializingBean {
 
     private String ip;
 
@@ -27,10 +26,6 @@ public class PomeloRpcRegistry implements InitializingBean, DisposableBean {
     private String group;
 
     private int threadCount;
-
-    @Override
-    public void destroy() throws Exception {
-    }
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -119,4 +114,17 @@ public class PomeloRpcRegistry implements InitializingBean, DisposableBean {
         this.ip = ip;
     }
 
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("PomeloRpcRegistry{");
+        sb.append("ip='").append(ip).append('\'');
+        sb.append(", port=").append(port);
+        sb.append(", timeout=").append(timeout);
+        sb.append(", protocolType=").append(protocolType);
+        sb.append(", serializer=").append(serializer);
+        sb.append(", group='").append(group).append('\'');
+        sb.append(", threadCount=").append(threadCount);
+        sb.append('}');
+        return sb.toString();
+    }
 }

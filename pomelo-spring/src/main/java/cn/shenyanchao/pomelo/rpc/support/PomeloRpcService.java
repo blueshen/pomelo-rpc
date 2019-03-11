@@ -1,15 +1,9 @@
 package cn.shenyanchao.pomelo.rpc.support;
 
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.ApplicationEvent;
-import org.springframework.context.ApplicationListener;
-
 /**
  * @author shenyanchao
  */
-public class PomeloRpcService implements ApplicationContextAware, ApplicationListener {
+public class PomeloRpcService {
 
     /**
      * 接口名称 key
@@ -21,21 +15,10 @@ public class PomeloRpcService implements ApplicationContextAware, ApplicationLis
      */
     private String ref;
 
-    private ApplicationContext applicationContext;
-
     /**
      * 拦截器类
      */
     private String interceptorRef;
-
-    @Override
-    public void onApplicationEvent(ApplicationEvent event) {
-        //        Map<String, Object> rpcBeans = applicationContext.getBeansWithAnnotation(PomeloRpc.class);
-        //        for (Map.Entry entry : rpcBeans.entrySet()) {
-        ////            System.out.println(entry.getKey() + "" + entry.getValue());
-        //        }
-
-    }
 
     public String getInterfaceName() {
         return interfaceName;
@@ -59,25 +42,21 @@ public class PomeloRpcService implements ApplicationContextAware, ApplicationLis
         this.ref = ref;
     }
 
-    /**
-     * @return the applicationContext
-     */
-    public ApplicationContext getApplicationContext() {
-        return applicationContext;
-    }
-
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext)
-            throws BeansException {
-
-        this.applicationContext = applicationContext;
-    }
-
     public String getInterceptorRef() {
         return interceptorRef;
     }
 
     public void setInterceptorRef(String interceptorRef) {
         this.interceptorRef = interceptorRef;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("PomeloRpcService{");
+        sb.append("interfaceName='").append(interfaceName).append('\'');
+        sb.append(", ref='").append(ref).append('\'');
+        sb.append(", interceptorRef='").append(interceptorRef).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 }

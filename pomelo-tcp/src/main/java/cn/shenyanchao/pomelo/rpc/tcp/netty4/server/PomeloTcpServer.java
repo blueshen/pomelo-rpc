@@ -11,7 +11,7 @@ import com.google.inject.Singleton;
 
 import cn.shenyanchao.pomelo.rpc.core.protocol.PomeloRpcProtocol;
 import cn.shenyanchao.pomelo.rpc.core.server.RpcServer;
-import cn.shenyanchao.pomelo.rpc.core.server.filter.RpcInterceptor;
+import cn.shenyanchao.pomelo.rpc.core.server.intercepotr.RpcInterceptor;
 import cn.shenyanchao.pomelo.rpc.core.thread.NamedThreadFactory;
 import cn.shenyanchao.pomelo.rpc.serialize.PomeloSerializer;
 import cn.shenyanchao.pomelo.rpc.tcp.netty4.server.handler.PomeloRpcDecoderHandler;
@@ -85,11 +85,14 @@ public class PomeloTcpServer implements RpcServer {
 
     @Override
     public void run(final int port, final int timeout) throws Exception {
-        ThreadFactory serverBossTF = new NamedThreadFactory("pomelo-io-");
-        ThreadFactory serverWorkerTF = new NamedThreadFactory("pomelo-worker-");
+        ThreadFactory serverBossTF = new NamedThreadFactory("pomelo-io");
+        ThreadFactory serverWorkerTF = new NamedThreadFactory("pomelo-worker");
 
         ServerBootstrap bootstrap = new ServerBootstrap();
         if (Epoll.isAvailable()) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("-----> use epoll start server <-------");
+            }
             bossGroup = new EpollEventLoopGroup(PROCESSORS, serverBossTF);
             workerGroup = new EpollEventLoopGroup(PROCESSORS * 2, serverWorkerTF);
             ((EpollEventLoopGroup) bossGroup).setIoRatio(100);
@@ -97,7 +100,6 @@ public class PomeloTcpServer implements RpcServer {
             bootstrap.channel(EpollServerSocketChannel.class);
             bootstrap.option(EpollChannelOption.EPOLL_MODE, EpollMode.EDGE_TRIGGERED);
             bootstrap.childOption(EpollChannelOption.EPOLL_MODE, EpollMode.EDGE_TRIGGERED);
-            LOG.info("----- USE EPoll-------");
         } else {
             bossGroup = new NioEventLoopGroup(PROCESSORS, serverBossTF);
             workerGroup = new NioEventLoopGroup(PROCESSORS * 2, serverWorkerTF);
@@ -127,10 +129,14 @@ public class PomeloTcpServer implements RpcServer {
             }
 
         });
-        LOG.info("----------- pomelo starting ------------");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("-----------> pomelo starting <------------");
+        }
         bootstrap.bind(new InetSocketAddress(port)).sync();
-        LOG.info("tcp server started on port：" + port);
-        LOG.info("--------- start success! ------------");
+        LOG.info("******** tcp server started on port: {} ***********", port);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("---------> start success! <------------");
+        }
     }
 
     public byte getProtocolType() {
@@ -147,13 +153,6 @@ public class PomeloTcpServer implements RpcServer {
 
     public void setSerializer(PomeloSerializer serializer) {
         this.serializer = serializer;
-    }
-
-    /**
-     * @return the threadCount
-     */
-    public int getThreadCount() {
-        return threadCount;
     }
 
     /**

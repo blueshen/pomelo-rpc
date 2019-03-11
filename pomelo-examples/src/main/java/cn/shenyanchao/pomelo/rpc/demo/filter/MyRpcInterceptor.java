@@ -5,7 +5,7 @@ import java.lang.reflect.Method;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cn.shenyanchao.pomelo.rpc.core.server.filter.RpcInterceptor;
+import cn.shenyanchao.pomelo.rpc.core.server.intercepotr.RpcInterceptor;
 
 /**
  * @author shenyanchao

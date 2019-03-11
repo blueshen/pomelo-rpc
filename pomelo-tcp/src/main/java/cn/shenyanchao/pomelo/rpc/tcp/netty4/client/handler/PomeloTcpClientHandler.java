@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import cn.shenyanchao.pomelo.rpc.core.message.PomeloResponseMessage;
 import cn.shenyanchao.pomelo.rpc.tcp.netty4.client.ClientHolder;
-import cn.shenyanchao.pomelo.rpc.tcp.netty4.client.ResponseModule;
+import cn.shenyanchao.pomelo.rpc.tcp.netty4.client.ResponseHolder;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.util.ReferenceCountUtil;
@@ -23,17 +23,19 @@ public class PomeloTcpClientHandler extends ChannelInboundHandlerAdapter {
 
     private ClientHolder clientHolder;
 
-    private ResponseModule responseModule;
+    private ResponseHolder responseHolder;
 
-    public PomeloTcpClientHandler(ClientHolder clientHolder, ResponseModule responseModule) {
+    public PomeloTcpClientHandler(ClientHolder clientHolder, ResponseHolder responseHolder) {
         super();
         this.clientHolder = clientHolder;
-        this.responseModule = responseModule;
+        this.responseHolder = responseHolder;
     }
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        LOG.debug("进入client channelRead Method----------------");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("invoke client channelRead Method----------------");
+        }
         try {
             if (msg instanceof PomeloResponseMessage) {
                 PomeloResponseMessage response = (PomeloResponseMessage) msg;
@@ -41,8 +43,11 @@ public class PomeloTcpClientHandler extends ChannelInboundHandlerAdapter {
                     LOG.debug("receive response list from server: {} ,requestId is: {}", ctx.channel().remoteAddress(),
                             response.getRequestId());
                 }
-                responseModule.receiveResponse(response);
-                LOG.debug("receive message from server, 放入response queue中");
+                responseHolder.receiveResponse(response);
+
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("receive message from server, put it into responseQueue");
+                }
             } else {
                 LOG.error("receive message error,only support List || ResponseWrapper");
                 throw new Exception(

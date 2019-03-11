@@ -13,7 +13,7 @@ import cn.shenyanchao.pomelo.rpc.core.protocol.PomeloRpcProtocol;
 import cn.shenyanchao.pomelo.rpc.core.thread.NamedThreadFactory;
 import cn.shenyanchao.pomelo.rpc.tcp.netty4.client.ClientHolder;
 import cn.shenyanchao.pomelo.rpc.tcp.netty4.client.PomeloRpcClient;
-import cn.shenyanchao.pomelo.rpc.tcp.netty4.client.ResponseModule;
+import cn.shenyanchao.pomelo.rpc.tcp.netty4.client.ResponseHolder;
 import cn.shenyanchao.pomelo.rpc.tcp.netty4.client.RpcClient;
 import cn.shenyanchao.pomelo.rpc.tcp.netty4.client.handler.PomeloTcpClientHandler;
 import cn.shenyanchao.pomelo.rpc.tcp.netty4.server.handler.PomeloRpcDecoderHandler;
@@ -43,7 +43,7 @@ public class PomeloRpcClientFactory implements RpcClientFactory {
     private final Bootstrap bootstrap = new Bootstrap();
 
     @Inject
-    private ResponseModule responseModule;
+    private ResponseHolder responseModule;
 
     @Inject
     private ClientHolder clientHolder;
@@ -52,7 +52,9 @@ public class PomeloRpcClientFactory implements RpcClientFactory {
     private PomeloRpcProtocol pomeloRpcProtocol;
 
     public PomeloRpcClientFactory() {
-        LOG.debug("---------------- pomelo client connect ----------------");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("---------------- pomelo client connect ----------------");
+        }
         bootstrap.group(workerGroup)
                 .channel(NioSocketChannel.class)
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, CONNECT_TIMEOUT)
@@ -72,7 +74,9 @@ public class PomeloRpcClientFactory implements RpcClientFactory {
             }
 
         });
-        LOG.debug("---------------- pomelo client start success ------------------");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("---------------- pomelo client start success ------------------");
+        }
     }
 
     @Override
@@ -81,7 +85,6 @@ public class PomeloRpcClientFactory implements RpcClientFactory {
             RpcClient rpcClient = createClient(targetIP, targetPort);
             clientHolder.putRpcClient(targetIP, targetPort, rpcClient);
         }
-
         return clientHolder.getRpcClient(targetIP, targetPort);
     }
 

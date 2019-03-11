@@ -19,8 +19,8 @@ import com.google.inject.Singleton;
 @Singleton
 public class RegisterModule implements IRegisterModule {
 
-    public static final String BASE_PATH = "/pomelo";
     private static final Logger LOG = LoggerFactory.getLogger(RegisterModule.class);
+    public static final String BASE_PATH = "/pomelo";
     private CuratorFramework client;
     private ServiceDiscovery serviceDiscovery;
 
@@ -43,7 +43,9 @@ public class RegisterModule implements IRegisterModule {
                 .build();
         client.start();
         client.blockUntilConnected();
-        LOG.info("connect to zkServer : {} success!", zkServer);
+        if (LOG.isDebugEnabled()) {
+            LOG.info("connect to zkServer: {} success!", zkServer);
+        }
 
     }
 

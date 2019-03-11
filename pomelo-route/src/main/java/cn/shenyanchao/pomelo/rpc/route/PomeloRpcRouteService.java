@@ -10,7 +10,7 @@ import java.util.Map;
 import com.alibaba.fastjson.JSONObject;
 import com.google.inject.Singleton;
 
-import cn.shenyanchao.pomelo.rpc.core.server.filter.RpcInterceptor;
+import cn.shenyanchao.pomelo.rpc.core.server.intercepotr.RpcInterceptor;
 import cn.shenyanchao.pomelo.rpc.util.ClassPoolUtils;
 
 /**

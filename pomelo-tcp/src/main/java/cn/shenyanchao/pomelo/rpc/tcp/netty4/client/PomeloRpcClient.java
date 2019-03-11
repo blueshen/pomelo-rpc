@@ -22,9 +22,9 @@ public class PomeloRpcClient implements RpcClient {
 
     private ChannelFuture cf;
     private ClientHolder clientHolder;
-    private ResponseModule responseModule;
+    private ResponseHolder responseModule;
 
-    public PomeloRpcClient(ChannelFuture cf, ResponseModule responseModule, ClientHolder clientHolder) {
+    public PomeloRpcClient(ChannelFuture cf, ResponseHolder responseModule, ClientHolder clientHolder) {
         this.cf = cf;
         this.responseModule = responseModule;
         this.clientHolder = clientHolder;
@@ -69,7 +69,9 @@ public class PomeloRpcClient implements RpcClient {
         Object result;
         try {
             long leftTime = requestMessage.getTimeout() - (System.currentTimeMillis() - beginTime);
-            LOG.debug("poll from responseQueue timeout={}ms", leftTime);
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("poll from responseQueue timeout={}ms", leftTime);
+            }
             result = responseQueue.poll(
                     requestMessage.getTimeout() - (System.currentTimeMillis() - beginTime),
                     TimeUnit.MILLISECONDS);
@@ -139,7 +141,9 @@ public class PomeloRpcClient implements RpcClient {
     }
 
     public void sendMessage(final PomeloRequestMessage requestMessage) {
-        LOG.debug("------------{}-------", cf.channel().toString());
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("------------> send message to {}<-----------", cf.channel().toString());
+        }
 
         if (cf.channel().isOpen()) {
             ChannelFuture writeFuture = cf.channel().writeAndFlush(requestMessage);
@@ -169,14 +173,11 @@ public class PomeloRpcClient implements RpcClient {
                 response.setException(new Exception(errorMsg.toString()));
                 responseModule.receiveResponse(response);
             });
-
-            LOG.debug("-----------END SEND msg-------");
         }
 
     }
 
     public void destroy() {
-
         clientHolder.removeRpcClient(getServerIP(), getServerPort());
         if (cf.channel().isOpen()) {
             cf.channel().close();

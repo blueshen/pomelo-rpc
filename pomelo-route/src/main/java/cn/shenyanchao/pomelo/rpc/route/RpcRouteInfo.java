@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.Map;
 
-import cn.shenyanchao.pomelo.rpc.core.server.filter.RpcInterceptor;
+import cn.shenyanchao.pomelo.rpc.core.server.intercepotr.RpcInterceptor;
 
 /**
  * @author shenyanchao

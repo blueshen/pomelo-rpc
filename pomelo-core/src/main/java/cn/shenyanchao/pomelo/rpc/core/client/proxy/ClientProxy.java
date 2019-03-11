@@ -3,6 +3,7 @@ package cn.shenyanchao.pomelo.rpc.core.client.proxy;
 import cn.shenyanchao.pomelo.rpc.serialize.PomeloSerializer;
 
 /**
+ * 客户端代理
  * @author shenyanchao
  */
 public interface ClientProxy {

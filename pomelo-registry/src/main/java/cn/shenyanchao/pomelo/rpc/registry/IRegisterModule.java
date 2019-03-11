@@ -1,6 +1,7 @@
 package cn.shenyanchao.pomelo.rpc.registry;
 
 /**
+ * 服务注册模块
  * @author shenyanchao
  */
 public interface IRegisterModule {

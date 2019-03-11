@@ -1,6 +1,8 @@
 package cn.shenyanchao.pomelo.rpc.core.bytebuffer;
 
 /**
+ * Byte Buffer
+ *
  * @author shenyanchao
  */
 public interface RpcByteBuffer {

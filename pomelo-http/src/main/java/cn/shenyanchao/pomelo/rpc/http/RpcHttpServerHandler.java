@@ -5,7 +5,7 @@ import java.util.Map;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
-import cn.shenyanchao.pomelo.rpc.core.server.filter.RpcInterceptor;
+import cn.shenyanchao.pomelo.rpc.core.server.intercepotr.RpcInterceptor;
 import cn.shenyanchao.pomelo.rpc.route.PomeloRpcRouteService;
 import cn.shenyanchao.pomelo.rpc.route.RpcRouteInfo;
 

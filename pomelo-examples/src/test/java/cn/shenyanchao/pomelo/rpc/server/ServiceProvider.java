@@ -7,7 +7,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
-import cn.shenyanchao.pomelo.rpc.core.server.filter.RpcInterceptor;
+import cn.shenyanchao.pomelo.rpc.core.server.intercepotr.RpcInterceptor;
 import cn.shenyanchao.pomelo.rpc.registry.RegisterModule;
 import cn.shenyanchao.pomelo.rpc.support.PomeloRpcApplication;
 import cn.shenyanchao.pomelo.rpc.support.PomeloRpcRegistry;

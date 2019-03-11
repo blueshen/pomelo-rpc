@@ -17,9 +17,9 @@ import cn.shenyanchao.pomelo.rpc.core.message.PomeloResponseMessage;
  */
 
 @Singleton
-public class ResponseModule {
+public class ResponseHolder {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ResponseModule.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ResponseHolder.class);
 
     private Map<Integer, LinkedBlockingQueue<Object>> responses = new ConcurrentHashMap<>();
 

@@ -56,12 +56,15 @@ public class PomeloRpcTcpServerHandler extends ChannelInboundHandlerAdapter {
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         String remoteAddress = ctx.channel().remoteAddress().toString();
         if (LOG.isDebugEnabled()) {
-            LOG.debug("------remote IP:{}------", remoteAddress);
+            LOG.debug("------remote ip:{}------", remoteAddress);
         }
     }
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("---------- channel inactive:{}--------", ctx.channel().toString());
+        }
         ctx.channel().close();
     }
 
@@ -78,7 +81,7 @@ public class PomeloRpcTcpServerHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg)
             throws Exception {
         if (LOG.isDebugEnabled()) {
-            LOG.debug("----------channel read:{}--------", msg.toString());
+            LOG.debug("---------- channel read:{}--------", msg.toString());
         }
         if (!(msg instanceof PomeloRequestMessage)) {
             LOG.error("receive message error,only support RequestWrapper");

@@ -22,6 +22,7 @@ import com.google.inject.Singleton;
 import cn.shenyanchao.pomelo.rpc.registry.RegisterModule;
 
 /**
+ * 服务发现模块
  * @author shenyanchao
  */
 
@@ -96,7 +97,9 @@ public class DiscoveryModule implements IDiscoveryModule {
                 .build();
         client.start();
         client.blockUntilConnected();
-        LOG.info("client connect to server success");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("client connect to server:{} success", server);
+        }
 
     }
 

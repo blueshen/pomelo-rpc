@@ -10,7 +10,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import cn.shenyanchao.pomelo.rpc.core.server.RpcServer;
-import cn.shenyanchao.pomelo.rpc.core.server.filter.RpcInterceptor;
+import cn.shenyanchao.pomelo.rpc.core.server.intercepotr.RpcInterceptor;
 import cn.shenyanchao.pomelo.rpc.core.thread.NamedThreadFactory;
 import cn.shenyanchao.pomelo.rpc.http.RpcHttpServerHandler;
 import cn.shenyanchao.pomelo.rpc.http.netty4.server.handler.PomeloHttpServerHandler;

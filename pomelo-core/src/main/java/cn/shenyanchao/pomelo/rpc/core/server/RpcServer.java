@@ -1,6 +1,6 @@
 package cn.shenyanchao.pomelo.rpc.core.server;
 
-import cn.shenyanchao.pomelo.rpc.core.server.filter.RpcInterceptor;
+import cn.shenyanchao.pomelo.rpc.core.server.intercepotr.RpcInterceptor;
 
 /**
  * @author shenyanchao

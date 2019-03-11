@@ -11,8 +11,8 @@ import com.google.inject.Singleton;
 
 import cn.shenyanchao.pomelo.rpc.core.message.PomeloRequestMessage;
 import cn.shenyanchao.pomelo.rpc.core.message.PomeloResponseMessage;
-import cn.shenyanchao.pomelo.rpc.core.server.filter.RpcInterceptor;
 import cn.shenyanchao.pomelo.rpc.core.server.handler.RpcServerHandler;
+import cn.shenyanchao.pomelo.rpc.core.server.intercepotr.RpcInterceptor;
 import cn.shenyanchao.pomelo.rpc.serialize.PomeloSerializer;
 
 /**
@@ -95,9 +95,9 @@ public class RpcTcpServerHandler implements RpcServerHandler {
                 requestObjects = new Object[] {};
             }
             method.setAccessible(true);
-            if (rpcFilterServerBean.getRpcFilter() != null) {
+            if (null != rpcFilterServerBean.getRpcInterceptor()) {
                 // filter 过滤
-                RpcInterceptor rpcFilter = rpcFilterServerBean.getRpcFilter();
+                RpcInterceptor rpcFilter = rpcFilterServerBean.getRpcInterceptor();
                 if (rpcFilter.before(method, rpcFilterServerBean.getObject(), requestObjects)) {
                     responseWrapper.setResponse(method.invoke(rpcFilterServerBean.getObject(), requestObjects));
                 } else {
@@ -143,12 +143,12 @@ public class RpcTcpServerHandler implements RpcServerHandler {
 
         private Object object;
 
-        private RpcInterceptor rpcFilter;
+        private RpcInterceptor rpcInterceptor;
 
-        public RpcFilterServerBean(Object object, RpcInterceptor rpcFilter) {
+        public RpcFilterServerBean(Object object, RpcInterceptor rpcInterceptor) {
             super();
             this.object = object;
-            this.rpcFilter = rpcFilter;
+            this.rpcInterceptor = rpcInterceptor;
         }
 
         /**
@@ -165,19 +165,12 @@ public class RpcTcpServerHandler implements RpcServerHandler {
             this.object = object;
         }
 
-        /**
-         * @return the rpcFilter
-         */
-        public RpcInterceptor getRpcFilter() {
-            return rpcFilter;
+        public RpcInterceptor getRpcInterceptor() {
+            return rpcInterceptor;
         }
 
-        /**
-         * @param rpcFilter the rpcFilter to set
-         */
-        public void setRpcFilter(RpcInterceptor rpcFilter) {
-            this.rpcFilter = rpcFilter;
+        public void setRpcInterceptor(RpcInterceptor rpcInterceptor) {
+            this.rpcInterceptor = rpcInterceptor;
         }
-
     }
 }
