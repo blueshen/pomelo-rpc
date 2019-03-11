@@ -35,17 +35,20 @@ public class PomeloRpcHttpService implements ApplicationContextAware, Applicatio
 
     private ApplicationContext applicationContext;
 
+    private PomeloHttpServer pomeloHttpServer;
+
     @Override
     public void onApplicationEvent(ApplicationEvent event) {
 
+        pomeloHttpServer = new PomeloHttpServer();
         Object object = applicationContext.getBean(ref);
         if (StringUtils.isNotBlank(interceptorRef)) {
             RpcInterceptor rpcFilter = (RpcInterceptor) applicationContext.getBean(interceptorRef);
             RpcHttpBean rpcHttpBean = new RpcHttpBean(object, httpType, returnType);
-            PomeloHttpServer.getInstance().registerService(projectName, rpcHttpBean, rpcFilter);
+            pomeloHttpServer.registerService(projectName, rpcHttpBean, rpcFilter);
         } else {
             RpcHttpBean rpcHttpBean = new RpcHttpBean(object, httpType, returnType);
-            PomeloHttpServer.getInstance().registerService(projectName, rpcHttpBean, null);
+            pomeloHttpServer.registerService(projectName, rpcHttpBean, null);
         }
 
     }

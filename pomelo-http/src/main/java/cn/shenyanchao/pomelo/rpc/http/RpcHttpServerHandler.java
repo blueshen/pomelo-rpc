@@ -2,27 +2,31 @@ package cn.shenyanchao.pomelo.rpc.http;
 
 import java.util.Map;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+
+import cn.shenyanchao.pomelo.rpc.core.server.filter.RpcInterceptor;
 import cn.shenyanchao.pomelo.rpc.route.PomeloRpcRouteService;
 import cn.shenyanchao.pomelo.rpc.route.RpcRouteInfo;
-import cn.shenyanchao.pomelo.rpc.core.server.filter.RpcInterceptor;
 
 /**
  * @author shenyanchao
  */
+
+@Singleton
 public class RpcHttpServerHandler extends AbstractRpcHttpServerHandler {
 
     public static final int TYPE = 0;
 
-    public static RpcHttpServerHandler getInstance() {
-        return SingletonHolder.rpcHttpServerHandler;
-    }
+    @Inject
+    private PomeloRpcRouteService pomeloRpcRouteService;
 
     @Override
     public void addHandler(String instanceName, Object instance,
                            RpcInterceptor rpcFilter) {
         if (instance instanceof RpcHttpBean) {
             RpcHttpBean rpcHttpBean = (RpcHttpBean) instance;
-            PomeloRpcRouteService.getInstance().registerRoute(instanceName, rpcHttpBean.getObject(),
+            pomeloRpcRouteService.registerRoute(instanceName, rpcHttpBean.getObject(),
                     rpcFilter, rpcHttpBean.getHttpType(), rpcHttpBean.getReturnType());
         }
     }
@@ -30,20 +34,17 @@ public class RpcHttpServerHandler extends AbstractRpcHttpServerHandler {
     @Override
     public RpcRouteInfo isRouteInfos(String route, String methodType,
                                      Map<String, Object> params) throws Exception {
-        return PomeloRpcRouteService.getInstance().isRouteInfos(route, methodType, params);
+        return pomeloRpcRouteService.isRouteInfos(route, methodType, params);
     }
 
     @Override
     public Object methodInvoke(RpcRouteInfo routeInfo) throws Exception {
-        return PomeloRpcRouteService.getInstance().methodInvoke(routeInfo);
+        return pomeloRpcRouteService.methodInvoke(routeInfo);
     }
 
     @Override
     public void clear() {
-        PomeloRpcRouteService.getInstance().clear();
+        pomeloRpcRouteService.clear();
     }
 
-    static class SingletonHolder {
-        public static RpcHttpServerHandler rpcHttpServerHandler = new RpcHttpServerHandler();
-    }
 }

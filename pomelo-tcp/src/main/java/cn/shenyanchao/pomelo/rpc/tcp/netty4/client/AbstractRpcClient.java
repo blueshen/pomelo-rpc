@@ -1,4 +1,4 @@
-package cn.shenyanchao.pomelo.rpc.core.client;
+package cn.shenyanchao.pomelo.rpc.tcp.netty4.client;
 
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
@@ -17,6 +17,8 @@ public abstract class AbstractRpcClient implements RpcClient {
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractRpcClient.class);
 
+    protected ResponseModule responseModule;
+
     @Override
     public Object invokeImpl(String targetInstanceName, String methodName,
                              String[] argTypes, Object[] args, int timeout, PomeloSerializer serializer,
@@ -34,15 +36,15 @@ public abstract class AbstractRpcClient implements RpcClient {
 
     private Object invokeImplIntern(PomeloRequestMessage requestMessage) throws Exception {
         long beginTime = System.currentTimeMillis();
-        LinkedBlockingQueue<Object> responseQueue = new LinkedBlockingQueue<Object>(1);
-        getRpcClientFactory().putResponse(requestMessage.getId(), responseQueue);
+        LinkedBlockingQueue<Object> responseQueue = new LinkedBlockingQueue<>(1);
+        responseModule.putResponse(requestMessage.getId(), responseQueue);
         PomeloResponseMessage rpcResponse = null;
 
         try {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("client ready to send message,request id:{} ", requestMessage.getId());
             }
-
+            // fire
             sendMessage(requestMessage);
 
             if (LOG.isDebugEnabled()) {
@@ -55,12 +57,13 @@ public abstract class AbstractRpcClient implements RpcClient {
         }
         Object result;
         try {
-
+            long leftTime = requestMessage.getTimeout() - (System.currentTimeMillis() - beginTime);
+            LOG.debug("poll from responseQueue timeout={}ms",leftTime);
             result = responseQueue.poll(
                     requestMessage.getTimeout() - (System.currentTimeMillis() - beginTime),
                     TimeUnit.MILLISECONDS);
         } finally {
-            getRpcClientFactory().removeResponse(requestMessage.getId());
+            responseModule.removeResponse(requestMessage.getId());
         }
         if (null == result && (System.currentTimeMillis() - beginTime) <= requestMessage.getTimeout()) {
             //返回结果集为null
@@ -91,7 +94,7 @@ public abstract class AbstractRpcClient implements RpcClient {
                     rpcResponse.setResponse(null);
                 } else {
                     Object responseObject = rpcResponse.getSerializer().getSerialization().deserialize(
-                                    responseClassName, (byte[]) rpcResponse.getResponse());
+                            responseClassName, (byte[]) rpcResponse.getResponse());
                     if (responseObject instanceof Throwable) {
                         rpcResponse.setException((Throwable) responseObject);
                     } else {
@@ -119,7 +122,7 @@ public abstract class AbstractRpcClient implements RpcClient {
      *
      * @throws Exception
      */
-    public abstract void sendMessage(PomeloRequestMessage commonRpcRequest) throws Exception;
+    public abstract void sendMessage(PomeloRequestMessage pomeloRequestMessage) throws Exception;
 
     /**
      * 消灭消息

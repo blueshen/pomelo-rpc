@@ -29,6 +29,8 @@ public class PomeloRpcTcpServerHandler extends ChannelInboundHandlerAdapter {
 
     private ThreadPoolExecutor threadPoolExecutor;
 
+    private RpcTcpServerHandler rpcTcpServerHandler;
+
     /**
      * 协议名称
      */
@@ -39,10 +41,12 @@ public class PomeloRpcTcpServerHandler extends ChannelInboundHandlerAdapter {
      */
     private PomeloSerializer serializer;
 
-    public PomeloRpcTcpServerHandler(int threadCount, byte protocolType, PomeloSerializer serializer) {
+    public PomeloRpcTcpServerHandler(int threadCount, byte protocolType, PomeloSerializer serializer,
+                                     RpcTcpServerHandler rpcTcpServerHandler) {
         super();
         this.protocolType = protocolType;
         this.serializer = serializer;
+        this.rpcTcpServerHandler = rpcTcpServerHandler;
         threadPoolExecutor = new ThreadPoolExecutor(threadCount, threadCount,
                 60L, TimeUnit.SECONDS,
                 new LinkedBlockingQueue<>(), new NamedThreadFactory("rpc-handler"));
@@ -52,7 +56,7 @@ public class PomeloRpcTcpServerHandler extends ChannelInboundHandlerAdapter {
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         String remoteAddress = ctx.channel().remoteAddress().toString();
         if (LOG.isDebugEnabled()) {
-            LOG.debug("remote IP:{}", remoteAddress);
+            LOG.debug("------remote IP:{}------", remoteAddress);
         }
     }
 
@@ -73,6 +77,7 @@ public class PomeloRpcTcpServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg)
             throws Exception {
+        LOG.info("----------channel read:{}--------", msg.toString());
         if (!(msg instanceof PomeloRequestMessage)) {
             LOG.error("receive message error,only support RequestWrapper");
             throw new Exception(
@@ -92,7 +97,7 @@ public class PomeloRpcTcpServerHandler extends ChannelInboundHandlerAdapter {
         try {
             PomeloRequestMessage request = (PomeloRequestMessage) message;
             pomeloResponseMessage =
-                    RpcTcpServerHandler.getInstance().handleRequest(request, serializer, protocolType);
+                    rpcTcpServerHandler.handleRequest(request, serializer, protocolType);
             if (ctx.channel().isOpen()) {
                 ChannelFuture wf = ctx.channel().writeAndFlush(pomeloResponseMessage);
                 wf.addListener(new ChannelFutureListener() {
@@ -101,7 +106,7 @@ public class PomeloRpcTcpServerHandler extends ChannelInboundHandlerAdapter {
                         if (!future.isSuccess()) {
 
                             LOG.error(
-                                    "server write response error,client  host is: {}:{},server Ip:{}",
+                                    "server write response error, client host is: {}:{}, server Ip:{}",
                                     ((InetSocketAddress) ctx.channel().remoteAddress()).getHostName(),
                                     ((InetSocketAddress) ctx.channel().remoteAddress()).getPort(), getLocalhost());
                             ctx.channel().close();
@@ -124,15 +129,12 @@ public class PomeloRpcTcpServerHandler extends ChannelInboundHandlerAdapter {
         commonRpcResponse.setException(new Exception(errorMessage));
         ChannelFuture wf = ctx.channel().writeAndFlush(commonRpcResponse);
 
-        wf.addListener(new ChannelFutureListener() {
-            @Override
-            public void operationComplete(ChannelFuture future) throws Exception {
-                if (!future.isSuccess()) {
-                    LOG.error("server write response error,request id is: {},client Ip is: {},server Ip:{}",
-                            request.getId(), ctx
-                                    .channel().remoteAddress().toString(), getLocalhost());
-                    ctx.channel().close();
-                }
+        wf.addListener((ChannelFutureListener) future -> {
+            if (!future.isSuccess()) {
+                LOG.error("server write response error,request id is: {},client Ip is: {},server Ip:{}",
+                        request.getId(), ctx
+                                .channel().remoteAddress().toString(), getLocalhost());
+                ctx.channel().close();
             }
         });
     }

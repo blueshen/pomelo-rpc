@@ -12,8 +12,9 @@ public interface RpcServer {
      *
      * @param serviceName     服务名称
      * @param serviceInstance 服务实例
+     * @param rpcInterceptor  拦截器
      */
-    void registerService(String serviceName, Object serviceInstance, RpcInterceptor rpcFilter);
+    void registerService(String serviceName, Object serviceInstance, RpcInterceptor rpcInterceptor);
 
     /**
      * 运行

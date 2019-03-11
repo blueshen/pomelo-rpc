@@ -1,14 +1,10 @@
 package cn.shenyanchao.pomelo.rpc.support;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
-
-import cn.shenyanchao.pomelo.rpc.core.server.filter.RpcInterceptor;
-import cn.shenyanchao.pomelo.rpc.tcp.netty4.server.PomeloTcpServer;
 
 /**
  * @author shenyanchao
@@ -34,14 +30,11 @@ public class PomeloRpcService implements ApplicationContextAware, ApplicationLis
 
     @Override
     public void onApplicationEvent(ApplicationEvent event) {
+        //        Map<String, Object> rpcBeans = applicationContext.getBeansWithAnnotation(PomeloRpc.class);
+        //        for (Map.Entry entry : rpcBeans.entrySet()) {
+        ////            System.out.println(entry.getKey() + "" + entry.getValue());
+        //        }
 
-        if (StringUtils.isBlank(interceptorRef) || !(applicationContext
-                                                             .getBean(interceptorRef) instanceof RpcInterceptor)) {
-            PomeloTcpServer.getInstance().registerService(interfaceName, applicationContext.getBean(ref), null);
-        } else {
-            PomeloTcpServer.getInstance().registerService(interfaceName, applicationContext.getBean(ref),
-                    (RpcInterceptor) applicationContext.getBean(interceptorRef));
-        }
     }
 
     public String getInterfaceName() {

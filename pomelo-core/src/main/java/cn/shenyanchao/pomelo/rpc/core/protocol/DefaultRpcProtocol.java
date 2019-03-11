@@ -6,6 +6,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.inject.Singleton;
+
 import cn.shenyanchao.pomelo.rpc.core.bytebuffer.RpcByteBuffer;
 import cn.shenyanchao.pomelo.rpc.core.message.Message;
 import cn.shenyanchao.pomelo.rpc.core.message.PomeloRequestMessage;
@@ -18,6 +20,8 @@ import cn.shenyanchao.pomelo.rpc.serialize.PomeloSerializer;
  *
  * @author shenyanchao
  */
+
+@Singleton
 public class DefaultRpcProtocol implements RpcProtocol {
 
     public static final byte TYPE = 1;
@@ -34,13 +38,6 @@ public class DefaultRpcProtocol implements RpcProtocol {
 
     private static final byte RESPONSE = (byte) 1;
 
-    private DefaultRpcProtocol() {
-
-    }
-
-    public static RpcProtocol getInstance() {
-        return SingletonHolder.rpcProtocol;
-    }
 
     @Override
     public RpcByteBuffer encode(Message message,
@@ -310,7 +307,4 @@ public class DefaultRpcProtocol implements RpcProtocol {
         }
     }
 
-    public static class SingletonHolder {
-        static DefaultRpcProtocol rpcProtocol = new DefaultRpcProtocol();
-    }
 }

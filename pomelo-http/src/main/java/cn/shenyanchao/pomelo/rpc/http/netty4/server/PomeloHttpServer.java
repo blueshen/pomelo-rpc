@@ -6,6 +6,9 @@ import java.util.concurrent.ThreadFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+
 import cn.shenyanchao.pomelo.rpc.core.server.RpcServer;
 import cn.shenyanchao.pomelo.rpc.core.server.filter.RpcInterceptor;
 import cn.shenyanchao.pomelo.rpc.core.thread.NamedThreadFactory;
@@ -27,6 +30,8 @@ import io.netty.handler.timeout.IdleStateHandler;
 /**
  * @author shenyanchao
  */
+
+@Singleton
 public class PomeloHttpServer implements RpcServer {
 
     private static final Logger LOG = LoggerFactory.getLogger(PomeloHttpServer.class);
@@ -37,24 +42,19 @@ public class PomeloHttpServer implements RpcServer {
 
     private NioEventLoopGroup workerGroup;
 
-    private PomeloHttpServer() {
-
-    }
-
-    public static PomeloHttpServer getInstance() {
-        return SingletonHolder.instance;
-    }
+    @Inject
+    private RpcHttpServerHandler rpcHttpServerHandler;
 
     @Override
     public void registerService(String serviceName, Object serviceInstance,
                                 RpcInterceptor rpcFilter) {
 
-        RpcHttpServerHandler.getInstance().addHandler(serviceName, serviceInstance, rpcFilter);
+        rpcHttpServerHandler.addHandler(serviceName, serviceInstance, rpcFilter);
     }
 
     @Override
     public void stop() {
-        RpcHttpServerHandler.getInstance().clear();
+        rpcHttpServerHandler.clear();
         bossGroup.shutdownGracefully();
         workerGroup.shutdownGracefully();
     }
@@ -94,10 +94,6 @@ public class PomeloHttpServer implements RpcServer {
         bootstrap.bind(new InetSocketAddress(port)).sync();
         LOG.info("http server stared on：{}", port);
         LOG.info("-----------------start success!--------------------------");
-    }
-
-    private static class SingletonHolder {
-        static final PomeloHttpServer instance = new PomeloHttpServer();
     }
 
 }

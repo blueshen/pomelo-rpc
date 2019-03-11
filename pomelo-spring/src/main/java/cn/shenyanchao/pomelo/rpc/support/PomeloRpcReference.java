@@ -3,19 +3,14 @@ package cn.shenyanchao.pomelo.rpc.support;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.DisposableBean;
-import org.springframework.beans.factory.FactoryBean;
 
-import cn.shenyanchao.pomelo.rpc.discovery.DiscoveryModule;
 import cn.shenyanchao.pomelo.rpc.serialize.PomeloSerializer;
-import cn.shenyanchao.pomelo.rpc.tcp.netty4.client.factory.PomeloRpcClientFactory;
-import cn.shenyanchao.pomelo.rpc.tcp.netty4.client.handler.PomeloClientProxy;
 
 /**
  * @author shenyanchao
  */
 
-public class PomeloRpcReference implements FactoryBean, DisposableBean {
+public class PomeloRpcReference {
 
     private static final Logger LOG = LoggerFactory.getLogger(PomeloRpcReference.class);
     /**
@@ -39,21 +34,7 @@ public class PomeloRpcReference implements FactoryBean, DisposableBean {
      */
     private String group;
 
-    @Override
-    public void destroy() throws Exception {
-        DiscoveryModule.getInstance().close();
-        PomeloRpcClientFactory.getInstance().stopClient();
-    }
-
-    @Override
-    public Object getObject() throws Exception {
-        return PomeloClientProxy.getInstance()
-                .getProxyService(getObjectType(), timeout, serializer, protocolType, getObjectType().getName(),
-                        group);
-    }
-
-    @Override
-    public Class<?> getObjectType() {
+    public Class getObjectType() {
         try {
             if (StringUtils.isBlank(interfaceName)) {
                 LOG.warn("interfaceName is null");
@@ -66,11 +47,6 @@ public class PomeloRpcReference implements FactoryBean, DisposableBean {
             LOG.error("spring 解析失败", e);
         }
         return null;
-    }
-
-    @Override
-    public boolean isSingleton() {
-        return true;
     }
 
     public String getInterfaceName() {

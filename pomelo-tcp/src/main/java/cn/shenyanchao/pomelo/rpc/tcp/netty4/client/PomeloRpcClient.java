@@ -5,11 +5,8 @@ import java.net.InetSocketAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cn.shenyanchao.pomelo.rpc.core.client.AbstractRpcClient;
-import cn.shenyanchao.pomelo.rpc.core.client.factory.RpcClientFactory;
 import cn.shenyanchao.pomelo.rpc.core.message.PomeloRequestMessage;
 import cn.shenyanchao.pomelo.rpc.core.message.PomeloResponseMessage;
-import cn.shenyanchao.pomelo.rpc.tcp.netty4.client.factory.PomeloRpcClientFactory;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 
@@ -22,8 +19,12 @@ public class PomeloRpcClient extends AbstractRpcClient {
 
     private ChannelFuture cf;
 
-    public PomeloRpcClient(ChannelFuture cf) {
+    private ClientHolder clientHolder;
+
+    public PomeloRpcClient(ChannelFuture cf, ResponseModule responseModule, ClientHolder clientHolder) {
         this.cf = cf;
+        this.responseModule = responseModule;
+        this.clientHolder = clientHolder;
     }
 
     @Override
@@ -37,44 +38,36 @@ public class PomeloRpcClient extends AbstractRpcClient {
     }
 
     @Override
-    public RpcClientFactory getRpcClientFactory() {
-        return PomeloRpcClientFactory.getInstance();
-    }
-
-    @Override
-    public void sendMessage(final PomeloRequestMessage requestMessage) throws Exception {
+    public void sendMessage(final PomeloRequestMessage requestMessage) {
+        LOG.debug("------------{}-------", cf.channel().toString());
 
         if (cf.channel().isOpen()) {
             ChannelFuture writeFuture = cf.channel().writeAndFlush(requestMessage);
             // use listener to avoid wait for write & thread context switch
-            writeFuture.addListener(new ChannelFutureListener() {
-                @Override
-                public void operationComplete(ChannelFuture future)
-                        throws Exception {
-                    if (future.isSuccess()) {
-                        return;
-                    }
-                    StringBuffer errorMsg = new StringBuffer();
-                    // write timeout
-                    if (future.isCancelled()) {
-                        errorMsg.append("Send request to ").append(cf.channel().toString()).append(" cancelled by "
-                                + "user ,request id is ").append(requestMessage.getId());
-                    } else if (!future.isSuccess()) {
-                        if (cf.channel().isOpen()) {
-                            // maybe some exception,so close the channel
-                            cf.channel().close();
-                            getRpcClientFactory().removeRpcClient(getServerIP(), getServerPort());
-                        }
-                        errorMsg.append("Send request to ").append(cf.channel().toString()).append(" error.")
-                                .append(future.cause().toString());
-                    }
-                    LOG.error(errorMsg.toString());
-                    PomeloResponseMessage response =
-                            new PomeloResponseMessage(requestMessage.getId(), requestMessage.getSerializer(),
-                                    requestMessage.getProtocolType());
-                    response.setException(new Exception(errorMsg.toString()));
-                    getRpcClientFactory().receiveResponse(response);
+            writeFuture.addListener((ChannelFutureListener) future -> {
+                if (future.isSuccess()) {
+                    return;
                 }
+                StringBuffer errorMsg = new StringBuffer();
+                // write timeout
+                if (future.isCancelled()) {
+                    errorMsg.append("Send request to ").append(cf.channel().toString()).append(" cancelled by "
+                            + "user ,request id is ").append(requestMessage.getId());
+                } else if (!future.isSuccess()) {
+                    if (cf.channel().isOpen()) {
+                        // maybe some exception,so close the channel
+                        cf.channel().close();
+                        clientHolder.removeRpcClient(getServerIP(), getServerPort());
+                    }
+                    errorMsg.append("Send request to ").append(cf.channel().toString()).append(" error.")
+                            .append(future.cause().toString());
+                }
+                LOG.error(errorMsg.toString());
+                PomeloResponseMessage response =
+                        new PomeloResponseMessage(requestMessage.getId(), requestMessage.getSerializer(),
+                                requestMessage.getProtocolType());
+                response.setException(new Exception(errorMsg.toString()));
+                responseModule.receiveResponse(response);
             });
         }
 
@@ -82,7 +75,8 @@ public class PomeloRpcClient extends AbstractRpcClient {
 
     @Override
     public void destroy() {
-        getRpcClientFactory().removeRpcClient(getServerIP(), getServerPort());
+
+        clientHolder.removeRpcClient(getServerIP(), getServerPort());
         if (cf.channel().isOpen()) {
             cf.channel().close();
         }

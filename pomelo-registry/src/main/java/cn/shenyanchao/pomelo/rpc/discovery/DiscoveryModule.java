@@ -17,11 +17,15 @@ import org.apache.curator.x.discovery.ServiceInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.inject.Singleton;
+
 import cn.shenyanchao.pomelo.rpc.registry.RegisterModule;
 
 /**
  * @author shenyanchao
  */
+
+@Singleton
 public class DiscoveryModule implements IDiscoveryModule {
 
     private static final Logger LOG = LoggerFactory.getLogger(DiscoveryModule.class);
@@ -30,13 +34,6 @@ public class DiscoveryModule implements IDiscoveryModule {
     private ServiceDiscovery serviceDiscovery;
     private ServiceCache serviceCache;
 
-    private DiscoveryModule() {
-
-    }
-
-    public static DiscoveryModule getInstance() {
-        return DiscoveryModule.SingletonHolder.instance;
-    }
 
     /**
      * 方法置为同步，解决serviceCache多次start问题
@@ -70,7 +67,7 @@ public class DiscoveryModule implements IDiscoveryModule {
             addressList.add(socketAddress);
         }
         servers.put(group, addressList);
-
+        LOG.debug("ACTIVE ADDRESS:{}", addressList);
         return servers.get(group);
 
     }
@@ -100,10 +97,6 @@ public class DiscoveryModule implements IDiscoveryModule {
         client.blockUntilConnected();
         LOG.info("client connect to server success");
 
-    }
-
-    private static class SingletonHolder {
-        static final DiscoveryModule instance = new DiscoveryModule();
     }
 
 }

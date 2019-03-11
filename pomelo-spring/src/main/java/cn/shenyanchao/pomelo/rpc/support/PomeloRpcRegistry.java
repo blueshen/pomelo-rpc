@@ -6,8 +6,6 @@ import org.springframework.beans.factory.InitializingBean;
 
 import cn.shenyanchao.pomelo.rpc.serialize.PomeloSerializer;
 import cn.shenyanchao.pomelo.rpc.util.NetUtils;
-import cn.shenyanchao.pomelo.rpc.registry.RegisterModule;
-import cn.shenyanchao.pomelo.rpc.tcp.netty4.server.PomeloTcpServer;
 
 /**
  * 注册
@@ -32,9 +30,6 @@ public class PomeloRpcRegistry implements InitializingBean, DisposableBean {
 
     @Override
     public void destroy() throws Exception {
-
-        RegisterModule.getInstance().close();
-        PomeloTcpServer.getInstance().stop();
     }
 
     @Override
@@ -43,14 +38,6 @@ public class PomeloRpcRegistry implements InitializingBean, DisposableBean {
         if (port == 0) {
             throw new Exception("parameter port can not be null");
         }
-
-        PomeloTcpServer.getInstance().setSerializer(serializer);
-        PomeloTcpServer.getInstance().setProtocolType(protocolType);
-        PomeloTcpServer.getInstance().setThreadCount(threadCount);
-        PomeloTcpServer.getInstance().run(port, timeout);
-        // 注册服务节点
-        RegisterModule.getInstance().registerServer(group, getLocalhost(), port);
-
     }
 
     /**
@@ -91,7 +78,7 @@ public class PomeloRpcRegistry implements InitializingBean, DisposableBean {
         this.serializer = serializer;
     }
 
-    private String getLocalhost() {
+    public String getLocalhost() {
         String ip = StringUtils.isBlank(this.getIp()) ? NetUtils.getLocalHost() : this.getIp();
         return ip;
     }

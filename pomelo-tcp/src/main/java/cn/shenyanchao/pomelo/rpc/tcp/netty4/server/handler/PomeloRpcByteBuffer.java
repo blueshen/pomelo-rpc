@@ -1,4 +1,4 @@
-package cn.shenyanchao.pomelo.rpc.tcp.netty4.codec;
+package cn.shenyanchao.pomelo.rpc.tcp.netty4.server.handler;
 
 import cn.shenyanchao.pomelo.rpc.core.bytebuffer.RpcByteBuffer;
 import io.netty.buffer.ByteBuf;

@@ -6,13 +6,18 @@ import java.util.concurrent.ThreadFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cn.shenyanchao.pomelo.rpc.core.client.RpcClient;
-import cn.shenyanchao.pomelo.rpc.core.client.factory.AbstractRpcClientFactory;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+
+import cn.shenyanchao.pomelo.rpc.core.protocol.PomeloRpcProtocol;
 import cn.shenyanchao.pomelo.rpc.core.thread.NamedThreadFactory;
+import cn.shenyanchao.pomelo.rpc.tcp.netty4.client.ClientHolder;
 import cn.shenyanchao.pomelo.rpc.tcp.netty4.client.PomeloRpcClient;
+import cn.shenyanchao.pomelo.rpc.tcp.netty4.client.ResponseModule;
+import cn.shenyanchao.pomelo.rpc.tcp.netty4.client.RpcClient;
 import cn.shenyanchao.pomelo.rpc.tcp.netty4.client.handler.PomeloTcpClientHandler;
-import cn.shenyanchao.pomelo.rpc.tcp.netty4.codec.PomeloRpcDecoderHandler;
-import cn.shenyanchao.pomelo.rpc.tcp.netty4.codec.PomeloRpcEncoderHandler;
+import cn.shenyanchao.pomelo.rpc.tcp.netty4.server.handler.PomeloRpcDecoderHandler;
+import cn.shenyanchao.pomelo.rpc.tcp.netty4.server.handler.PomeloRpcEncoderHandler;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -27,25 +32,30 @@ import io.netty.handler.timeout.IdleStateHandler;
 /**
  * @author shenyanchao
  */
-public class PomeloRpcClientFactory extends AbstractRpcClientFactory {
+@Singleton
+public class PomeloRpcClientFactory implements RpcClientFactory {
 
     private static final Logger LOG = LoggerFactory.getLogger(PomeloRpcClientFactory.class);
     private static final int PROCESSORS = Runtime.getRuntime().availableProcessors();
     private static final ThreadFactory workerThreadFactory = new NamedThreadFactory("pomelo-worker-");
-    private static EventLoopGroup workerGroup = new NioEventLoopGroup(6 * PROCESSORS, workerThreadFactory);
-
+    private static final int CONNECT_TIMEOUT = 1000;
+    private static EventLoopGroup workerGroup = new NioEventLoopGroup(2 * PROCESSORS, workerThreadFactory);
     private final Bootstrap bootstrap = new Bootstrap();
 
-    public static PomeloRpcClientFactory getInstance() {
-        return SingletonHolder.instance;
-    }
+    @Inject
+    private ResponseModule responseModule;
 
-    @Override
-    public void connect(int connectTimeout) {
-        LOG.info("----------------client connect -------------------------------");
+    @Inject
+    private ClientHolder clientHolder;
+
+    @Inject
+    private PomeloRpcProtocol pomeloRpcProtocol;
+
+    public PomeloRpcClientFactory() {
+        LOG.debug("---------------- pomelo client connect ----------------");
         bootstrap.group(workerGroup)
                 .channel(NioSocketChannel.class)
-                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, connectTimeout)
+                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, CONNECT_TIMEOUT)
                 .option(ChannelOption.TCP_NODELAY, true)
                 .option(ChannelOption.SO_REUSEADDR, true)
                 .option(ChannelOption.SO_KEEPALIVE, true)
@@ -53,21 +63,31 @@ public class PomeloRpcClientFactory extends AbstractRpcClientFactory {
                 .option(ChannelOption.SO_RCVBUF, 65535);
         bootstrap.handler(new ChannelInitializer<SocketChannel>() {
             @Override
-            protected void initChannel(SocketChannel channel) throws Exception {
+            protected void initChannel(SocketChannel channel) {
                 ChannelPipeline pipeline = channel.pipeline();
-                pipeline.addLast("decoder", new PomeloRpcDecoderHandler());
-                pipeline.addLast("encoder", new PomeloRpcEncoderHandler());
+                pipeline.addLast("decoder", new PomeloRpcDecoderHandler(pomeloRpcProtocol));
+                pipeline.addLast("encoder", new PomeloRpcEncoderHandler(pomeloRpcProtocol));
                 pipeline.addLast("timeout", new IdleStateHandler(0, 0, 120));
-                pipeline.addLast("handler", new PomeloTcpClientHandler());
+                pipeline.addLast("handler", new PomeloTcpClientHandler(clientHolder, responseModule));
             }
 
         });
-        LOG.info("---------------- client start success-------------------------------");
+        LOG.debug("---------------- pomelo client start success ------------------");
     }
 
     @Override
-    protected RpcClient createClient(String targetIP, int targetPort) throws Exception {
-        ChannelFuture future = bootstrap.connect(new InetSocketAddress(targetIP, targetPort)).sync();
+    public RpcClient getRpcClient(String targetIP, int targetPort) throws Exception {
+        if (!clientHolder.containClient(targetIP, targetPort)) {
+            RpcClient rpcClient = createClient(targetIP, targetPort);
+            clientHolder.putRpcClient(targetIP, targetPort, rpcClient);
+        }
+
+        return clientHolder.getRpcClient(targetIP, targetPort);
+    }
+
+    private RpcClient createClient(String targetIP, int targetPort) throws Exception {
+        ChannelFuture future =
+                bootstrap.connect(new InetSocketAddress(targetIP, targetPort)).sync();
         future.awaitUninterruptibly();
         if (!future.isDone()) {
             LOG.error("Create connection to {}:{} timeout!", targetIP, targetIP);
@@ -81,19 +101,15 @@ public class PomeloRpcClientFactory extends AbstractRpcClientFactory {
             LOG.error("Create connection to {}:{} error!", targetIP, targetIP, future.cause());
             throw new Exception("Create connection to " + targetIP + ":" + targetPort + " error", future.cause());
         }
-        PomeloRpcClient client = new PomeloRpcClient(future);
-        putRpcClient(targetIP, targetPort, client);
+        PomeloRpcClient client = new PomeloRpcClient(future, responseModule, clientHolder);
         return client;
     }
 
-    @Override
-    public void stopClient() throws Exception {
-        getInstance().clearClients();
-        workerGroup.shutdownGracefully();
+    public ResponseModule getResponseModule() {
+        return responseModule;
     }
 
-    static class SingletonHolder {
-        public static PomeloRpcClientFactory instance = new PomeloRpcClientFactory();
+    public ClientHolder getClientHolder() {
+        return clientHolder;
     }
-
 }

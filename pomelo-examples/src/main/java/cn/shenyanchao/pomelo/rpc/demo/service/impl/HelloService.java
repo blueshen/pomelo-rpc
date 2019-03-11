@@ -1,11 +1,17 @@
 package cn.shenyanchao.pomelo.rpc.demo.service.impl;
 
+import org.springframework.stereotype.Service;
+
+import cn.shenyanchao.pomelo.rpc.core.annotation.PomeloRpc;
 import cn.shenyanchao.pomelo.rpc.demo.entity.RpcUser;
 import cn.shenyanchao.pomelo.rpc.demo.service.IHelloService;
 
 /**
  * @author shenyanchao
  */
+
+@PomeloRpc
+@Service
 public class HelloService implements IHelloService {
 
     @Override

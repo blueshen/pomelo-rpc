@@ -14,14 +14,19 @@ public class PomeloRpcHttpRegistry implements InitializingBean, DisposableBean {
 
     private int timeout;
 
+    private PomeloHttpServer pomeloHttpServer;
+
     @Override
     public void destroy() throws Exception {
-        PomeloHttpServer.getInstance().stop();
+        if (null != pomeloHttpServer) {
+            pomeloHttpServer.stop();
+        }
     }
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        PomeloHttpServer.getInstance().run(port, timeout);
+        pomeloHttpServer = new PomeloHttpServer();
+        pomeloHttpServer.run(port, timeout);
     }
 
     /**

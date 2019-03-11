@@ -7,7 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cn.shenyanchao.pomelo.rpc.core.message.PomeloResponseMessage;
-import cn.shenyanchao.pomelo.rpc.tcp.netty4.client.factory.PomeloRpcClientFactory;
+import cn.shenyanchao.pomelo.rpc.tcp.netty4.client.ClientHolder;
+import cn.shenyanchao.pomelo.rpc.tcp.netty4.client.ResponseModule;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.util.ReferenceCountUtil;
@@ -15,17 +16,23 @@ import io.netty.util.ReferenceCountUtil;
 /**
  * @author shenyanchao
  */
+
 public class PomeloTcpClientHandler extends ChannelInboundHandlerAdapter {
 
     private static final Logger LOG = LoggerFactory.getLogger(PomeloTcpClientHandler.class);
 
-    public PomeloTcpClientHandler() {
-        super();
+    private ClientHolder clientHolder;
 
+    private ResponseModule responseModule;
+
+    public PomeloTcpClientHandler(ClientHolder clientHolder, ResponseModule responseModule) {
+        this.clientHolder = clientHolder;
+        this.responseModule = responseModule;
     }
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        LOG.debug("进入client channelRead Method----------------");
         try {
             if (msg instanceof PomeloResponseMessage) {
                 PomeloResponseMessage response = (PomeloResponseMessage) msg;
@@ -33,7 +40,8 @@ public class PomeloTcpClientHandler extends ChannelInboundHandlerAdapter {
                     LOG.debug("receive response list from server: {} ,requestId is: {}", ctx.channel().remoteAddress(),
                             response.getRequestId());
                 }
-                PomeloRpcClientFactory.getInstance().receiveResponse(response);
+                responseModule.receiveResponse(response);
+                LOG.debug("receive message from server, 放入response queue中");
             } else {
                 LOG.error("receive message error,only support List || ResponseWrapper");
                 throw new Exception(
@@ -51,7 +59,7 @@ public class PomeloTcpClientHandler extends ChannelInboundHandlerAdapter {
             LOG.error("catch some exception not IOException", e);
         }
         InetSocketAddress remoteAddress = (InetSocketAddress) ctx.channel().remoteAddress();
-        PomeloRpcClientFactory.getInstance().removeRpcClient(remoteAddress.getHostName(), remoteAddress.getPort());
+        clientHolder.removeRpcClient(remoteAddress.getHostName(), remoteAddress.getPort());
         if (ctx.channel().isOpen()) {
             ctx.channel().close();
         }
@@ -62,7 +70,7 @@ public class PomeloTcpClientHandler extends ChannelInboundHandlerAdapter {
     public void channelUnregistered(ChannelHandlerContext ctx) throws Exception {
         LOG.error("connection closed: {} ", ctx.channel().remoteAddress());
         InetSocketAddress remoteAddress = (InetSocketAddress) ctx.channel().remoteAddress();
-        PomeloRpcClientFactory.getInstance().removeRpcClient(remoteAddress.getHostName(), remoteAddress.getPort());
+        clientHolder.removeRpcClient(remoteAddress.getHostName(), remoteAddress.getPort());
         if (ctx.channel().isOpen()) {
             ctx.channel().close();
         }

@@ -35,6 +35,10 @@
             <artifactId>spring-context</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.google.inject</groupId>
+            <artifactId>guice</artifactId>
+        </dependency>
+        <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-all</artifactId>
         </dependency>

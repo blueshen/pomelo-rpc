@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 import org.apache.commons.lang3.StringUtils;
 
 import com.alibaba.fastjson.JSONObject;
+import com.google.inject.Inject;
 
 import cn.shenyanchao.pomelo.rpc.route.RpcRouteInfo;
 import cn.shenyanchao.pomelo.rpc.http.RpcHttpServerHandler;
@@ -39,6 +40,10 @@ import io.netty.util.ReferenceCountUtil;
  * @author shenyanchao
  */
 public class PomeloHttpServerHandler extends ChannelInboundHandlerAdapter {
+
+
+    @Inject
+    private RpcHttpServerHandler rpcHttpServerHandler;
 
     public PomeloHttpServerHandler() {
         super();
@@ -94,7 +99,7 @@ public class PomeloHttpServerHandler extends ChannelInboundHandlerAdapter {
                 }
                 if (message instanceof LastHttpContent) {
                     RpcRouteInfo rpcRouteInfo =
-                            RpcHttpServerHandler.getInstance().isRouteInfos(url, httpType, map);
+                            rpcHttpServerHandler.isRouteInfos(url, httpType, map);
                     if (rpcRouteInfo == null || rpcRouteInfo.getRoute() == null) {
                         DefaultHttpResponse response = getDefaultHttpResponse(HttpResponseStatus.NOT_FOUND, null);
                         serverBean = new ServerBean(response, null, keepAlive);
@@ -102,7 +107,7 @@ public class PomeloHttpServerHandler extends ChannelInboundHandlerAdapter {
                     } else {
                         DefaultHttpResponse response = getDefaultHttpResponse(HttpResponseStatus.OK,
                                 rpcRouteInfo.getReturnType());
-                        Object result = RpcHttpServerHandler.getInstance().methodInvoke(rpcRouteInfo);
+                        Object result = rpcHttpServerHandler.methodInvoke(rpcRouteInfo);
                         if (result == null) {
                             serverBean = new ServerBean(response, null, keepAlive);
                             writeResponse(ctx, serverBean);

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.alibaba.fastjson.JSONObject;
+import com.google.inject.Singleton;
 
 import cn.shenyanchao.pomelo.rpc.core.server.filter.RpcInterceptor;
 import cn.shenyanchao.pomelo.rpc.util.ClassPoolUtils;
@@ -15,15 +16,13 @@ import cn.shenyanchao.pomelo.rpc.util.ClassPoolUtils;
 /**
  * @author shenyanchao
  */
+
+@Singleton
 public class PomeloRpcRouteService implements IPomeloRpcRouteService {
 
     public static final int TYPE = 0;
 
     private static List<RpcRouteInfo> rpcRouteInfos = new ArrayList<RpcRouteInfo>();
-
-    public static PomeloRpcRouteService getInstance() {
-        return SingletonHolder.instance;
-    }
 
     @Override
     public RpcRouteInfo isRouteInfos(String route, String methodType, Map<String, Object> params) throws Exception {
@@ -145,9 +144,5 @@ public class PomeloRpcRouteService implements IPomeloRpcRouteService {
     @Override
     public void clear() {
         rpcRouteInfos.clear();
-    }
-
-    static class SingletonHolder {
-        static PomeloRpcRouteService instance = new PomeloRpcRouteService();
     }
 }

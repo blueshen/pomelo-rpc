@@ -1,6 +1,5 @@
-package cn.shenyanchao.pomelo.rpc.core.client;
+package cn.shenyanchao.pomelo.rpc.tcp.netty4.client;
 
-import cn.shenyanchao.pomelo.rpc.core.client.factory.RpcClientFactory;
 import cn.shenyanchao.pomelo.rpc.serialize.PomeloSerializer;
 
 /**
@@ -41,9 +40,5 @@ public interface RpcClient {
      */
     int getServerPort();
 
-    /**
-     * @return
-     */
-    RpcClientFactory getRpcClientFactory();
 
 }

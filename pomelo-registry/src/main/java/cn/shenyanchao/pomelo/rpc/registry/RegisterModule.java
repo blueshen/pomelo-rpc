@@ -11,23 +11,18 @@ import org.apache.curator.x.discovery.details.JsonInstanceSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.inject.Singleton;
+
 /**
  * @author shenyanchao
  */
+@Singleton
 public class RegisterModule implements IRegisterModule {
 
     public static final String BASE_PATH = "/pomelo";
     private static final Logger LOG = LoggerFactory.getLogger(RegisterModule.class);
     private CuratorFramework client;
     private ServiceDiscovery serviceDiscovery;
-
-    private RegisterModule() {
-
-    }
-
-    public static RegisterModule getInstance() {
-        return SingletonHolder.instance;
-    }
 
     @Override
     public void close() throws Exception {
@@ -73,8 +68,5 @@ public class RegisterModule implements IRegisterModule {
         serviceDiscovery.start();
     }
 
-    private static class SingletonHolder {
-        static final RegisterModule instance = new RegisterModule();
-    }
 
 }

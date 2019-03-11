@@ -7,9 +7,12 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.inject.Singleton;
+
 import cn.shenyanchao.pomelo.rpc.core.message.PomeloRequestMessage;
 import cn.shenyanchao.pomelo.rpc.core.message.PomeloResponseMessage;
 import cn.shenyanchao.pomelo.rpc.core.server.filter.RpcInterceptor;
+import cn.shenyanchao.pomelo.rpc.core.server.handler.RpcServerHandler;
 import cn.shenyanchao.pomelo.rpc.serialize.PomeloSerializer;
 
 /**
@@ -17,20 +20,18 @@ import cn.shenyanchao.pomelo.rpc.serialize.PomeloSerializer;
  *
  * @author shenyanchao
  */
-public class RpcTcpServerHandler extends AbstractRpcTcpServerHandler {
+
+@Singleton
+public class RpcTcpServerHandler implements RpcServerHandler {
 
     private static final Logger LOG = LoggerFactory.getLogger(RpcTcpServerHandler.class);
 
     /**
      * 保存处理bean实例
      */
-    private static Map<String, RpcFilterServerBean> rpcBeanHandlers = new ConcurrentHashMap<>(128);
+    private Map<String, RpcFilterServerBean> rpcBeanHandlers = new ConcurrentHashMap<>(128);
 
-    private static Map<String, Method> cacheMethods = new ConcurrentHashMap<>(256);
-
-    public static RpcTcpServerHandler getInstance() {
-        return SingletonHolder.rpcTcpServerHandler;
-    }
+    private Map<String, Method> cacheMethods = new ConcurrentHashMap<>(256);
 
     @Override
     public void addHandler(String instanceName, Object instance, RpcInterceptor rpcFilter) {
@@ -50,8 +51,8 @@ public class RpcTcpServerHandler extends AbstractRpcTcpServerHandler {
         }
     }
 
-    @Override
-    public PomeloResponseMessage handleRequest(PomeloRequestMessage request, PomeloSerializer serializer, byte protocolType) {
+    public PomeloResponseMessage handleRequest(PomeloRequestMessage request, PomeloSerializer serializer,
+                                               byte protocolType) {
         PomeloResponseMessage responseWrapper = new PomeloResponseMessage(request.getId(), serializer, protocolType);
         String targetInstanceName = new String(request.getTargetInstanceName());
         String methodName = new String(request.getMethodName());
@@ -136,10 +137,6 @@ public class RpcTcpServerHandler extends AbstractRpcTcpServerHandler {
             methodKeyBuilder.append(argType).append("_");
         }
         return methodKeyBuilder.toString();
-    }
-
-    static class SingletonHolder {
-        public static RpcTcpServerHandler rpcTcpServerHandler = new RpcTcpServerHandler();
     }
 
     class RpcFilterServerBean {

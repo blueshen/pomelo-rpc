@@ -6,14 +6,18 @@ import java.util.concurrent.ThreadFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+
+import cn.shenyanchao.pomelo.rpc.core.protocol.PomeloRpcProtocol;
 import cn.shenyanchao.pomelo.rpc.core.server.RpcServer;
 import cn.shenyanchao.pomelo.rpc.core.server.filter.RpcInterceptor;
-import cn.shenyanchao.pomelo.rpc.serialize.PomeloSerializer;
-import cn.shenyanchao.pomelo.rpc.tcp.netty4.server.handler.RpcTcpServerHandler;
 import cn.shenyanchao.pomelo.rpc.core.thread.NamedThreadFactory;
-import cn.shenyanchao.pomelo.rpc.tcp.netty4.codec.PomeloRpcDecoderHandler;
-import cn.shenyanchao.pomelo.rpc.tcp.netty4.codec.PomeloRpcEncoderHandler;
+import cn.shenyanchao.pomelo.rpc.serialize.PomeloSerializer;
+import cn.shenyanchao.pomelo.rpc.tcp.netty4.server.handler.PomeloRpcDecoderHandler;
+import cn.shenyanchao.pomelo.rpc.tcp.netty4.server.handler.PomeloRpcEncoderHandler;
 import cn.shenyanchao.pomelo.rpc.tcp.netty4.server.handler.PomeloRpcTcpServerHandler;
+import cn.shenyanchao.pomelo.rpc.tcp.netty4.server.handler.RpcTcpServerHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -34,6 +38,8 @@ import io.netty.handler.timeout.IdleStateHandler;
  *
  * @author shenyanchao
  */
+
+@Singleton
 public class PomeloTcpServer implements RpcServer {
 
     private static final Logger LOG = LoggerFactory.getLogger(PomeloTcpServer.class);
@@ -59,22 +65,20 @@ public class PomeloTcpServer implements RpcServer {
      */
     private int threadCount;
 
-    private PomeloTcpServer() {
+    @Inject
+    private PomeloRpcProtocol pomeloRpcProtocol;
 
-    }
-
-    public static PomeloTcpServer getInstance() {
-        return SingletonHolder.instance;
-    }
+    @Inject
+    private RpcTcpServerHandler rpcTcpServerHandler;
 
     @Override
-    public void registerService(String serviceName, Object serviceInstance, RpcInterceptor rpcFilter) {
-        RpcTcpServerHandler.getInstance().addHandler(serviceName, serviceInstance, rpcFilter);
+    public void registerService(String serviceName, Object serviceInstance, RpcInterceptor rpcInterceptor) {
+        rpcTcpServerHandler.addHandler(serviceName, serviceInstance, rpcInterceptor);
     }
 
     @Override
     public void stop() {
-        RpcTcpServerHandler.getInstance().clear();
+        rpcTcpServerHandler.clear();
         bossGroup.shutdownGracefully();
         workerGroup.shutdownGracefully();
     }
@@ -114,10 +118,11 @@ public class PomeloTcpServer implements RpcServer {
             @Override
             protected void initChannel(SocketChannel channel) throws Exception {
                 ChannelPipeline pipeline = channel.pipeline();
-                pipeline.addLast("decoder", new PomeloRpcDecoderHandler());
-                pipeline.addLast("encoder", new PomeloRpcEncoderHandler());
+                pipeline.addLast("decoder", new PomeloRpcDecoderHandler(pomeloRpcProtocol));
+                pipeline.addLast("encoder", new PomeloRpcEncoderHandler(pomeloRpcProtocol));
                 pipeline.addLast("timeout", new IdleStateHandler(0, 0, 120));
-                pipeline.addLast("handler", new PomeloRpcTcpServerHandler(threadCount, protocolType, serializer));
+                pipeline.addLast("handler",
+                        new PomeloRpcTcpServerHandler(threadCount, protocolType, serializer, rpcTcpServerHandler));
 
             }
 
@@ -156,10 +161,6 @@ public class PomeloTcpServer implements RpcServer {
      */
     public void setThreadCount(int threadCount) {
         this.threadCount = threadCount;
-    }
-
-    private static class SingletonHolder {
-        static final PomeloTcpServer instance = new PomeloTcpServer();
     }
 
 }
