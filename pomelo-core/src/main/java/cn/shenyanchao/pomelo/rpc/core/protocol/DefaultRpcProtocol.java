@@ -24,7 +24,7 @@ import cn.shenyanchao.pomelo.rpc.serialize.Serialization;
 @Singleton
 public class DefaultRpcProtocol implements RpcProtocol {
 
-    public static final byte TYPE = 1;
+    public static final byte PROTOCOL_TYPE = 1;
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultRpcProtocol.class);
 
@@ -81,7 +81,7 @@ public class DefaultRpcProtocol implements RpcProtocol {
 
                 RpcByteBuffer byteBuffer = byteBufferWrapper.get(capacity);
                 byteBuffer.writeByte(PomeloRpcProtocol.CURRENT_VERSION);
-                byteBuffer.writeByte((byte) TYPE);
+                byteBuffer.writeByte((byte) PROTOCOL_TYPE);
                 //--------------HEADER_LEN----------------
                 byteBuffer.writeByte(VERSION);//1B
                 byteBuffer.writeByte(type);//1B
@@ -154,7 +154,7 @@ public class DefaultRpcProtocol implements RpcProtocol {
             }
             RpcByteBuffer byteBuffer = byteBufferWrapper.get(capacity);
             byteBuffer.writeByte(PomeloRpcProtocol.CURRENT_VERSION); // 1B
-            byteBuffer.writeByte((byte) TYPE);//1B
+            byteBuffer.writeByte(PROTOCOL_TYPE);//1B
             //--------------HEADER_LEN----------------
             byteBuffer.writeByte(VERSION);//1B
             byteBuffer.writeByte(type);  //1B
@@ -180,7 +180,7 @@ public class DefaultRpcProtocol implements RpcProtocol {
 
     @Override
     public Message decode(RpcByteBuffer wrapper, Message errorObject,
-                          int... originPosArray) throws Exception {
+                          int... originPosArray) {
         final int originPos;
         if (originPosArray != null && originPosArray.length == 1) {
             originPos = originPosArray[0];
@@ -192,7 +192,7 @@ public class DefaultRpcProtocol implements RpcProtocol {
             return errorObject;
         }
         byte version = wrapper.readByte();
-        if (version == TYPE) {
+        if (version == PROTOCOL_TYPE) {
             byte type = wrapper.readByte();
             if (type == REQUEST) {
                 if (wrapper.readableBytes() < REQUEST_HEADER_LEN - 2) {
@@ -254,7 +254,7 @@ public class DefaultRpcProtocol implements RpcProtocol {
 
                 PomeloRequestMessage pomeloRequestMessage = new PomeloRequestMessage(
                         targetInstanceByte, methodNameByte, argTypes, args,
-                        timeout, requestId, PomeloSerializer.parse(serializerType), TYPE);
+                        timeout, requestId, PomeloSerializer.parse(serializerType), PROTOCOL_TYPE);
 
                 int messageLen = PomeloRpcProtocol.HEADER_LEN + REQUEST_HEADER_LEN
                         + expectedLenInfoLen + expectedLen;
@@ -290,7 +290,7 @@ public class DefaultRpcProtocol implements RpcProtocol {
                 wrapper.readBytes(bodyBytes);
 
                 PomeloResponseMessage responseWrapper = new PomeloResponseMessage(
-                        requestId, serializer, TYPE);
+                        requestId, serializer, PROTOCOL_TYPE);
                 responseWrapper.setResponse(bodyBytes);
                 responseWrapper.setResponseClassName(classNameBytes);
                 int messageLen = PomeloRpcProtocol.HEADER_LEN + RESPONSE_HEADER_LEN

@@ -1,6 +1,3 @@
-/**
- *
- */
 package cn.shenyanchao.pomelo.rpc.core.protocol;
 
 import cn.shenyanchao.pomelo.rpc.core.bytebuffer.RpcByteBuffer;

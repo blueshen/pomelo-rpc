@@ -62,8 +62,8 @@ public class PomeloHttpServer implements RpcServer {
     @Override
     public void run(int port, final int timeout) throws Exception {
 
-        ThreadFactory serverBossTF = new NamedThreadFactory("pomelo-http-io-");
-        ThreadFactory serverWorkerTF = new NamedThreadFactory("pomelo-http-worker-");
+        ThreadFactory serverBossTF = new NamedThreadFactory("pomelo-http-io");
+        ThreadFactory serverWorkerTF = new NamedThreadFactory("pomelo-http-worker");
         bossGroup = new NioEventLoopGroup(PROCESSORS, serverBossTF);
         workerGroup = new NioEventLoopGroup(PROCESSORS * 2, serverWorkerTF);
         workerGroup.setIoRatio(50);

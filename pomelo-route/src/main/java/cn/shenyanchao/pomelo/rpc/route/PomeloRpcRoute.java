@@ -7,12 +7,12 @@ import java.util.List;
  */
 public class PomeloRpcRoute {
 
+
     public static RpcRouteServer getBestServer(List<RpcRouteServer> serverList) {
         RpcRouteServer server;
         RpcRouteServer best = null;
         int total = 0;
         for (int i = 0, len = serverList.size(); i < len; i++) {
-
             server = serverList.get(i);
             if (server.down) {
                 continue;

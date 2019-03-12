@@ -118,7 +118,7 @@ public class PomeloTcpServer implements RpcServer {
         bootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
 
             @Override
-            protected void initChannel(SocketChannel channel) throws Exception {
+            protected void initChannel(SocketChannel channel) {
                 ChannelPipeline pipeline = channel.pipeline();
                 pipeline.addLast("decoder", new PomeloRpcDecoderHandler(pomeloRpcProtocol));
                 pipeline.addLast("encoder", new PomeloRpcEncoderHandler(pomeloRpcProtocol));

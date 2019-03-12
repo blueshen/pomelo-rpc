@@ -10,7 +10,7 @@ import cn.shenyanchao.pomelo.rpc.demo.service.IHelloService;
  * @author shenyanchao
  */
 
-@PomeloRpc
+@PomeloRpc(group = "hello", name = "helloService")
 @Service
 public class HelloService implements IHelloService {
 

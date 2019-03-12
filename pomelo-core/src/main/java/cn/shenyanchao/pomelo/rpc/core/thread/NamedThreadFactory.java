@@ -10,17 +10,11 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class NamedThreadFactory implements ThreadFactory {
 
-    static final AtomicInteger poolNumber = new AtomicInteger(0);
-
-    final AtomicInteger threadNumber = new AtomicInteger(0);
-
-    final ThreadGroup group;
-    final String namePrefix;
-    final boolean isDaemon;
-
-    public NamedThreadFactory() {
-        this("pomelo");
-    }
+    private final AtomicInteger poolNumber = new AtomicInteger(0);
+    private final AtomicInteger threadNumber = new AtomicInteger(0);
+    private final ThreadGroup group;
+    private final String namePrefix;
+    private final boolean isDaemon;
 
     public NamedThreadFactory(String name) {
         this(name, false);

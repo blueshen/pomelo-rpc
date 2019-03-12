@@ -28,9 +28,7 @@ public class NetUtils {
     public static final String ANYHOST = "0.0.0.0";
     private static final Logger LOG = LoggerFactory.getLogger(NetUtils.class);
     private static final int RND_PORT_START = 30000;
-
     private static final int RND_PORT_RANGE = 10000;
-
     private static final Random RANDOM = new Random(System.currentTimeMillis());
     private static final int MIN_PORT = 0;
     private static final int MAX_PORT = 65535;

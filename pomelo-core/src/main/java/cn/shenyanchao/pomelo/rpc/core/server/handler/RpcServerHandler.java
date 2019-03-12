@@ -12,8 +12,9 @@ public interface RpcServerHandler {
      *
      * @param instanceName
      * @param instance
+     * @param rpcInterceptor
      */
-    void addHandler(String instanceName, Object instance, RpcInterceptor rpcFilter);
+    void addHandler(String instanceName, Object instance, RpcInterceptor rpcInterceptor);
 
     /**
      * 清除

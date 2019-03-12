@@ -7,7 +7,7 @@ import cn.shenyanchao.pomelo.rpc.core.server.intercepotr.RpcInterceptor;
 /**
  * @author shenyanchao
  */
-public interface IPomeloRpcRouteService {
+public interface IRpcRouteService {
 
     /**
      * @param route

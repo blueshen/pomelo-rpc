@@ -1,7 +1,5 @@
 package cn.shenyanchao.pomelo.rpc.spring.config.tcp;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.beans.factory.xml.BeanDefinitionParser;
@@ -14,8 +12,6 @@ import cn.shenyanchao.pomelo.rpc.support.PomeloRpcApplication;
  * @author shenyanchao
  */
 public class PomeloApplicationParser implements BeanDefinitionParser {
-
-    private static final Logger LOG = LoggerFactory.getLogger(PomeloApplicationParser.class);
 
     @Override
     public BeanDefinition parse(Element element, ParserContext parserContext) {

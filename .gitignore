@@ -13,3 +13,4 @@ target
 .DS_Store
 logs
 pom.xml.versionsBackup
+pom.xml.releaseBackup

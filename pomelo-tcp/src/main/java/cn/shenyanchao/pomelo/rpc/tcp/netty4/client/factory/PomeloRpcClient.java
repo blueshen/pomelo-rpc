@@ -1,4 +1,4 @@
-package cn.shenyanchao.pomelo.rpc.tcp.netty4.client;
+package cn.shenyanchao.pomelo.rpc.tcp.netty4.client.factory;
 
 import java.net.InetSocketAddress;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import cn.shenyanchao.pomelo.rpc.core.message.PomeloRequestMessage;
 import cn.shenyanchao.pomelo.rpc.core.message.PomeloResponseMessage;
 import cn.shenyanchao.pomelo.rpc.serialize.PomeloSerializer;
+import cn.shenyanchao.pomelo.rpc.tcp.netty4.client.ClientHolder;
+import cn.shenyanchao.pomelo.rpc.tcp.netty4.client.ResponseHolder;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 

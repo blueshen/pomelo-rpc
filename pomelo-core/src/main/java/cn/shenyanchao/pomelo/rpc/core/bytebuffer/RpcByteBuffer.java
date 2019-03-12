@@ -1,7 +1,7 @@
 package cn.shenyanchao.pomelo.rpc.core.bytebuffer;
 
 /**
- * Byte Buffer
+ * Netty Buffer Wrapper
  *
  * @author shenyanchao
  */

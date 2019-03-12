@@ -183,10 +183,11 @@ public class PomeloHttpServerHandler extends ChannelInboundHandlerAdapter {
 
         if (ctx.channel().isOpen() && serverBean != null) {
             if (!serverBean.isKeepAlive()) {
-                ctx.write(serverBean.getResponse()).addListener(ChannelFutureListener.CLOSE);
+                ctx.write(serverBean.getDefaultHttpResponse()).addListener(ChannelFutureListener.CLOSE);
             } else {
-                serverBean.getResponse().headers().set(HttpHeaderNames.CONNECTION, HttpHeaderValues.KEEP_ALIVE);
-                ctx.write(serverBean.getResponse());
+                serverBean.getDefaultHttpResponse().headers()
+                        .set(HttpHeaderNames.CONNECTION, HttpHeaderValues.KEEP_ALIVE);
+                ctx.write(serverBean.getDefaultHttpResponse());
             }
             if (serverBean.getDefaultHttpContent() != null) {
                 ctx.writeAndFlush(serverBean.getDefaultHttpContent());

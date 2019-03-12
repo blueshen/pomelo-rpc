@@ -27,7 +27,6 @@ public class PomeloReferenceParser implements BeanDefinitionParser {
         RootBeanDefinition beanDefinition = new RootBeanDefinition();
         beanDefinition.setBeanClass(PomeloRpcReference.class);
         beanDefinition.setLazyInit(false);
-
         beanDefinition.getPropertyValues().addPropertyValue("interfaceName", interfaceName);
         beanDefinition.getPropertyValues().addPropertyValue("group", group);
         beanDefinition.getPropertyValues().addPropertyValue("protocolType", protocolType);

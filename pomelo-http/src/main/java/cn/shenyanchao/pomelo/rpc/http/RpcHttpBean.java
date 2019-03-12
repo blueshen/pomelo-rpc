@@ -1,6 +1,7 @@
 package cn.shenyanchao.pomelo.rpc.http;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * @author shenyanchao
@@ -64,4 +65,32 @@ public class RpcHttpBean implements Serializable {
         this.returnType = returnType;
     }
 
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("RpcHttpBean{");
+        sb.append("object=").append(object);
+        sb.append(", httpType='").append(httpType).append('\'');
+        sb.append(", returnType='").append(returnType).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        RpcHttpBean that = (RpcHttpBean) o;
+        return Objects.equals(object, that.object) &&
+                Objects.equals(httpType, that.httpType) &&
+                Objects.equals(returnType, that.returnType);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(object, httpType, returnType);
+    }
 }

@@ -7,19 +7,13 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 定义某个类是RPC服务
+ * 特定方法提供服务
  * @author shenyanchao
- * @since 2019-03-08 10:29
+ * @since 2019-03-12 12:26
  */
 
-@Target({ElementType.TYPE})
+@Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface PomeloRpc {
-
-    String group() default "";
-
-    String name() default "";
-
-
+public @interface PomeloMethod {
 }

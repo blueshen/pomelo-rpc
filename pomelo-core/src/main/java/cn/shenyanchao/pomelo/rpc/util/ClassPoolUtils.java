@@ -23,15 +23,15 @@ public class ClassPoolUtils {
      * 获取方法的参数变量名称
      *
      * @param classname
-     * @param methodname
+     * @param methodName
      *
      * @return
      */
-    public static String[] getMethodVariableName(String classname, String methodname) {
+    public static String[] getMethodVariableName(String classname, String methodName) {
         try {
             ClassPool pool = ClassPool.getDefault();
             CtClass cc = pool.get(classname);
-            CtMethod cm = cc.getDeclaredMethod(methodname);
+            CtMethod cm = cc.getDeclaredMethod(methodName);
             MethodInfo methodInfo = cm.getMethodInfo();
             CodeAttribute codeAttribute = methodInfo.getCodeAttribute();
             String[] paramNames = new String[cm.getParameterTypes().length];

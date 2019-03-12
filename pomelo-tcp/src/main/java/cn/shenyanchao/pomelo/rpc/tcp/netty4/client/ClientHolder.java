@@ -5,6 +5,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.google.inject.Singleton;
 
+import cn.shenyanchao.pomelo.rpc.tcp.netty4.client.factory.RpcClient;
+
 /**
  * @author shenyanchao
  * @since 2019-03-11 18:45

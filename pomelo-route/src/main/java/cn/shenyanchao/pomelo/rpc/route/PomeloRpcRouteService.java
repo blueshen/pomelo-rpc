@@ -18,7 +18,7 @@ import cn.shenyanchao.pomelo.rpc.util.ClassPoolUtils;
  */
 
 @Singleton
-public class PomeloRpcRouteService implements IPomeloRpcRouteService {
+public class PomeloRpcRouteService implements IRpcRouteService {
 
     public static final int TYPE = 0;
 

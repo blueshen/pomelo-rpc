@@ -1,4 +1,4 @@
-package cn.shenyanchao.pomelo.rpc.tcp.netty4.client;
+package cn.shenyanchao.pomelo.rpc.tcp.netty4.client.factory;
 
 import cn.shenyanchao.pomelo.rpc.serialize.PomeloSerializer;
 

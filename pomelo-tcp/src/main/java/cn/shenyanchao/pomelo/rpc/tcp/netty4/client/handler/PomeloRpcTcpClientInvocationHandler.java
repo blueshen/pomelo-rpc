@@ -9,9 +9,9 @@ import java.util.Set;
 
 import cn.shenyanchao.pomelo.rpc.discovery.DiscoveryModule;
 import cn.shenyanchao.pomelo.rpc.route.RpcRouteServer;
-import cn.shenyanchao.pomelo.rpc.route.SocketAddressUtil;
+import cn.shenyanchao.pomelo.rpc.route.utils.SocketAddressUtil;
 import cn.shenyanchao.pomelo.rpc.serialize.PomeloSerializer;
-import cn.shenyanchao.pomelo.rpc.tcp.netty4.client.RpcClient;
+import cn.shenyanchao.pomelo.rpc.tcp.netty4.client.factory.RpcClient;
 import cn.shenyanchao.pomelo.rpc.tcp.netty4.client.factory.PomeloRpcClientFactory;
 
 /**

@@ -2,7 +2,9 @@ package cn.shenyanchao.pomelo.rpc.route;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Map;
+import java.util.Objects;
 
 import cn.shenyanchao.pomelo.rpc.core.server.intercepotr.RpcInterceptor;
 
@@ -163,5 +165,46 @@ public class RpcRouteInfo implements Serializable {
 
     public void setRpcInterceptor(RpcInterceptor rpcInterceptor) {
         this.rpcInterceptor = rpcInterceptor;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("RpcRouteInfo{");
+        sb.append("route='").append(route).append('\'');
+        sb.append(", method='").append(method).append('\'');
+        sb.append(", httpType='").append(httpType).append('\'');
+        sb.append(", params=").append(params);
+        sb.append(", objCls=").append(objCls);
+        sb.append(", methods=").append(methods == null ? "null" : Arrays.asList(methods).toString());
+        sb.append(", returnType='").append(returnType).append('\'');
+        sb.append(", rpcInterceptor=").append(rpcInterceptor);
+        sb.append('}');
+        return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        RpcRouteInfo that = (RpcRouteInfo) o;
+        return Objects.equals(route, that.route) &&
+                Objects.equals(method, that.method) &&
+                Objects.equals(httpType, that.httpType) &&
+                Objects.equals(params, that.params) &&
+                Objects.equals(objCls, that.objCls) &&
+                Arrays.equals(methods, that.methods) &&
+                Objects.equals(returnType, that.returnType) &&
+                Objects.equals(rpcInterceptor, that.rpcInterceptor);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(route, method, httpType, params, objCls, returnType, rpcInterceptor);
+        result = 31 * result + Arrays.hashCode(methods);
+        return result;
     }
 }

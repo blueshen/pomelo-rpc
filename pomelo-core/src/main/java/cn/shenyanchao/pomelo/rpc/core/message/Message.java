@@ -5,6 +5,7 @@ import java.io.Serializable;
 import cn.shenyanchao.pomelo.rpc.serialize.PomeloSerializer;
 
 /**
+ * 报文
  * @author shenyanchao
  * @since 2019-03-06 21:46
  */

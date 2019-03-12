@@ -15,7 +15,7 @@ public class KryoUtils {
     private static final List<Serializer> serializerList = new ArrayList<>();
     private static final List<Integer> idList = new ArrayList<>();
 
-    private static final ThreadLocal<Kryo> kryos = new ThreadLocal<Kryo>() {
+    private static final ThreadLocal<Kryo> KRYOS = new ThreadLocal<Kryo>() {
         @Override
         protected Kryo initialValue() {
             Kryo kryo = new Kryo();
@@ -47,6 +47,6 @@ public class KryoUtils {
      * @return
      */
     public static Kryo getKryo() {
-        return kryos.get();
+        return KRYOS.get();
     }
 }

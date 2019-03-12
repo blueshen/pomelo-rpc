@@ -1,7 +1,5 @@
 package cn.shenyanchao.pomelo.rpc.tcp.netty4.client.factory;
 
-import cn.shenyanchao.pomelo.rpc.tcp.netty4.client.RpcClient;
-
 /**
  * @author shenyanchao
  */

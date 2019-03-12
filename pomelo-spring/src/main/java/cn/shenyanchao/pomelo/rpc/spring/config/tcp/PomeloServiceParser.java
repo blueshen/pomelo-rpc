@@ -13,10 +13,6 @@ import cn.shenyanchao.pomelo.rpc.support.PomeloRpcService;
  */
 public class PomeloServiceParser implements BeanDefinitionParser {
 
-    public PomeloServiceParser() {
-
-    }
-
     @Override
     public BeanDefinition parse(Element element, ParserContext parserContext) {
 

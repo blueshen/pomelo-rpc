@@ -12,11 +12,8 @@ public class PomeloResponseMessage extends Message {
     private static final long serialVersionUID = 4523576666635080090L;
 
     private Object response = null;
-
     private boolean isError = false;
-
     private Throwable exception = null;
-
     private byte[] responseClassName;
 
     public PomeloResponseMessage(int requestId, PomeloSerializer serializer, byte protocolType) {

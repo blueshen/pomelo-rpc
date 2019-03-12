@@ -13,7 +13,6 @@ import cn.shenyanchao.pomelo.rpc.tcp.netty4.client.factory.PomeloRpcClientFactor
 /**
  * @author shenyanchao
  */
-
 @Singleton
 public class PomeloClientProxy implements ClientProxy {
 

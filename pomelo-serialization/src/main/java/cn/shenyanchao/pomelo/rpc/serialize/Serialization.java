@@ -7,15 +7,21 @@ package cn.shenyanchao.pomelo.rpc.serialize;
 public interface Serialization {
 
     /**
-     * encode Object to byte[]
      * @param object
+     *
      * @return
+     *
      * @throws Exception
      */
     byte[] serialize(Object object) throws Exception;
 
     /**
-     * decode byte[] to Object
+     * @param className
+     * @param bytes
+     *
+     * @return
+     *
+     * @throws Exception
      */
     Object deserialize(String className, byte[] bytes) throws Exception;
 }

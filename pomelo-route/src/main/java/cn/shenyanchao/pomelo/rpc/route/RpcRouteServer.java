@@ -2,6 +2,7 @@ package cn.shenyanchao.pomelo.rpc.route;
 
 import java.io.Serializable;
 import java.net.InetSocketAddress;
+import java.util.Objects;
 
 /**
  * 权重轮询server
@@ -76,4 +77,36 @@ public class RpcRouteServer implements Serializable {
         this.down = down;
     }
 
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("RpcRouteServer{");
+        sb.append("server=").append(server);
+        sb.append(", weight=").append(weight);
+        sb.append(", effectiveWeight=").append(effectiveWeight);
+        sb.append(", currentWeight=").append(currentWeight);
+        sb.append(", down=").append(down);
+        sb.append('}');
+        return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        RpcRouteServer that = (RpcRouteServer) o;
+        return weight == that.weight &&
+                effectiveWeight == that.effectiveWeight &&
+                currentWeight == that.currentWeight &&
+                down == that.down &&
+                Objects.equals(server, that.server);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(server, weight, effectiveWeight, currentWeight, down);
+    }
 }
