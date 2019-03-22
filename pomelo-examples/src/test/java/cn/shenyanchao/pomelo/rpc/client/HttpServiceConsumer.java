@@ -68,9 +68,10 @@ public class HttpServiceConsumer {
         for (int i = 0; i < count; i++) {
             Response response = client.newCall(request).execute();
             String returnValue = response.body().string();
-            if (LOG.isDebugEnabled()) {
-                LOG.debug(returnValue);
-            }
+            //            if (LOG.isDebugEnabled()) {
+            //                LOG.debug(returnValue);
+            //            }
+            System.out.println(returnValue);
 
         }
         long endtime = System.currentTimeMillis();

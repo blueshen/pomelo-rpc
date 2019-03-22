@@ -1,4 +1,4 @@
-package cn.shenyanchao.pomelo.rpc.http;
+package cn.shenyanchao.pomelo.rpc.http.netty4.server.bean;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -8,7 +8,7 @@ import java.util.Objects;
  */
 public class RpcHttpBean implements Serializable {
 
-    private static final long serialVersionUID = 856548453845561188L;
+    private static final long serialVersionUID = 265484593845561188L;
 
     private Object object;
 

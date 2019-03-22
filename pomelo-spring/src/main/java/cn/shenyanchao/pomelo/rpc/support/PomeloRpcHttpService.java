@@ -1,20 +1,9 @@
 package cn.shenyanchao.pomelo.rpc.support;
 
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.ApplicationEvent;
-import org.springframework.context.ApplicationListener;
-
-import cn.shenyanchao.pomelo.rpc.core.server.intercepotr.RpcInterceptor;
-import cn.shenyanchao.pomelo.rpc.http.RpcHttpBean;
-import cn.shenyanchao.pomelo.rpc.http.netty4.server.PomeloHttpServer;
-
 /**
  * @author shenyanchao
  */
-public class PomeloRpcHttpService implements ApplicationContextAware, ApplicationListener {
+public class PomeloRpcHttpService {
 
     private String projectName;
 
@@ -32,26 +21,6 @@ public class PomeloRpcHttpService implements ApplicationContextAware, Applicatio
      * html,json,xml
      */
     private String returnType;
-
-    private ApplicationContext applicationContext;
-
-    private PomeloHttpServer pomeloHttpServer;
-
-    @Override
-    public void onApplicationEvent(ApplicationEvent event) {
-
-        pomeloHttpServer = new PomeloHttpServer();
-        Object object = applicationContext.getBean(ref);
-        if (StringUtils.isNotBlank(interceptorRef)) {
-            RpcInterceptor rpcFilter = (RpcInterceptor) applicationContext.getBean(interceptorRef);
-            RpcHttpBean rpcHttpBean = new RpcHttpBean(object, httpType, returnType);
-            pomeloHttpServer.registerService(projectName, rpcHttpBean, rpcFilter);
-        } else {
-            RpcHttpBean rpcHttpBean = new RpcHttpBean(object, httpType, returnType);
-            pomeloHttpServer.registerService(projectName, rpcHttpBean, null);
-        }
-
-    }
 
     public String getProjectName() {
         return projectName;
@@ -109,20 +78,6 @@ public class PomeloRpcHttpService implements ApplicationContextAware, Applicatio
      */
     public void setReturnType(String returnType) {
         this.returnType = returnType;
-    }
-
-    /**
-     * @return the applicationContext
-     */
-    public ApplicationContext getApplicationContext() {
-        return applicationContext;
-    }
-
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext)
-            throws BeansException {
-
-        this.applicationContext = applicationContext;
     }
 
 }

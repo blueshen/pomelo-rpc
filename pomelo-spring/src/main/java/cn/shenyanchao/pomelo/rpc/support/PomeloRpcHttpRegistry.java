@@ -1,33 +1,13 @@
 package cn.shenyanchao.pomelo.rpc.support;
 
-import org.springframework.beans.factory.DisposableBean;
-import org.springframework.beans.factory.InitializingBean;
-
-import cn.shenyanchao.pomelo.rpc.http.netty4.server.PomeloHttpServer;
-
 /**
  * @author shenyanchao
  */
-public class PomeloRpcHttpRegistry implements InitializingBean, DisposableBean {
+public class PomeloRpcHttpRegistry {
 
     private int port;
 
     private int timeout;
-
-    private PomeloHttpServer pomeloHttpServer;
-
-    @Override
-    public void destroy() throws Exception {
-        if (null != pomeloHttpServer) {
-            pomeloHttpServer.stop();
-        }
-    }
-
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        pomeloHttpServer = new PomeloHttpServer();
-        pomeloHttpServer.run(port, timeout);
-    }
 
     /**
      * @return the port

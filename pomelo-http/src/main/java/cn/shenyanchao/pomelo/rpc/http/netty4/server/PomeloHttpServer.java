@@ -12,7 +12,7 @@ import com.google.inject.Singleton;
 import cn.shenyanchao.pomelo.rpc.core.server.RpcServer;
 import cn.shenyanchao.pomelo.rpc.core.server.intercepotr.RpcInterceptor;
 import cn.shenyanchao.pomelo.rpc.core.thread.NamedThreadFactory;
-import cn.shenyanchao.pomelo.rpc.http.RpcHttpServerHandler;
+import cn.shenyanchao.pomelo.rpc.http.netty4.server.handler.RpcHttpServerHandler;
 import cn.shenyanchao.pomelo.rpc.http.netty4.server.handler.PomeloHttpServerHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
@@ -28,6 +28,8 @@ import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.timeout.IdleStateHandler;
 
 /**
+ * http服务器
+ *
  * @author shenyanchao
  */
 
@@ -47,9 +49,9 @@ public class PomeloHttpServer implements RpcServer {
 
     @Override
     public void registerService(String serviceName, Object serviceInstance,
-                                RpcInterceptor rpcFilter) {
+                                RpcInterceptor rpcInterceptor) {
 
-        rpcHttpServerHandler.addHandler(serviceName, serviceInstance, rpcFilter);
+        rpcHttpServerHandler.addHandler(serviceName, serviceInstance, rpcInterceptor);
     }
 
     @Override
@@ -79,21 +81,24 @@ public class PomeloHttpServer implements RpcServer {
                 .childOption(ChannelOption.TCP_NODELAY, true)
                 .childOption(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT);
         bootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
-
             @Override
-            protected void initChannel(SocketChannel channel) throws Exception {
+            protected void initChannel(SocketChannel channel) {
                 ChannelPipeline pipeline = channel.pipeline();
                 pipeline.addLast("codec", new HttpServerCodec());
                 pipeline.addLast("aggregator", new HttpObjectAggregator(512 * 1024));
                 pipeline.addLast("timeout", new IdleStateHandler(0, 0, 120));
-                pipeline.addLast("biz", new PomeloHttpServerHandler());
+                pipeline.addLast("biz", new PomeloHttpServerHandler(rpcHttpServerHandler));
             }
 
         });
-        LOG.info("-----------------pomelo starting--------------------------");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("-----------------pomelo http server starting--------------------------");
+        }
         bootstrap.bind(new InetSocketAddress(port)).sync();
         LOG.info("http server stared on：{}", port);
-        LOG.info("-----------------start success!--------------------------");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("-----------------pomelo http server start success!--------------------------");
+        }
     }
 
 }

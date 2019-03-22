@@ -45,7 +45,7 @@ public class ClassPoolUtils {
                 return paramNames;
             }
         } catch (Exception e) {
-            LOG.error("getMethodVariableName fail ", e);
+            LOG.error("get method error! ", e);
         }
         return null;
     }

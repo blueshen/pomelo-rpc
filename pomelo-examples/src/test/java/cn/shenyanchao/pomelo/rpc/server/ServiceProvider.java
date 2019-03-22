@@ -1,5 +1,7 @@
 package cn.shenyanchao.pomelo.rpc.server;
 
+import java.util.Map;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -24,7 +26,7 @@ public class ServiceProvider {
 
         PomeloRpcApplication app = applicationContext.getBean(PomeloRpcApplication.class);
         PomeloRpcRegistry registry = applicationContext.getBean(PomeloRpcRegistry.class);
-        PomeloRpcService service = applicationContext.getBean(PomeloRpcService.class);
+        Map<String, PomeloRpcService> serviceMap = applicationContext.getBeansOfType(PomeloRpcService.class);
 
         final Injector injector = Guice.createInjector();
         PomeloTcpServer pomeloTcpServer = injector.getInstance(PomeloTcpServer.class);
@@ -38,13 +40,17 @@ public class ServiceProvider {
         // 注册服务节点
         registerModule.registerServer(registry.getGroup(), registry.getLocalhost(), registry.getPort());
 
-        if (StringUtils.isBlank(service.getInterceptorRef()) ||
-                !(applicationContext.getBean(service.getInterceptorRef()) instanceof RpcInterceptor)) {
-            pomeloTcpServer
-                    .registerService(service.getInterfaceName(), applicationContext.getBean(service.getRef()), null);
-        } else {
-            pomeloTcpServer.registerService(service.getInterfaceName(), applicationContext.getBean(service.getRef()),
-                    (RpcInterceptor) applicationContext.getBean(service.getInterceptorRef()));
+        for (PomeloRpcService service : serviceMap.values()) {
+            if (StringUtils.isBlank(service.getInterceptorRef()) ||
+                    !(applicationContext.getBean(service.getInterceptorRef()) instanceof RpcInterceptor)) {
+                pomeloTcpServer
+                        .registerService(service.getInterfaceName(), applicationContext.getBean(service.getRef()),
+                                null);
+            } else {
+                pomeloTcpServer
+                        .registerService(service.getInterfaceName(), applicationContext.getBean(service.getRef()),
+                                (RpcInterceptor) applicationContext.getBean(service.getInterceptorRef()));
+            }
         }
 
     }

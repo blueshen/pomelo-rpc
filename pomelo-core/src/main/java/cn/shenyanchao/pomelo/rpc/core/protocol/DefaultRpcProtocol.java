@@ -43,8 +43,7 @@ public class DefaultRpcProtocol implements RpcProtocol {
                                 RpcByteBuffer byteBufferWrapper) throws Exception {
         if (!(message instanceof PomeloRequestMessage)
                 && !(message instanceof PomeloResponseMessage)) {
-            throw new Exception(
-                    "unknown Message");
+            throw new Exception("unknown Message");
         }
         int id = 0;
         byte type = REQUEST;

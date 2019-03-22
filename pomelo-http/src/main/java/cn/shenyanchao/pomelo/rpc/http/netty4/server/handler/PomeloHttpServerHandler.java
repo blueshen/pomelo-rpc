@@ -8,11 +8,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSONObject;
-import com.google.inject.Inject;
 
-import cn.shenyanchao.pomelo.rpc.http.RpcHttpServerHandler;
 import cn.shenyanchao.pomelo.rpc.http.netty4.server.bean.ServerBean;
 import cn.shenyanchao.pomelo.rpc.route.RpcRouteInfo;
 import io.netty.buffer.ByteBuf;
@@ -41,15 +41,17 @@ import io.netty.util.ReferenceCountUtil;
  */
 public class PomeloHttpServerHandler extends ChannelInboundHandlerAdapter {
 
-    @Inject
+    private static final Logger LOG = LoggerFactory.getLogger(PomeloHttpServerHandler.class);
+
     private RpcHttpServerHandler rpcHttpServerHandler;
 
-    public PomeloHttpServerHandler() {
-        super();
+    public PomeloHttpServerHandler(RpcHttpServerHandler rpcHttpServerHandler) {
+        this.rpcHttpServerHandler = rpcHttpServerHandler;
     }
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+        LOG.error("channel close", cause);
         ctx.channel().close();
     }
 
@@ -62,7 +64,6 @@ public class PomeloHttpServerHandler extends ChannelInboundHandlerAdapter {
 
         boolean keepAlive = true;
         try {
-
             ServerBean serverBean;
             Map<String, Object> map = new HashMap<>(16);
             String httpType = null;
@@ -71,7 +72,7 @@ public class PomeloHttpServerHandler extends ChannelInboundHandlerAdapter {
                 HttpRequest request = (HttpRequest) message;
                 if (HttpUtil.is100ContinueExpected(request)) {
                     DefaultHttpResponse response = new DefaultFullHttpResponse(HTTP_1_1, HttpResponseStatus.CONTINUE);
-                    serverBean = new ServerBean(response, null, keepAlive);
+                    serverBean = new ServerBean(response, null, true);
                     writeResponse(ctx, serverBean);
                     return;
                 }
@@ -91,6 +92,7 @@ public class PomeloHttpServerHandler extends ChannelInboundHandlerAdapter {
                 if (content.isReadable()) {
                     String contentMsg = content.toString(CharsetUtil.UTF_8);
                     if (StringUtils.isNotBlank(contentMsg)) {
+                        //TODO 无故引入fastjson
                         Map<String, Object> params = JSONObject.parseObject(contentMsg, Map.class);
                         map.putAll(params);
                     }
@@ -99,7 +101,7 @@ public class PomeloHttpServerHandler extends ChannelInboundHandlerAdapter {
                 if (message instanceof LastHttpContent) {
                     RpcRouteInfo rpcRouteInfo =
                             rpcHttpServerHandler.isRouteInfos(url, httpType, map);
-                    if (rpcRouteInfo == null || rpcRouteInfo.getRoute() == null) {
+                    if (null == rpcRouteInfo || null == rpcRouteInfo.getRoute()) {
                         DefaultHttpResponse response = getDefaultHttpResponse(HttpResponseStatus.NOT_FOUND, null);
                         serverBean = new ServerBean(response, null, keepAlive);
                         writeResponse(ctx, serverBean);
@@ -124,7 +126,7 @@ public class PomeloHttpServerHandler extends ChannelInboundHandlerAdapter {
         } catch (Exception e) {
             DefaultHttpResponse response = getDefaultHttpResponse(HttpResponseStatus.INTERNAL_SERVER_ERROR, null);
             DefaultHttpContent defaultHttpContent =
-                    new DefaultHttpContent(Unpooled.copiedBuffer(e.getMessage(), CharsetUtil.UTF_8));
+                    new DefaultHttpContent(Unpooled.copiedBuffer("internal error!", CharsetUtil.UTF_8));
             ServerBean serverBean = new ServerBean(response, defaultHttpContent, keepAlive);
             writeResponse(ctx, serverBean);
         } finally {
@@ -134,13 +136,13 @@ public class PomeloHttpServerHandler extends ChannelInboundHandlerAdapter {
     }
 
     private Map<String, Object> getParametersByUrl(QueryStringDecoder queryStringDecoder) {
-        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>(64);
         Map<String, List<String>> params = queryStringDecoder.parameters();
         if (!params.isEmpty()) {
             for (Entry<String, List<String>> p : params.entrySet()) {
                 String key = p.getKey();
-                List<String> vals = p.getValue();
-                for (String val : vals) {
+                List<String> values = p.getValue();
+                for (String val : values) {
                     map.put(key, val);
                 }
             }
@@ -151,6 +153,7 @@ public class PomeloHttpServerHandler extends ChannelInboundHandlerAdapter {
 
     private DefaultHttpResponse getDefaultHttpResponse(HttpResponseStatus type, String returnType) {
         DefaultHttpResponse httpResponse;
+
         if (HttpResponseStatus.NOT_FOUND == type) {
             httpResponse = new DefaultHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.NOT_FOUND);
         } else if (HttpResponseStatus.INTERNAL_SERVER_ERROR == type) {
@@ -173,15 +176,15 @@ public class PomeloHttpServerHandler extends ChannelInboundHandlerAdapter {
         }
 
         httpResponse.headers().set(HttpHeaderNames.ACCESS_CONTROL_ALLOW_ORIGIN, "*");
-        httpResponse.headers().set(HttpHeaderNames.CACHE_CONTROL, "no-cache");
-        httpResponse.headers().set(HttpHeaderNames.PRAGMA, "no-cache");
+        httpResponse.headers().set(HttpHeaderNames.CACHE_CONTROL, HttpHeaderValues.NO_CACHE);
+        httpResponse.headers().set(HttpHeaderNames.PRAGMA, HttpHeaderValues.NO_CACHE);
         httpResponse.headers().set(HttpHeaderNames.EXPIRES, "-1");
         return httpResponse;
     }
 
     private void writeResponse(ChannelHandlerContext ctx, ServerBean serverBean) {
 
-        if (ctx.channel().isOpen() && serverBean != null) {
+        if (ctx.channel().isOpen() && null != serverBean) {
             if (!serverBean.isKeepAlive()) {
                 ctx.write(serverBean.getDefaultHttpResponse()).addListener(ChannelFutureListener.CLOSE);
             } else {
@@ -189,7 +192,7 @@ public class PomeloHttpServerHandler extends ChannelInboundHandlerAdapter {
                         .set(HttpHeaderNames.CONNECTION, HttpHeaderValues.KEEP_ALIVE);
                 ctx.write(serverBean.getDefaultHttpResponse());
             }
-            if (serverBean.getDefaultHttpContent() != null) {
+            if (null != serverBean.getDefaultHttpContent()) {
                 ctx.writeAndFlush(serverBean.getDefaultHttpContent());
             }
         }

@@ -11,7 +11,7 @@ import io.netty.handler.codec.http.DefaultHttpResponse;
  */
 public class ServerBean implements Serializable {
 
-    private static final long serialVersionUID = 1062069789009L;
+    private static final long serialVersionUID = 1900069789009L;
 
     private DefaultHttpResponse defaultHttpResponse;
 
@@ -31,22 +31,8 @@ public class ServerBean implements Serializable {
         return defaultHttpResponse;
     }
 
-    public void setDefaultHttpResponse(DefaultHttpResponse defaultHttpResponse) {
-        this.defaultHttpResponse = defaultHttpResponse;
-    }
-
-    /**
-     * @return the defaultHttpContent
-     */
     public DefaultHttpContent getDefaultHttpContent() {
         return defaultHttpContent;
-    }
-
-    /**
-     * @param defaultHttpContent the defaultHttpContent to set
-     */
-    public void setDefaultHttpContent(DefaultHttpContent defaultHttpContent) {
-        this.defaultHttpContent = defaultHttpContent;
     }
 
     /**
@@ -54,13 +40,6 @@ public class ServerBean implements Serializable {
      */
     public boolean isKeepAlive() {
         return keepAlive;
-    }
-
-    /**
-     * @param keepAlive the keepAlive to set
-     */
-    public void setKeepAlive(boolean keepAlive) {
-        this.keepAlive = keepAlive;
     }
 
     @Override
