@@ -1,4 +1,4 @@
-package cn.shenyanchao.pomelo.rpc.spring.config.tcp;
+package cn.shenyanchao.pomelo.rpc.spring.tcp;
 
 import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
 

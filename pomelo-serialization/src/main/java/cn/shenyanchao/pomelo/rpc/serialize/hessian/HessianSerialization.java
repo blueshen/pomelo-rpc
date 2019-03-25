@@ -13,6 +13,7 @@ import cn.shenyanchao.pomelo.rpc.serialize.Serialization;
  * @since 2019-03-06 21:19
  */
 public class HessianSerialization implements Serialization {
+
     @Override
     public byte[] serialize(Object object) throws Exception {
         ByteArrayOutputStream byteArray = new ByteArrayOutputStream();

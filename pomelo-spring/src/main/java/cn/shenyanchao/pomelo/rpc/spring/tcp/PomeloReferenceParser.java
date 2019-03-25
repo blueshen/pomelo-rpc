@@ -1,4 +1,4 @@
-package cn.shenyanchao.pomelo.rpc.spring.config.tcp;
+package cn.shenyanchao.pomelo.rpc.spring.tcp;
 
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.RootBeanDefinition;
@@ -7,7 +7,7 @@ import org.springframework.beans.factory.xml.ParserContext;
 import org.w3c.dom.Element;
 
 import cn.shenyanchao.pomelo.rpc.serialize.PomeloSerializer;
-import cn.shenyanchao.pomelo.rpc.support.PomeloRpcReference;
+import cn.shenyanchao.pomelo.rpc.spring.tcp.support.PomeloRpcReference;
 
 /**
  * @author shenyanchao

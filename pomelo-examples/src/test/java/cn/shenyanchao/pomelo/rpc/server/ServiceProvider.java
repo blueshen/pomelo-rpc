@@ -11,9 +11,9 @@ import com.google.inject.Injector;
 
 import cn.shenyanchao.pomelo.rpc.core.server.intercepotr.RpcInterceptor;
 import cn.shenyanchao.pomelo.rpc.registry.RegisterModule;
-import cn.shenyanchao.pomelo.rpc.support.PomeloRpcApplication;
-import cn.shenyanchao.pomelo.rpc.support.PomeloRpcRegistry;
-import cn.shenyanchao.pomelo.rpc.support.PomeloRpcService;
+import cn.shenyanchao.pomelo.rpc.spring.tcp.support.PomeloRpcApplication;
+import cn.shenyanchao.pomelo.rpc.spring.tcp.support.PomeloRpcRegistry;
+import cn.shenyanchao.pomelo.rpc.spring.tcp.support.PomeloRpcService;
 import cn.shenyanchao.pomelo.rpc.tcp.netty4.server.PomeloTcpServer;
 
 /**

@@ -1,4 +1,4 @@
-package cn.shenyanchao.pomelo.rpc.support;
+package cn.shenyanchao.pomelo.rpc.spring.tcp.support;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.InitializingBean;

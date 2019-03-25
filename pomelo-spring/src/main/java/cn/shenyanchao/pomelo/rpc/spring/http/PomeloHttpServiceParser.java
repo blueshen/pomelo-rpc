@@ -1,4 +1,4 @@
-package cn.shenyanchao.pomelo.rpc.spring.config.tcp;
+package cn.shenyanchao.pomelo.rpc.spring.http;
 
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.RootBeanDefinition;
@@ -6,28 +6,32 @@ import org.springframework.beans.factory.xml.BeanDefinitionParser;
 import org.springframework.beans.factory.xml.ParserContext;
 import org.w3c.dom.Element;
 
-import cn.shenyanchao.pomelo.rpc.support.PomeloRpcService;
+import cn.shenyanchao.pomelo.rpc.spring.http.support.PomeloRpcHttpService;
 
 /**
  * @author shenyanchao
  */
-public class PomeloServiceParser implements BeanDefinitionParser {
+public class PomeloHttpServiceParser implements BeanDefinitionParser {
 
     @Override
     public BeanDefinition parse(Element element, ParserContext parserContext) {
 
-        String interfaceName = element.getAttribute("interfaceName");
+        String projectName = element.getAttribute("projectName");
         String ref = element.getAttribute("ref");
         String interceptorRef = element.getAttribute("interceptorRef");
+        String httpType = element.getAttribute("httpType");
+        String returnType = element.getAttribute("returnType");
 
         RootBeanDefinition beanDefinition = new RootBeanDefinition();
-        beanDefinition.setBeanClass(PomeloRpcService.class);
+        beanDefinition.setBeanClass(PomeloRpcHttpService.class);
         beanDefinition.setLazyInit(false);
-        beanDefinition.getPropertyValues().addPropertyValue("interfaceName", interfaceName);
+        beanDefinition.getPropertyValues().addPropertyValue("projectName", projectName);
         beanDefinition.getPropertyValues().addPropertyValue("ref", ref);
         beanDefinition.getPropertyValues().addPropertyValue("interceptorRef", interceptorRef);
+        beanDefinition.getPropertyValues().addPropertyValue("httpType", httpType);
+        beanDefinition.getPropertyValues().addPropertyValue("returnType", returnType);
 
-        parserContext.getRegistry().registerBeanDefinition(interfaceName, beanDefinition);
+        parserContext.getRegistry().registerBeanDefinition(projectName, beanDefinition);
         return beanDefinition;
     }
 

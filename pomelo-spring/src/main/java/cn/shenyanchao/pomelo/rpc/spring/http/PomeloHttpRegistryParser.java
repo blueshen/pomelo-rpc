@@ -1,4 +1,4 @@
-package cn.shenyanchao.pomelo.rpc.spring.config.http;
+package cn.shenyanchao.pomelo.rpc.spring.http;
 
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.RootBeanDefinition;
@@ -6,7 +6,7 @@ import org.springframework.beans.factory.xml.BeanDefinitionParser;
 import org.springframework.beans.factory.xml.ParserContext;
 import org.w3c.dom.Element;
 
-import cn.shenyanchao.pomelo.rpc.support.PomeloRpcHttpRegistry;
+import cn.shenyanchao.pomelo.rpc.spring.http.support.PomeloRpcHttpRegistry;
 
 /**
  * @author shenyanchao

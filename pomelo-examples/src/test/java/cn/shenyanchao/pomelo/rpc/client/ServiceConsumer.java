@@ -19,8 +19,8 @@ import cn.shenyanchao.pomelo.rpc.core.thread.NamedThreadFactory;
 import cn.shenyanchao.pomelo.rpc.demo.entity.RpcUser;
 import cn.shenyanchao.pomelo.rpc.demo.service.IHelloService;
 import cn.shenyanchao.pomelo.rpc.discovery.DiscoveryModule;
-import cn.shenyanchao.pomelo.rpc.support.PomeloRpcApplication;
-import cn.shenyanchao.pomelo.rpc.support.PomeloRpcReference;
+import cn.shenyanchao.pomelo.rpc.spring.tcp.support.PomeloRpcApplication;
+import cn.shenyanchao.pomelo.rpc.spring.tcp.support.PomeloRpcReference;
 import cn.shenyanchao.pomelo.rpc.tcp.netty4.client.handler.PomeloClientProxy;
 
 public class ServiceConsumer {

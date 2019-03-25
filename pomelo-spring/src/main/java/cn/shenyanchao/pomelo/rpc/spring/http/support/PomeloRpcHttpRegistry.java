@@ -1,4 +1,4 @@
-package cn.shenyanchao.pomelo.rpc.support;
+package cn.shenyanchao.pomelo.rpc.spring.http.support;
 
 /**
  * @author shenyanchao
