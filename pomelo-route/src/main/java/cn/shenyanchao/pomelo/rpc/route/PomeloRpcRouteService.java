@@ -20,9 +20,7 @@ import cn.shenyanchao.pomelo.rpc.util.ClassPoolUtils;
 @Singleton
 public class PomeloRpcRouteService implements IRpcRouteService {
 
-    public static final int TYPE = 0;
-
-    private static List<RpcRouteInfo> rpcRouteInfos = new ArrayList<RpcRouteInfo>();
+    private List<RpcRouteInfo> rpcRouteInfos = new ArrayList<>();
 
     @Override
     public RpcRouteInfo isRouteInfos(String route, String methodType, Map<String, Object> params) throws Exception {
@@ -81,26 +79,23 @@ public class PomeloRpcRouteService implements IRpcRouteService {
 
                     } else {// javabean
                         objs[j] = mdTypes[j].newInstance();
+                        //TODO
                         String json = JSONObject.toJSONString(routeInfo.getParams());
                         objs[j] = JSONObject.parseObject(json, objs[j].getClass());
                     }
-                }//参数循环结束
+                }
 
                 method.setAccessible(true);
-
                 Object result;
-
                 Object object = routeInfo.getObjCls().newInstance();
-
-                if (routeInfo.getRpcInterceptor() != null) {
-                    RpcInterceptor rpcFilter = routeInfo.getRpcInterceptor();
-
-                    if (rpcFilter.before(method, object, objs)) {
+                if (null != routeInfo.getRpcInterceptor()) {
+                    RpcInterceptor rpcInterceptor = routeInfo.getRpcInterceptor();
+                    if (rpcInterceptor.before(method, object, objs)) {
                         result = getResult(method, object, objs);
                     } else {
                         throw new Exception("无效的请求，服务端已经拒绝回应");
                     }
-                    rpcFilter.after(result);
+                    rpcInterceptor.after(result);
 
                 } else {
 
@@ -118,7 +113,7 @@ public class PomeloRpcRouteService implements IRpcRouteService {
     }
 
     @Override
-    public void registerRoute(String projectname, Object instance, RpcInterceptor rpcFilter, String httpType,
+    public void registerRoute(String projectName, Object instance, RpcInterceptor rpcFilter, String httpType,
                               String returnType) {
         Method[] methods = instance.getClass().getDeclaredMethods();
         for (Method method : methods) {
@@ -133,7 +128,7 @@ public class PomeloRpcRouteService implements IRpcRouteService {
             rpcRouteInfo.setMethod(method.getName());
             rpcRouteInfo.setReturnType(returnType);
             rpcRouteInfo.setRpcInterceptor(rpcFilter);
-            String route = projectname + "/" + simplename + "/" + rpcRouteInfo.getMethod();
+            String route = projectName + "/" + simplename + "/" + rpcRouteInfo.getMethod();
             rpcRouteInfo.setRoute(route);
 
             rpcRouteInfos.add(rpcRouteInfo);

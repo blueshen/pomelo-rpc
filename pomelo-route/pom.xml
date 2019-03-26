@@ -10,7 +10,7 @@
     </parent>
     <artifactId>pomelo-route</artifactId>
     <name>pomelo-route</name>
-    <description>pomelo路由</description>
+    <description>pomelo-路由</description>
 
     <dependencies>
         <dependency>

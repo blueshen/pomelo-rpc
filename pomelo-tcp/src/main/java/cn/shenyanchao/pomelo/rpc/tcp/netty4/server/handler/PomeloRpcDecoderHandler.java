@@ -26,7 +26,6 @@ public class PomeloRpcDecoderHandler extends ByteToMessageDecoder {
                           List<Object> out) throws Exception {
         PomeloRpcByteBuffer wrapper = new PomeloRpcByteBuffer(buf);
         Object result = pomeloRpcProtocol.decode(wrapper, null);
-
         if (result != null) {
             out.add(result);
         }

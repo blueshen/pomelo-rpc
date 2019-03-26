@@ -15,6 +15,7 @@ import com.alibaba.fastjson.JSONObject;
 
 import cn.shenyanchao.pomelo.rpc.http.netty4.server.bean.ServerBean;
 import cn.shenyanchao.pomelo.rpc.route.RpcRouteInfo;
+import cn.shenyanchao.pomelo.rpc.util.ContentType;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
@@ -165,14 +166,14 @@ public class PomeloHttpServerHandler extends ChannelInboundHandlerAdapter {
                 HttpHeaderValues.CHUNKED);
         if (HttpResponseStatus.NOT_FOUND != type && HttpResponseStatus.INTERNAL_SERVER_ERROR != type) {
             if ("json".equalsIgnoreCase(returnType)) {
-                httpResponse.headers().set(HttpHeaderNames.CONTENT_TYPE, "application/json; charset=UTF-8");
+                httpResponse.headers().set(HttpHeaderNames.CONTENT_TYPE, ContentType.APPLICATION_JSON_UTF8);
             } else if ("html".equalsIgnoreCase(returnType)) {
-                httpResponse.headers().set(HttpHeaderNames.CONTENT_TYPE, "text/plain; charset=UTF-8");
+                httpResponse.headers().set(HttpHeaderNames.CONTENT_TYPE, ContentType.TEXT_PLAIN_UTF8);
             } else if ("xml".equalsIgnoreCase(returnType)) {
-                httpResponse.headers().set(HttpHeaderNames.CONTENT_TYPE, "text/xml; charset=UTF-8");
+                httpResponse.headers().set(HttpHeaderNames.CONTENT_TYPE, ContentType.TEXT_XML_UTF8);
             }
         } else {
-            httpResponse.headers().set(HttpHeaderNames.CONTENT_TYPE, "text/plain; charset=UTF-8");
+            httpResponse.headers().set(HttpHeaderNames.CONTENT_TYPE, ContentType.TEXT_PLAIN_UTF8);
         }
 
         httpResponse.headers().set(HttpHeaderNames.ACCESS_CONTROL_ALLOW_ORIGIN, "*");

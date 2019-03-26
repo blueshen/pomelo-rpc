@@ -1,21 +1,20 @@
 [![Build Status](https://travis-ci.org/blueshen/pomelo-rpc.svg?branch=master)](https://travis-ci.org/blueshen/pomelo-rpc)
 [![Coverage Status](https://coveralls.io/repos/github/blueshen/pomelo-rpc/badge.svg?branch=master)](https://coveralls.io/github/blueshen/pomelo-rpc?branch=master)
 
+---
 
-## RPC
+## Pomelo RPC
 
-Just another Rpc Framework
-
-
+Just Another RPC Framework
 
 ## Feature
 
-- 服务发现(Zookeeper)
-- Spring集成
-- TCP协议
-- HTTP协议
+- Service Registry & Service Discovery
+- Spring Integrate
+- TCP\HTTP Support
+- Serialization: jdk, kryo, protobuf, hessian
 
 
-## 关于我
+## About Me
 
 请访问: <https://www.shenyanchao.cn>

@@ -60,7 +60,7 @@ public class PomeloTcpClientHandler extends ChannelInboundHandlerAdapter {
     }
 
     @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable e) throws Exception {
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable e) {
         if (!(e.getCause() instanceof IOException)) {
             LOG.error("catch some exception not IOException", e);
         }
@@ -73,7 +73,7 @@ public class PomeloTcpClientHandler extends ChannelInboundHandlerAdapter {
     }
 
     @Override
-    public void channelUnregistered(ChannelHandlerContext ctx) throws Exception {
+    public void channelUnregistered(ChannelHandlerContext ctx) {
         LOG.error("connection closed: {} ", ctx.channel().remoteAddress());
         InetSocketAddress remoteAddress = (InetSocketAddress) ctx.channel().remoteAddress();
         clientHolder.removeRpcClient(remoteAddress.getHostName(), remoteAddress.getPort());

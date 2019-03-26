@@ -45,37 +45,8 @@ public class RpcRouteServer implements Serializable {
         this.server = server;
     }
 
-    public int getWeight() {
-        return weight;
-    }
 
-    public void setWeight(int weight) {
-        this.weight = weight;
-    }
 
-    public int getEffectiveWeight() {
-        return effectiveWeight;
-    }
-
-    public void setEffectiveWeight(int effectiveWeight) {
-        this.effectiveWeight = effectiveWeight;
-    }
-
-    public int getCurrentWeight() {
-        return currentWeight;
-    }
-
-    public void setCurrentWeight(int currentWeight) {
-        this.currentWeight = currentWeight;
-    }
-
-    public boolean isDown() {
-        return down;
-    }
-
-    public void setDown(boolean down) {
-        this.down = down;
-    }
 
     @Override
     public String toString() {

@@ -5,9 +5,9 @@ import java.util.Map;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import cn.shenyanchao.pomelo.rpc.core.server.handler.RpcServerHandler;
 import cn.shenyanchao.pomelo.rpc.core.server.intercepotr.RpcInterceptor;
 import cn.shenyanchao.pomelo.rpc.http.netty4.server.bean.RpcHttpBean;
-import cn.shenyanchao.pomelo.rpc.http.netty4.server.handler.AbstractRpcHttpServerHandler;
 import cn.shenyanchao.pomelo.rpc.route.PomeloRpcRouteService;
 import cn.shenyanchao.pomelo.rpc.route.RpcRouteInfo;
 
@@ -16,9 +16,7 @@ import cn.shenyanchao.pomelo.rpc.route.RpcRouteInfo;
  */
 
 @Singleton
-public class RpcHttpServerHandler extends AbstractRpcHttpServerHandler {
-
-    public static final int TYPE = 0;
+public class RpcHttpServerHandler implements RpcServerHandler {
 
     @Inject
     private PomeloRpcRouteService pomeloRpcRouteService;
@@ -33,13 +31,11 @@ public class RpcHttpServerHandler extends AbstractRpcHttpServerHandler {
         }
     }
 
-    @Override
     public RpcRouteInfo isRouteInfos(String route, String methodType,
                                      Map<String, Object> params) throws Exception {
         return pomeloRpcRouteService.isRouteInfos(route, methodType, params);
     }
 
-    @Override
     public Object methodInvoke(RpcRouteInfo routeInfo) throws Exception {
         return pomeloRpcRouteService.methodInvoke(routeInfo);
     }

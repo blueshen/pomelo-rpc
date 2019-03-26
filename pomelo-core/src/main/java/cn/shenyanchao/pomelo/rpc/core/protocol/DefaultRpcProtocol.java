@@ -23,19 +23,13 @@ import cn.shenyanchao.pomelo.rpc.serialize.Serialization;
 
 @Singleton
 public class DefaultRpcProtocol implements RpcProtocol {
-
-    public static final byte PROTOCOL_TYPE = 1;
-
     private static final Logger LOG = LoggerFactory.getLogger(DefaultRpcProtocol.class);
 
+    public static final byte PROTOCOL_TYPE = 1;
     private static final int REQUEST_HEADER_LEN = 1 * 6 + 5 * 4;
-
     private static final int RESPONSE_HEADER_LEN = 1 * 6 + 3 * 4;
-
     private static final byte VERSION = (byte) 1;
-
     private static final byte REQUEST = (byte) 0;
-
     private static final byte RESPONSE = (byte) 1;
 
     @Override

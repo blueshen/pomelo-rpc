@@ -3,16 +3,16 @@ package cn.shenyanchao.pomelo.rpc.tcp.netty4.client.handler;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.net.InetSocketAddress;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
 import cn.shenyanchao.pomelo.rpc.discovery.DiscoveryModule;
 import cn.shenyanchao.pomelo.rpc.route.RpcRouteServer;
-import cn.shenyanchao.pomelo.rpc.route.utils.SocketAddressUtil;
 import cn.shenyanchao.pomelo.rpc.serialize.PomeloSerializer;
-import cn.shenyanchao.pomelo.rpc.tcp.netty4.client.factory.RpcClient;
 import cn.shenyanchao.pomelo.rpc.tcp.netty4.client.factory.PomeloRpcClientFactory;
+import cn.shenyanchao.pomelo.rpc.tcp.netty4.client.factory.RpcClient;
 
 /**
  * @author shenyanchao
@@ -48,6 +48,15 @@ public class PomeloRpcTcpClientInvocationHandler implements InvocationHandler {
 
     }
 
+    private List<RpcRouteServer> toInetSocketAddress(Set<InetSocketAddress> addresses) {
+        List<RpcRouteServer> routeServers = new ArrayList<>();
+        for (InetSocketAddress inetSocketAddress : addresses) {
+            RpcRouteServer rpcRouteServer = new RpcRouteServer(inetSocketAddress, 1);
+            routeServers.add(rpcRouteServer);
+        }
+        return routeServers;
+    }
+
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         RpcClient client;
@@ -56,7 +65,7 @@ public class PomeloRpcTcpClientInvocationHandler implements InvocationHandler {
         Random r = new Random();
         int i = r.nextInt(groups.length);
         Set<InetSocketAddress> addresses = discoveryModule.getActiveServersByGroup(groups[i]);
-        List<RpcRouteServer> servers = SocketAddressUtil.toInetSocketAddress(addresses);
+        List<RpcRouteServer> servers = toInetSocketAddress(addresses);
         if (servers.size() <= 0) {
             throw new Exception("no server found! please check~");
         }

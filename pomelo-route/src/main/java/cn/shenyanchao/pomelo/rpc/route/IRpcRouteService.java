@@ -10,6 +10,8 @@ import cn.shenyanchao.pomelo.rpc.core.server.intercepotr.RpcInterceptor;
 public interface IRpcRouteService {
 
     /**
+     * 判断是否RoueInfo
+     *
      * @param route
      * @param methodType
      * @param params
@@ -34,9 +36,13 @@ public interface IRpcRouteService {
     /**
      * 注册路由
      *
+     * @param projectName
      * @param instance
+     * @param rpcInterceptor
+     * @param httpType
+     * @param returnType
      */
-    void registerRoute(String projectname, Object instance, RpcInterceptor rpcInterceptor, String httpType,
+    void registerRoute(String projectName, Object instance, RpcInterceptor rpcInterceptor, String httpType,
                        String returnType);
 
     void clear();

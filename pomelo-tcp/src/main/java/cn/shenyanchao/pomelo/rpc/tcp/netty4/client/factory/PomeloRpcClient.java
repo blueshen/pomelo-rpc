@@ -40,7 +40,6 @@ public class PomeloRpcClient implements RpcClient {
         for (int i = 0; i < argTypes.length; i++) {
             argTypeBytes[i] = argTypes[i].getBytes();
         }
-
         PomeloRequestMessage wrapper = new PomeloRequestMessage(targetInstanceName.getBytes(),
                 methodName.getBytes(), argTypeBytes, args, timeout, serializer, protocolType);
 
@@ -95,7 +94,7 @@ public class PomeloRpcClient implements RpcClient {
             rpcResponse = new PomeloResponseMessage(requestMessage.getId(), requestMessage.getSerializer(),
                     requestMessage.getProtocolType());
             rpcResponse.setException(new Throwable(errorMsg.toString()));
-        } else if (result != null) {
+        } else if (null != result) {
             rpcResponse = (PomeloResponseMessage) result;
         }
 
@@ -124,7 +123,7 @@ public class PomeloRpcClient implements RpcClient {
 
         if (null != rpcResponse.getException()) {
             Throwable t = rpcResponse.getException();
-            LOG.error("server error,server is:{}:{}, request id is:{}", getServerIP(), getServerPort(),
+            LOG.error("server error, server is:{}:{}, request id is:{}", getServerIP(), getServerPort(),
                     requestMessage.getId(), t);
             return null;
         }

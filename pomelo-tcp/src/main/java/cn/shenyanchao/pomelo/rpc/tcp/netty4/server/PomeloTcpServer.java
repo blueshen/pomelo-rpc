@@ -155,9 +155,6 @@ public class PomeloTcpServer implements RpcServer {
         this.serializer = serializer;
     }
 
-    /**
-     * @param threadCount the threadCount to set
-     */
     public void setThreadCount(int threadCount) {
         this.threadCount = threadCount;
     }
